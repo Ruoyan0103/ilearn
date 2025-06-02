@@ -10,13 +10,13 @@ class Potential(ABC):
     """
 
     @abstractmethod
-    def train(self, train_structures, energies, forces, stresses, **kwargs):
+    def train(self, dataset_filename, **kwargs):
         """
         Train interatomic potentials with energies, forces and
         stresses corresponding to structures.
 
         Args:
-            train_structures (list): List of ASE Structure objects.
+            dataset_filename (string): File containing a list of ASE Structure objects.
             energies (list): List of DFT-calculated total energies of each structure
                 in structures list.
             forces (list): List of DFT-calculated (m, 3) forces of each structure
