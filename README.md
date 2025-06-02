@@ -11,7 +11,7 @@
 
 ## Installation
 
-You can install `ilearn` using pip:
+You will be able to install `ilearn` using pip:
 
 ```bash
 pip install ilearn
