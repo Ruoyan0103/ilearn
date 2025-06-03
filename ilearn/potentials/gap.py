@@ -19,11 +19,12 @@ import numpy as np
 from ase.io import read 
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
+from ilearn.lammps.calcs import ThresholdDisplacementEnergy
 
 module_dir = os.path.dirname(__file__)
 results_dir = os.path.join(module_dir, 'results')
 
-class GAPotential:
+class GAPotential(Potential):
     """
     This class implements Turbo Smooth Overlap of Atomic Position potentials.
     """
@@ -211,21 +212,21 @@ class GAPotential:
             Dict{num_atoms, ref_energies, ref_forces, ref_virial, pred_energies, pred_forces, pred_virial}.
             RMSE of energies, forces and virials.
         """
-        values_dict = { "num_atoms": [],
-                        "ref_energies": [],
-                        "pred_energies": [],
-                        "ref_forces": [],
-                        "pred_forces": [],
-                        "ref_virials": [],
-                        "pred_virials": [],}
+        values_dict = { 'num_atoms': [],
+                        'ref_energies': [],
+                        'pred_energies': [],
+                        'ref_forces': [],
+                        'pred_forces': [],
+                        'ref_virials': [],
+                        'pred_virials': [],}
         for struct in test_structures_dataset:
-            values_dict["num_atoms"].append(len(struct))
+            values_dict['num_atoms'].append(len(struct))
             if predict_energies:
                 ref_energy = struct.get_potential_energy()
-                values_dict["ref_energies"].append(ref_energy)
+                values_dict['ref_energies'].append(ref_energy)
                 struct.calc = Potential(self.param['potential_label'], self.param['xml_file'])
                 pred_energy = struct.get_potential_energy()
-                values_dict["pred_energies"].append(pred_energy)
+                values_dict['pred_energies'].append(pred_energy)
             if predict_forces:
                 for i in range(len(struct)):
                     values_dict['ref_forces'].append(struct.get_forces()[i])
@@ -240,19 +241,41 @@ class GAPotential:
                     values_dict['pred_virials'].append(struct.info['virial'].flatten())
         
         # calculate RMSE:
+        rmse_dict = {'rmse_energy': -100, 'rmse_force': -100, 'rmse_virial': -100}
         if predict_energies:
             # using np.sqrt to normalize energies per atom,  J. Chem. Phys. 158, 121501 (2023), Figure 4.
             eng_ref = [a / np.sqrt(n) for a, n in zip(values_dict['ref_energies'], values_dict['num_atoms'])]
             eng_pred = [b / np.sqrt(n) for b, n in zip(values_dict['pred_energies'], values_dict['num_atoms'])]
             # J. Chem. Phys. 158, 121501 (2023), RMSE equation (1b) 
-            rmse_energy = np.sqrt(mean_squared_error(eng_ref, eng_pred))
+            rmse_dict['rmse_energy'] = np.sqrt(mean_squared_error(eng_ref, eng_pred))
         if predict_forces:
             # J. Chem. Phys. 158, 121501 (2023), RMSE_component, equation (5)
-            rmse_force = np.sqrt(mean_squared_error(values_dict['ref_forces'], values_dict['pred_forces']))
+            rmse_dict['rmse_force'] = np.sqrt(mean_squared_error(values_dict['ref_forces'], values_dict['pred_forces']))
         if predict_virials:
-            rmse_virial = np.sqrt(mean_squared_error(values_dict['ref_virials'], values_dict['pred_virials']))
-        return values_dict, rmse_energy, rmse_force, rmse_virial
-    
+            rmse_dict['rmse_virial'] = np.sqrt(mean_squared_error(values_dict['ref_virials'], values_dict['pred_virials']))
+        return values_dict, rmse_dict
+
+
+    # def _write_eval_results(values_dict, files_dict):
+    #     if values_dict['ref_energies'] and values_dict['pred_energies']:
+    #         efile = os.path.join(results_dir, files_dict['energies_file'])
+    #         with open(efile, 'a') as file:
+    #             file.write(f'{values_dict['ref_energies']}, {values_dict['pred_energies']}\n')
+    #     if values_dict['ref_forces'] and values_dict['pred_forces']:
+    #         ffile = os.path.join(results_dir, files_dict['ref_forces_file'])
+    #         with open(ffile, 'a') as file:
+    #             file.write(' '.join(map(str, {values_dict['ref_forces']})) + '\n')
+    #         ffile = os.path.join(results_dir, files_dict['pred_forces_file'])
+    #         with open(ffile, 'a') as file:
+    #             file.write(' '.join(map(str, {files_dict['pred_forces_file']})) + '\n')
+    #     if values_dict['ref_virials'] and values_dict['pred_virials']:
+    #         vfile = os.path.join(results_dir, files_dict['ref_virials_file'])
+    #         with open(vfile, 'a') as file:
+    #             file.write(' '.join(map(str, {values_dict['ref_virials']})) + '\n')
+    #         vfile = os.path.join(results_dir, files_dict['pred_virials_file'])
+    #         with open(vfile, 'a') as file:
+    #             file.write(' '.join(map(str, {values_dict['pred_virials']})) + '\n')
+
 
     def evaluate(self, test_structures_dataset, config_type, config_type_set=None,
                  predict_energies=True, predict_forces=True, predict_virials=False):
@@ -273,27 +296,7 @@ class GAPotential:
             RMSE of energies, forces and stresses.
         """
         # test_structures = read(test_structures_dataset, format='extxyz', index=':')
-        def write_results(energies_file, ref_force_file, pred_force_file,
-                          ref_virials_file, pred_virials_file):
-            if predict_energies:
-                efile = os.path.join(results_dir, energy_file)
-                with open(efile, 'a') as file:
-                    file.write(f'{ref_energies}, {pred_energies}\n')
-            if predict_forces:
-                ffile = os.path.join(results_dir, ref_forces_file)
-                with open(ffile, 'a') as file:
-                    file.write(' '.join(map(str, {ref_forces})) + '\n')
-                ffile = os.path.join(results_dir, pred_forces_file)
-                with open(ffile, 'a') as file:
-                    file.write(' '.join(map(str, {pred_forces})) + '\n')
-            if predict_virials:
-                vfile = os.path.join(results_dir, ref_virials_file)
-                with open(vfile, 'a') as file:
-                    file.write(' '.join(map(str, {ref_virials})) + '\n')
-                vfile = os.path.join(results_dir, pred_virials_file)
-                with open(vfile, 'a') as file:
-                    file.write(' '.join(map(str, {pred_virials})) + '\n')
-
+                    
         if config_type:
             if config_type_set is None:  # not recommended to use this option
                 config_type_set = set()
@@ -307,28 +310,18 @@ class GAPotential:
                 if 'config_type' in struct.info:
                     config_type = struct.info['config_type']
                     data_config_type[config_type].append(struct)
-                    values_dict, rmse_energy, rmse_force, rmse_virials = self._evaluate_helper(data_config_type[config_type], 
-                                                                        predict_energies=True, predict_forces=True, predict_virials=False)
-                write_results(energies_file, ref_force_file, pred_force_file,)
+                    values_dict, rmse_dict = self._evaluate_helper(data_config_type[config_type], 
+                                                                  predict_energies=True, predict_forces=True, predict_virials=False)
         else:
-            values_dict, rmse_energy, rmse_force, rmse_virials = self._evaluate_helper(test_structures_dataset, 
-                                                                 predict_energies=True, predict_forces=True, predict_virials=False)
-            return values_dict, rmse_energy, rmse_force, rmse_virials
+            values_dict, rmse_dict = self._evaluate_helper(test_structures_dataset, 
+                                                          predict_energies=True, predict_forces=True, predict_virials=False)
+            
+    #def predict(self, test_structures_dataset):
 
-### Lammps calculation 
-    def predict(self, structure): 
-        """
-        Predict energy, forces and stresses of the structure.
-
-        Args:
-            structure (Structure): Pymatgen Structure object.
-
-        Returns:
-            energy, forces, stress
-        """
-        calculator = EnergyForceStress(self)
-        energy, forces, stress = calculator.calculate(structures=[structure])[0]
-        return energy, forces, stress
-
-
-
+if __name__ == "__main__":
+    gap_file = os.path.join(module_dir, 'params', 'Ge-v10.xml')
+    gap = GAPotential.from_config(gap_file)
+    ff_settings = gap.write_param(gap_file)
+    print(ff_settings)
+    tde = ThresholdDisplacementEnergy(ff_settings=ff_settings)
+    tde._setup()

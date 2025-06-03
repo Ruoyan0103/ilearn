@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 from itertools import product
+import os 
+from ilearn.potentials import Potential
+
 plt.rcParams['font.family'] = 'DejaVu Serif'
 
 class ThresholdDisplacementEnergy:
@@ -152,20 +155,22 @@ class ThresholdDisplacementEnergy:
             ff_settings = self.ff_settings.write_param()
         else:
             ff_settings = self.ff_settings
+        input_file = 'in.tde'
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings)))
         return input_file
 
 
 
-tde = ThresholdDisplacementEnergy()
-vector1 = [0., 0., 1.]
-vector2 = [1., 0., 1.]
-vector3 = [1., 1., 1.]
-vectors = np.array((vector1, vector2, vector3))
-tde.get_uniform_angles(vectors, 4)
-tde.get_hkl_from_angles()
-tde.plot()
+#tde = ThresholdDisplacementEnergy()
+# vector1 = [0., 0., 1.]
+# vector2 = [1., 0., 1.]
+# vector3 = [1., 1., 1.]
+# vectors = np.array((vector1, vector2, vector3))
+# tde.get_uniform_angles(vectors, 4)
+# tde.get_hkl_from_angles()
+# tde.plot()
+
 
 
 

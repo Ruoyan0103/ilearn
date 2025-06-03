@@ -7,6 +7,7 @@ boundary p p p
 read_data data.thermalized
 
 # --------------------------- FORCE FIELD ------------------------
-{ff_settings}
+pair_style        quip
+pair_coeff        * * /m/home/home6/66/jinr1/data/Desktop/00-Project/01-Paper1/ilearn/ilearn/potentials/params/Ge-v10.xml "Potential xml_label=GAP_2025_3_8_120_22_43_25_989" 32
 
 
