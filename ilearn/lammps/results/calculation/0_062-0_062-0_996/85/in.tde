@@ -5,13 +5,14 @@ units            metal
 atom_style       atomic
 boundary         p p p
 read_data        ../data.thermalized
-mass             1 {mass}
+mass             1 72.56
 
 # ------------------------ FORCE FIELD ------------------------
-{ff_settings}
+pair_style        meam
+pair_coeff        * * /m/home/home6/66/jinr1/data/Desktop/00-Project/01-Paper1/ilearn/ilearn/potentials/params/MEAM/library.meam Ge /m/home/home6/66/jinr1/data/Desktop/00-Project/01-Paper1/ilearn/ilearn/potentials/params/MEAM/Ge.meam Ge
 
 # --------------------- SIMULATION SETTINGS -------------------
-variable         Xlat equal {alat}
+variable         Xlat equal 3
 compute          peperatom all pe/atom
 compute          keperatom all ke/atom
 thermo           100
@@ -20,17 +21,17 @@ fix              output all print 100 "$(step) $(time) $(temp) $(press) &
                  $(pe) $(ke) $(etotal)" file tde_out screen no
 
 dump             1 all custom 10 dump.xyz type x y z c_peperatom c_keperatom
-group            group_pka id == {pka_id}
-velocity         group_pka set {V_x} {V_y} {V_y} units box # metal units:A/ps
+group            group_pka id == 100
+velocity         group_pka set 5.238415420878645 5.238415420878645 5.238415420878645 units box # metal units:A/ps
 fix              timestep all dt/reset 1 NULL 0.002 0.05 emax 10
 region           region_border block $(xlo+v_Xlat) $(xhi-v_Xlat) $(ylo+v_Xlat) &
                  $(yhi-v_Xlat) $(zlo+v_Xlat) $(zhi-v_Xlat) side out units box
 
 group            group_border region region_border
-fix              fix_heatsink group_border temp/berendsen {temp} {temp} $(100.0*dt)
+fix              fix_heatsink group_border temp/berendsen 300 300 $(100.0*dt)
 fix              fix_momentum all momentum 1 linear 1 1 1
 fix              fix_nve all nve
 run              5000
 dump             final all custom 1 dump_out element x y z id c_peperatom c_keperatom
-dump_modify      final element {element}
+dump_modify      final element Ge
 run 0

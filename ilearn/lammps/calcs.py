@@ -1,9 +1,7 @@
+import os, math, subprocess
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
-from itertools import product
-import os, math
-
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
 module_dir = os.path.dirname(os.path.abspath(__file__))
@@ -53,7 +51,9 @@ class ThresholdDisplacementEnergy:
         self.min_velocity = min_velocity
         self.max_velocity = max_velocity
         self.velocity_interval = velocity_interval
-        self.kin_eng_threshold = kin_eng_threshold  # Threshold for kinetic energy difference
+        self.kin_eng_threshold = kin_eng_threshold  
+        self.thermal_file = ''
+        self.size = 3       # Size of the simulation box in Angstroms (9 * alat)
         
     def get_random_angles(min_phi, max_phi, min_theta, max_theta, num_points):
         '''
@@ -139,7 +139,7 @@ class ThresholdDisplacementEnergy:
             k = np.sin(theta) * np.sin(phi)
             l = np.cos(theta)
             self.hkl_list.append(np.array((h, k, l)))
-        
+
 
     def plot(self):
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
@@ -280,7 +280,66 @@ class ThresholdDisplacementEnergy:
                 prev_kin_eng = next_kin_eng
 
 
-        #def calculate(self):
+    def check_vacancies_with_reference(self):
+        '''
+        Check for vacancies in the thermalized data by comparing with a reference file.
+        Returns
+        -------
+        int
+            Number of vacancies detected.
+        '''
+        if not self.thermal_file:
+            raise ValueError("Thermal file not set.")
+        reference_file = self.thermal_file
+        trajectory_file = 'dump_out'
+        if not os.path.isfile(trajectory_file):
+            return 0
+        reference_pipeline = import_file(reference_file)
+        pipeline = import_file(trajectory_file)
+        wsam = WignerSeitzAnalysisModifier(per_type_occupancies=True, output_displaced=False)
+        wsam.reference = reference_pipeline.source
+        pipeline.modifiers.append(wsam)
+
+        data = pipeline.compute(0)
+        if 'Occupancy' not in data.particles or 'Particle Identifier' not in data.particles or 'Position' not in data.particles:
+            raise ValueError("Required data (Occupancy, Particle Identifier, or Position) not found.")
+        num_vac = 0
+        for particle_id, occupancy, position in zip(data.particles['Particle Identifier'],
+                                                    data.particles['Occupancy'],
+                                                    data.particles['Position']):
+            if occupancy == 0:
+                print(f"Vacancy detected at Particle ID: {particle_id}, Position: {position}")
+                num_vac += 1
+        if num_vac == 0:
+            print(f"no vacancy")
+        return num_vac
+
+    def thermalize(self):
+        template_dir = os.path.join(module_dir, 'templates', 'tde')
+        with open(os.path.join(template_dir, 'in.thermalize'), 'r') as f:
+            input_template = f.read()
+            ff_settings = self.ff_settings
+        input_file = os.path.join(module_dir, 'in.thermalize')
+        output_thermalized = os.path.join(module_dir, 'results', 'data.thermalized')
+        with open(input_file, 'w') as f:
+            f.write(input_template.format(ff_settings='\n'.join(ff_settings),
+                                            mass=self.mass, alat=self.alat, size=self.size,
+                                            output_thermalized=output_thermalized)) 
+        submit_file = os.path.join(module_dir, 'submit-thermal.sh')
+        cmd = f'sbatch {submit_file}'
+        # subprocess.run(cmd, shell=True, check=True)
+        # self.thermal_file = output_thermalized  
+
+    def calculate(self):
+        
+        thermalize()
+        cmd = 'sbatch submit-tde.sh'
+        subprocess.run(cmd, shell=True, check=True)
+
+        
+
+            
+
 
 
     

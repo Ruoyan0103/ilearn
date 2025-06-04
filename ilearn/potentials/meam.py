@@ -45,7 +45,7 @@ if __name__ == "__main__":
     temp = 300 
     element = 'Ge'
     mass = 72.56
-    min_velocity = 45
+    min_velocity = 80
     max_velocity = 95
     velocity_interval = 5
     kin_eng_threshold = 4
@@ -56,9 +56,10 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 0)
-    tde.set_hkl_from_angles()
-    tde._setup()
+    # tde.get_uniform_angles(vectors, 0)
+    # tde.set_hkl_from_angles()
+    # tde._setup()
+    tde.thermalize()
 
 
         
