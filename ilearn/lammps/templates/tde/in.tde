@@ -1,12 +1,36 @@
-# --------------------------- INITIALIZATION ----------------------
-units metal
-atom_style atomic
-boundary p p p
+# LAMMPS input script for TDE simulation
+# parameters: mass, alat, cell_file, ff_settings, pka_id, V_x, V_y, V_z, temp, output_file, element
+# ----------------------- Initialization ---------------------
+units            metal
+atom_style       atomic
+boundary         p p p
+read_data        {cell_file}
+mass             1 {mass}
 
-# --------------------------- ATOM DEFINITION ---------------------
-read_data data.thermalized
-
-# --------------------------- FORCE FIELD ------------------------
+# ------------------------ Force field ------------------------
 {ff_settings}
 
+# --------------------- Simulation settings -------------------
+variable         Xlat equal {alat}
+compute          peperatom all pe/atom
+compute          keperatom all ke/atom
+thermo           100
+thermo_style     custom time dt temp vol press etotal pe ke
+fix              output all print 100 "$(step) $(time) $(temp) $(press) &
+                 $(pe) $(ke) $(etotal)" file tde_out screen no
 
+dump             1 all custom 10 dump.xyz type x y z c_peperatom c_keperatom
+group            group_pka id == {pka_id}
+velocity         group_pka set {V_x} {V_y} {V_y} units box # metal units:A/ps
+fix              timestep all dt/reset 1 NULL 0.002 0.05 emax 10
+region           region_border block $(xlo+v_Xlat) $(xhi-v_Xlat) $(ylo+v_Xlat) &
+                 $(yhi-v_Xlat) $(zlo+v_Xlat) $(zhi-v_Xlat) side out units box
+
+group            group_border region region_border
+fix              fix_heatsink group_border temp/berendsen {temp} {temp} $(100.0*dt)
+fix              fix_momentum all momentum 1 linear 1 1 1
+fix              fix_nve all nve
+run              5000
+dump             final all custom 1 {output_file} element x y z id c_peperatom c_keperatom
+dump_modify      final element {element}
+run 0
