@@ -314,6 +314,7 @@ class ThresholdDisplacementEnergy:
             print(f"no vacancy")
         return num_vac
 
+
     def thermalize(self):
         template_dir = os.path.join(module_dir, 'templates', 'tde')
         with open(os.path.join(template_dir, 'in.thermalize'), 'r') as f:
@@ -327,23 +328,24 @@ class ThresholdDisplacementEnergy:
                                             output_thermalized=output_thermalized)) 
         submit_file = os.path.join(module_dir, 'submit-thermal.sh')
         cmd = f'sbatch {submit_file}'
-        # subprocess.run(cmd, shell=True, check=True)
-        # self.thermal_file = output_thermalized  
+        subprocess.run(cmd, shell=True, check=True)
+        self.thermal_file = output_thermalized  
 
     def calculate(self):
-        
-        thermalize()
-        cmd = 'sbatch submit-tde.sh'
-        subprocess.run(cmd, shell=True, check=True)
+        pass
+        '''
+        bash: 
+        cd os.path.join(module_dir, 'results', 'calculation')
+        find . -mindepth 2 -maxdepth 2 -type d | sort > folder_list.txt
+        wc -l folder_list.txt
+        copy os.path.join(module_dir, 'submit-tde.sh') to os.path.join(module_dir, 'results', 'calculation')
+        set array in submit-tde.sh to the number of lines in folder_list.txt
+        sbatch submit-tde.sh
+        '''
 
         
 
             
-
-
-
-    
-
 
 # example usage
 # tde = ThresholdDisplacementEnergy()
