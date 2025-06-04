@@ -331,6 +331,7 @@ class ThresholdDisplacementEnergy:
         # subprocess.run(cmd, shell=True, check=True)
         # self.thermal_file = output_thermalized  
 
+
     def calculate(self):
         pass
         '''
@@ -344,7 +345,12 @@ class ThresholdDisplacementEnergy:
         '''
 
     def write_results(self):
-        
+        '''
+        Write the results of the TDE calculation to a file.
+        This method should be implemented to save the results in a structured format.
+        '''
+        pass
+
 
         
 
