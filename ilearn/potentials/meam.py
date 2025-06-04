@@ -60,6 +60,8 @@ if __name__ == "__main__":
     tde.set_hkl_from_angles()
     tde._setup()
     tde.thermalize()
+    tde.calculate()
+    
 
 
         

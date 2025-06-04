@@ -321,15 +321,15 @@ class ThresholdDisplacementEnergy:
             input_template = f.read()
             ff_settings = self.ff_settings
         input_file = os.path.join(module_dir, 'in.thermalize')
-        output_thermalized = os.path.join(module_dir, 'results', 'data.thermalized')
+        output_thermalized = os.path.join(module_dir, 'results', 'calculation', 'data.thermalized')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings),
                                             mass=self.mass, alat=self.alat, size=self.size,
                                             output_thermalized=output_thermalized)) 
-        submit_file = os.path.join(module_dir, 'submit-thermal.sh')
-        cmd = f'sbatch {submit_file}'
-        subprocess.run(cmd, shell=True, check=True)
-        self.thermal_file = output_thermalized  
+        # submit_file = os.path.join(module_dir, 'results', 'calculation', 'submit-thermal.sh')
+        # cmd = f'sbatch {submit_file}'
+        # subprocess.run(cmd, shell=True, check=True)
+        # self.thermal_file = output_thermalized  
 
     def calculate(self):
         pass
@@ -342,6 +342,9 @@ class ThresholdDisplacementEnergy:
         set array in submit-tde.sh to the number of lines in folder_list.txt
         sbatch submit-tde.sh
         '''
+
+    def write_results(self):
+        
 
         
 

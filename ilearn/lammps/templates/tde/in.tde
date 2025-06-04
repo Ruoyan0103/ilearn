@@ -4,7 +4,7 @@
 units            metal
 atom_style       atomic
 boundary         p p p
-read_data        ../data.thermalized
+read_data        ../../data.thermalized
 mass             1 {mass}
 
 # ------------------------ FORCE FIELD ------------------------
