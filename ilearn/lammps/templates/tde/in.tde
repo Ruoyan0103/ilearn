@@ -1,10 +1,10 @@
 # LAMMPS input script for TDE simulation
-# parameters: mass, alat, cell_file, ff_settings, pka_id, V_x, V_y, V_z, temp, output_file, element
+# parameters: mass, alat, ff_settings, pka_id, V_x, V_y, V_z, temp, element
 # ----------------------- Initialization ---------------------
 units            metal
 atom_style       atomic
 boundary         p p p
-read_data        {cell_file}
+read_data        data.thermalized
 mass             1 {mass}
 
 # ------------------------ Force field ------------------------
@@ -31,6 +31,6 @@ fix              fix_heatsink group_border temp/berendsen {temp} {temp} $(100.0*
 fix              fix_momentum all momentum 1 linear 1 1 1
 fix              fix_nve all nve
 run              5000
-dump             final all custom 1 {output_file} element x y z id c_peperatom c_keperatom
+dump             final all custom 1 dump_out element x y z id c_peperatom c_keperatom
 dump_modify      final element {element}
 run 0
