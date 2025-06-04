@@ -20,11 +20,12 @@ from ase.io import read
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy
+from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
 results_dir = os.path.join(module_dir, 'results')
 
-class GAPotential(Potential):
+class GAPotential(IPotential):
     """
     This class implements Turbo Smooth Overlap of Atomic Position potentials.
     """
@@ -318,10 +319,27 @@ class GAPotential(Potential):
             
     #def predict(self, test_structures_dataset):
 
+# example usage
 if __name__ == "__main__":
-    gap_file = os.path.join(module_dir, 'params', 'Ge-v10.xml')
+    gap_file = os.path.join(module_dir, 'params', 'GAP', 'Ge-v10.xml')
     gap = GAPotential.from_config(gap_file)
     ff_settings = gap.write_param(gap_file)
-    print(ff_settings)
-    tde = ThresholdDisplacementEnergy(ff_settings=ff_settings)
+    alat = 3
+    pka_id = 100
+    temp = 300 
+    element = 'Ge'
+    mass = 72.56
+    min_velocity = 50
+    max_velocity = 100
+    velocity_interval = 5
+    kin_eng_threshold = 4
+
+    tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
+                                    pka_id, min_velocity, max_velocity, velocity_interval, kin_eng_threshold)
+    vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
+    vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
+    vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
+    vectors = np.array((vector1, vector2, vector3))
+    tde.get_uniform_angles(vectors, 4)
+    tde.set_hkl_from_angles()
     tde._setup()

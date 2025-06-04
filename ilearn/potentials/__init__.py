@@ -4,7 +4,7 @@
 """This package contains Potential classes representing Interatomic Potentials."""
 from abc import ABC 
 
-class Potential(ABC):
+class IPotential(ABC):
     pass
     # """
     # Abstract Base class for a Interatomic Potential.
