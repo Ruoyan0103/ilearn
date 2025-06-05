@@ -60,7 +60,7 @@ class ThresholdDisplacementEnergy:
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
         self.thermal_file = ''
-        self.size = 9       # Size of the simulation box in Angstroms (9 * alat)
+        self.size = 3      # Size of the simulation box in Angstroms (9 * alat)
         
     def get_random_angles(self, min_phi, max_phi, min_theta, max_theta, num_points):
         '''
@@ -340,7 +340,7 @@ class ThresholdDisplacementEnergy:
             raise FileNotFoundError(f"{self.thermal_file} is not found. Please run thermalization first.")
         reference_file = self.thermal_file
         if not os.path.isfile(trajectory_file):
-            raise FileNotFoundError(f"{trajectory_file} is not found.Please run TDE calculation first.")
+            raise FileNotFoundError(f"{trajectory_file} is not found. Please run TDE calculation first.")
         reference_pipeline = import_file(reference_file)
         pipeline = import_file(trajectory_file)
         wsam = WignerSeitzAnalysisModifier(per_type_occupancies=True, output_displaced=False)
@@ -353,10 +353,12 @@ class ThresholdDisplacementEnergy:
         for particle_id, occupancy, position in zip(data.particles['Particle Identifier'],
                                                     data.particles['Occupancy'],
                                                     data.particles['Position']):
-            if occupancy != 0:
+            if occupancy == 0:
                 print(f"{trajectory_file}: Vacancy detected at Particle ID: {particle_id}, Position: {position}")
                 vac_flag = True
                 break 
+        if not vac_flag:
+            print(f"{trajectory_file}: No vacancies detected.")
         return vac_flag
 
 
@@ -382,6 +384,7 @@ class ThresholdDisplacementEnergy:
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
+        time.sleep(15)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
 
 
     @deprecated(reason="This method is deprecated, use calculate instead.")
@@ -505,25 +508,31 @@ class ThresholdDisplacementEnergy:
         finished_hkl = [False] * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
         pre_v = self.min_velocity
         while pre_v < self.max_velocity:
+            if all(finished_hkl):
+                print("All hkl calculations are finished. TDE is written")
+                break
             for idx, _ in enumerate(self.hkl_list):
-                if finished_hkl[idx]:
+                if finished_hkl[idx]:                 # If this hkl is already finished, skip it
                     continue
                 velocity_dir = os.path.join(calculation_dir, str(pre_v))
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
-                if self._exist_trajectory_file(trajectory_file, check_interval=0.05, max_wait_hours=0.2):
-                    if self._check_vacancies_with_reference(trajectory_file):
-                        finished_hkl[idx] = True
-                        self._write_TDE(idx, pre_v)
-                        continue 
-                    else:
-                        next_v = pre_v + self.velocity_interval
-                        velocity_dir = os.path.join(calculation_dir, str(next_v))
-                        vel_hkl_dir = os.path.join(velocity_dir, str(idx))
-                        subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
+                higher_energy_needed = False
+                if self._check_vacancies_with_reference(trajectory_file):
+                    finished_hkl[idx] = True
+                    self._write_TDE(idx, pre_v)
                 else:
-                    raise FileNotFoundError(f"Trajectory file not found: {trajectory_file}")
+                    higher_energy_needed = True
+                    next_v = pre_v + self.velocity_interval
+                    velocity_dir = os.path.join(calculation_dir, str(next_v))
+                    vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+                    subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
+            if higher_energy_needed:
+                time.sleep(40) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
+        for idx, finished_flag in enumerate(finished_hkl):
+            if not finished_flag:
+                print(f"Hkl {self.hkl_list[idx]} is not finished. TDE is not written for this hkl.")
 
 
 # example usage

@@ -21,7 +21,7 @@ fix              output all print 100 "$(step) $(time) $(temp) $(press) &
 
 dump             1 all custom 10 dump.xyz type x y z c_peperatom c_keperatom
 group            group_pka id == {pka_id}
-velocity         group_pka set {V_x} {V_y} {V_y} units box # metal units:A/ps
+velocity         group_pka set {V_x} {V_y} {V_z} units box # metal units:A/ps
 fix              timestep all dt/reset 1 NULL 0.002 0.05 emax 10
 region           region_border block $(xlo+v_Xlat) $(xhi-v_Xlat) $(ylo+v_Xlat) &
                  $(yhi-v_Xlat) $(zlo+v_Xlat) $(zhi-v_Xlat) side out units box
@@ -30,7 +30,7 @@ group            group_border region region_border
 fix              fix_heatsink group_border temp/berendsen {temp} {temp} $(100.0*dt)
 fix              fix_momentum all momentum 1 linear 1 1 1
 fix              fix_nve all nve
-run              5000
+run              500
 dump             final all custom 1 dump_out element x y z id c_peperatom c_keperatom
 dump_modify      final element {element}
 run 0
