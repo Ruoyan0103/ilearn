@@ -23,7 +23,7 @@ logger = AppLogger(__name__, os.path.join(log_dir, 'tde.log'), overwrite=True).g
 
 class ThresholdDisplacementEnergy:
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
-                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold):
+                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size):
         '''
         Initialize the ThresholdDisplacementEnergy class.
         Parameters
@@ -64,7 +64,7 @@ class ThresholdDisplacementEnergy:
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
         self.thermal_file = ''
-        self.size = 3      # Size of the simulation box in Angstroms (9 * alat)
+        self.size = simulation_size      # simulation box: size*alat
         
     def get_random_angles(self, min_phi, max_phi, min_theta, max_theta, num_points):
         '''
@@ -196,8 +196,8 @@ class ThresholdDisplacementEnergy:
         ax.set_xticks(np.radians([0, 5, 10, 15, 20, 25, 30, 35, 40, 45]))  # Set ticks in radians
         ax.set_xticklabels(['0°', '5°', '10°', '15°', '20°', '25°', '30°', '35°', '40°', '45°'], fontsize=8)
         contourf = ax.contourf(phi_grid2, theta_grid2, energy_grid, levels=10, cmap='viridis', alpha=0.89)
-        contour = ax.contour(phi_grid2, theta_grid2, energy_grid, levels=10, colors='black', linewidths=0.18)
-        scatter = ax.scatter(azimuthal, polar, c='#D3D3D3', s=0.8, edgecolors='#D3D3D3')
+        ax.contour(phi_grid2, theta_grid2, energy_grid, levels=10, colors='black', linewidths=0.18)
+        ax.scatter(azimuthal, polar, c='#D3D3D3', s=0.8, edgecolors='#D3D3D3')
         
         # Text 1: Along the arc ("Azimuthal")
         angle = np.pi / 8                                # Position along the arc (midway between 0 and pi/4)
@@ -307,6 +307,31 @@ class ThresholdDisplacementEnergy:
                 prev_kin_eng = next_kin_eng
     
 
+    def check_interval(self):
+        '''
+        Check if the velocity interval is safe to satisfy the kinetic energy threshold (threshold).
+        '''
+        safe_v_interval = True
+        for hkl in self.hkl_list:
+            hkl = np.array(hkl)
+            v = self.min_velocity
+            v_interval = self.velocity_interval
+            kinetic_energy = lambda v: 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (v*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
+            
+            prev_kin_eng = kinetic_energy(v)
+            while v <= self.max_velocity:
+                next_v = v + v_interval
+                next_kin_eng = kinetic_energy(next_v)
+                energy_diff = next_kin_eng - prev_kin_eng
+                if energy_diff > self.kin_eng_threshold:
+                    print(f"Velocity {v} ang/pic, Kinetic energy: {prev_kin_eng:.2f} eV")
+                    print(f"Energy difference {energy_diff} exceeds threshold {self.kin_eng_threshold}.")
+                    safe_v_interval = False
+                v = next_v
+                prev_kin_eng = next_kin_eng
+        return safe_v_interval
+                    
+
     def _setup(self):
         '''
         Set up the simulation environment for the TDE calculation.
@@ -402,7 +427,7 @@ class ThresholdDisplacementEnergy:
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
-        time.sleep(15)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
+        time.sleep(300)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
 
 
     @deprecated(reason="This method is deprecated, use calculate instead.")
