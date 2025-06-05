@@ -1,0 +1,100 @@
+LAMMPS (2 Aug 2023 - Update 3)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+# --------------- INITIALIZATION ------------------
+# parameters: alat, mass, ff_settings, output_thermalized (0 K)
+clear
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+units metal
+dimension 3
+boundary p p p
+atom_style atomic
+
+# -------------------- CUBIC ------------------
+
+variable a equal 3
+
+lattice         custom $a                               a1 1.0 0.0 0.0                          a2 0.0 1.0 0.0                          a3 0.0 0.0 1.0                          basis 0.0 0.0 0.0                       basis 0.0 0.5 0.5                       basis 0.5 0.0 0.5                       basis 0.5 0.5 0.0                       basis 0.25 0.25 0.25                    basis 0.25 0.75 0.75                    basis 0.75 0.25 0.75                    basis 0.75 0.75 0.25
+lattice         custom 3                               a1 1.0 0.0 0.0                          a2 0.0 1.0 0.0                          a3 0.0 0.0 1.0                          basis 0.0 0.0 0.0                       basis 0.0 0.5 0.5                       basis 0.5 0.0 0.5                       basis 0.5 0.5 0.0                       basis 0.25 0.25 0.25                    basis 0.25 0.75 0.75                    basis 0.75 0.25 0.75                    basis 0.75 0.75 0.25
+Lattice spacing in x,y,z = 3 3 3
+
+region          myreg block     0 9                                 0 9                                 0 9
+
+create_box      1 myreg
+Created orthogonal box = (0 0 0) to (27 27 27)
+  1 by 1 by 1 MPI processor grid
+create_atoms    1 region myreg
+Created 5832 atoms
+  using lattice units in orthogonal box = (0 0 0) to (27 27 27)
+  create_atoms CPU = 0.001 seconds
+mass            1       72.56
+
+# ------------------------ FORCE FIELDS ---------------------------
+pair_style        meam
+pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/MEAM/library.meam Ge /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/MEAM/Ge.meam Ge
+
+# ------------------------ SIMULATION SETTINGS --------------------
+minimize 1e-4 1e-6 5000 5000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 6.5
+  ghost atom cutoff = 6.5
+  binsize = 3.25, bins = 9 9 9
+  2 neighbor lists, perpetual/occasional/extra = 2 0 0
+  (1) pair meam, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+  (2) pair meam, perpetual, half/full from (1)
+      attributes: half, newton on
+      pair build: halffull/newton
+      stencil: none
+      bin: none
+Per MPI rank memory allocation (min/avg/max) = 56.45 | 56.45 | 56.45 Mbytes
+   Step          Temp          E_pair         E_mol          TotEng         Press     
+         0   0              326876.76      0              326876.76      41023155     
+         1   0              326876.76      0              326876.76      41023155     
+Loop time of 0.188621 on 1 procs for 1 steps with 5832 atoms
+
+99.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = search direction is not downhill
+  Energy initial, next-to-last, final = 
+      326876.758019129   326876.758019129   326876.758019129
+  Force two-norm initial, final = 0 0
+  Force max component initial, final = 0 0
+  Final line search alpha, max atom move = 0 0
+  Iterations, force evaluations = 1 0
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.18837    | 0.18837    | 0.18837    |   0.0 | 99.87
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 6.0406e-05 | 6.0406e-05 | 6.0406e-05 |   0.0 |  0.03
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.0001938  |            |       |  0.10
+
+Nlocal:           5832 ave        5832 max        5832 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Nghost:          12798 ave       12798 max       12798 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+Neighs:     1.0381e+06 ave  1.0381e+06 max  1.0381e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+FullNghs:  2.07619e+06 ave 2.07619e+06 max 2.07619e+06 min
+Histogram: 1 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 2076192
+Ave neighs/atom = 356
+Neighbor list builds = 0
+Dangerous builds = 0
+
+write_data      /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/lammps/results/calculations/data.thermalized
+System init for write_data ...
+
+Total wall time: 0:00:00
