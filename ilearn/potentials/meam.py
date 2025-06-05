@@ -41,23 +41,26 @@ if __name__ == "__main__":
     meam = MEAMPotential()
     ff_settings = meam.write_param(library_file, element_file, element_symbol)
     alat = 5.658
-    pka_id = 30
-    temp = 20
+    pka_id = 2766
+    temp = 0.1
     element = 'Ge'
     mass = 72.56
-    min_velocity = 75
+    min_velocity = 60
     max_velocity = 85
     velocity_interval = 5
     kin_eng_threshold = 4
+    simulation_size = 9
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
-                                      pka_id, min_velocity, max_velocity, velocity_interval, kin_eng_threshold)
+                                      pka_id, min_velocity, max_velocity, 
+                                      velocity_interval, kin_eng_threshold, simulation_size)
     vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 1)
+    tde.get_uniform_angles(vectors, 4)
     tde.set_hkl_from_angles()
+    # tde.check_interval()
     tde.calculate()
     
     
