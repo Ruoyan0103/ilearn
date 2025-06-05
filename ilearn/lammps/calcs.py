@@ -1,4 +1,4 @@
-import os, math, subprocess, time
+import os, math, subprocess, time, shutil
 import numpy as np
 from deprecated import deprecated
 import matplotlib.pyplot as plt
@@ -60,7 +60,7 @@ class ThresholdDisplacementEnergy:
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
         self.thermal_file = ''
-        self.size = 3       # Size of the simulation box in Angstroms (9 * alat)
+        self.size = 9       # Size of the simulation box in Angstroms (9 * alat)
         
     def get_random_angles(self, min_phi, max_phi, min_theta, max_theta, num_points):
         '''
@@ -107,8 +107,8 @@ class ThresholdDisplacementEnergy:
             theta = math.acos(vector[2])                        # polar angle (θ)
             X = vector[0] /((1 + abs(vector[2])))               # stereographic projection
             Y = vector[1] /((1 + abs(vector[2])))
-            if [X,Y] not in listCoords:
-                listCoords.append([X,Y])
+            if [X,Y] not in self.listCoords:
+                self.listCoords.append([X,Y])
                 self.angle_list.append(np.array((phi, theta)))  # Store angles in a list, listCoords helps to remove duplicates
             self.angle_set.add((phi, theta))                    # Store unique angles, no need of listCoords here
 
@@ -254,9 +254,10 @@ class ThresholdDisplacementEnergy:
                                           temp=self.temp, element=self.element,
                                           V_x=Vx, V_y=Vy, V_z=Vz))
         # ---------------------- copy submit-tde.sh ------------------
-        os.copyfile(os.path.join(template_dir, 'submit-tde.sh'), 
-                    os.path.join(vel_hkl_dir, 'submit-tde.sh'))
+        shutil.copy(os.path.join(template_dir, 'submit-tde.sh'), 
+                   os.path.join(vel_hkl_dir, 'submit-tde.sh'))
         
+
     @deprecated(reason="Outside dir is hkl, inside dir is velocity, bad design, use _setup instead.")
     def _setup_old(self):
         '''
@@ -353,7 +354,7 @@ class ThresholdDisplacementEnergy:
                                                     data.particles['Occupancy'],
                                                     data.particles['Position']):
             if occupancy != 0:
-                # print(f"Vacancy detected at Particle ID: {particle_id}, Position: {position}")
+                print(f"{trajectory_file}: Vacancy detected at Particle ID: {particle_id}, Position: {position}")
                 vac_flag = True
                 break 
         return vac_flag
@@ -377,7 +378,7 @@ class ThresholdDisplacementEnergy:
                                             mass=self.mass, alat=self.alat, size=self.size,
                                             output_thermalized=self.thermal_file)) 
         # ------------------------------ copy submit-thermal.sh ------------------------------
-        os.copyfile(os.path.join(template_dir, 'submit-thermal.sh'), 
+        shutil.copy(os.path.join(template_dir, 'submit-thermal.sh'), 
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
@@ -425,6 +426,7 @@ class ThresholdDisplacementEnergy:
         while True:
             if os.path.isfile(file_path):
                 exist_flag = True
+                print(f"Trajectory file {file_path} found")
                 break
             elapsed = time.time() - start_time
             if elapsed > timeout:
@@ -495,21 +497,21 @@ class ThresholdDisplacementEnergy:
         # dummy trajectory file for the minimum velocity
         # all calculations will start with minumum velocity + velocity interval
         velocity_dir = os.path.join(calculation_dir, str(self.min_velocity))
-        for idx, hkl in enumerate(self.hkl_list):
+        for idx, _ in enumerate(self.hkl_list):
             vel_hkl_dir = os.path.join(velocity_dir, str(idx))
-            os.copyfile(os.path.join(calculation_dir, 'data.thermalized'),
+            shutil.copy(os.path.join(calculation_dir, 'data.thermalized'),
                         os.path.join(vel_hkl_dir, 'dump_out'))
 
-        finished_hkl = False * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
+        finished_hkl = [False] * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
         pre_v = self.min_velocity
         while pre_v < self.max_velocity:
-            for idx, hkl in enumerate(self.hkl_list):
+            for idx, _ in enumerate(self.hkl_list):
                 if finished_hkl[idx]:
                     continue
                 velocity_dir = os.path.join(calculation_dir, str(pre_v))
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
-                if self._exist_trajectory_file(trajectory_file):
+                if self._exist_trajectory_file(trajectory_file, check_interval=0.05, max_wait_hours=0.2):
                     if self._check_vacancies_with_reference(trajectory_file):
                         finished_hkl[idx] = True
                         self._write_TDE(idx, pre_v)
