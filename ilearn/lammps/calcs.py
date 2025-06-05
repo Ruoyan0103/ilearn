@@ -1,16 +1,21 @@
-import os, math, subprocess
+import os, math, subprocess, time
 import numpy as np
+from deprecated import deprecated
 import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
+from ovito.io import import_file
+from ovito.modifiers import WignerSeitzAnalysisModifier
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
-module_dir = os.path.dirname(os.path.abspath(__file__))
-AMU_TO_KG = 1.66053906660E-27  # Atomic mass unit to kg conversion factor
-JOULE_TO_EV = 6.241509074E18  # Joule to eV conversion factor
 
-# Angstroms/picosecond to meters/second conversion factor
-ANGSTROM_TO_METER = 1E-10
-PS_TO_S = 1E-12  # Picoseconds to seconds conversion factor
+module_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(module_dir, 'templates', 'tde')
+calculation_dir = os.path.join(module_dir, 'results', 'calculations')
+
+AMU_TO_KG = 1.66053906660E-27 # Atomic mass unit to kg conversion factor
+JOULE_TO_EV = 6.241509074E18  # Joule to eV conversion factor
+ANGSTROM_TO_METER = 1E-10     # Angstroms/picosecond to meters/second conversion factor
+PS_TO_S = 1E-12               # Picoseconds to seconds conversion factor
 
 class ThresholdDisplacementEnergy:
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
@@ -41,6 +46,8 @@ class ThresholdDisplacementEnergy:
             Threshold for kinetic energy difference (in eV).
         '''
         self.angle_set = set()
+        self.angle_list = []
+        self.listCoords = []
         self.hkl_list = []
         self.ff_settings = ff_settings
         self.element = element
@@ -95,10 +102,15 @@ class ThresholdDisplacementEnergy:
         '''
         def append(vector):
             if np.linalg.norm(vector) != 0.0:
-                vector = vector / np.linalg.norm(vector) # Normalize the vector to calculate angles
-            phi = math.atan2(vector[1],vector[0])        # azimuthal angle (φ)
-            theta = math.acos(vector[2])                 # polar angle (θ)
-            self.angle_set.add((phi, theta))             # Store unique angles
+                vector = vector / np.linalg.norm(vector)        # Normalize the vector to calculate angles
+            phi = math.atan2(vector[1],vector[0])               # azimuthal angle (φ)
+            theta = math.acos(vector[2])                        # polar angle (θ)
+            X = vector[0] /((1 + abs(vector[2])))               # stereographic projection
+            Y = vector[1] /((1 + abs(vector[2])))
+            if [X,Y] not in listCoords:
+                listCoords.append([X,Y])
+                self.angle_list.append(np.array((phi, theta)))  # Store angles in a list, listCoords helps to remove duplicates
+            self.angle_set.add((phi, theta))                    # Store unique angles, no need of listCoords here
 
         def mid(vector1, vector2):
             mid1 = np.array(([(vector1[0] + vector2[0])/2, (vector1[1] + vector2[1])/2, (vector1[2] + vector2[2])/2]))
@@ -131,9 +143,9 @@ class ThresholdDisplacementEnergy:
     
 
     def set_hkl_from_angles(self):
-        self.angle_set.add((np.radians(0), np.radians(5)))    # (phi, theta) : (0°, 5°)
-        self.angle_set.add((np.radians(45), np.radians(5)))   # (phi, theta) : (45°, 5°)
-        for angle in self.angle_set:
+        self.angle_list.append(np.array((np.radians(45), np.radians(5))))  # (phi, theta) : (45°, 5°)
+        self.angle_set.add((np.radians(45), np.radians(5)))      # (phi, theta) : (45°, 5°)
+        for angle in self.angle_list:
             phi, theta = angle
             h = np.sin(theta) * np.cos(phi)
             k = np.sin(theta) * np.sin(phi)
@@ -224,15 +236,15 @@ class ThresholdDisplacementEnergy:
         plot_file = os.path.join(module_dir, 'results', 'tde.png')
         plt.savefig(plot_file, dpi=300)
 
-    def _setup_helper(self, hkl, velocity):
-        template_dir = os.path.join(os.path.dirname(__file__), 'templates', 'tde')
+    def _setup_helper(self, velocity, hkl, vel_hkl_dir):
+        '''
+        Prepare the input file for the TDE calculation.
+        '''
+        # ---------------------- write in.tde -----------------------
         with open(os.path.join(template_dir, 'in.tde'), 'r') as f:
             input_template = f.read()
         ff_settings = self.ff_settings
-        hkl_str = '-'.join(f'{x:.3f}'.replace('.', '_') for x in hkl)
-        calculation_dir = os.path.join(module_dir, 'results', 'calculation', hkl_str, str(velocity))   
-        os.makedirs(calculation_dir, exist_ok=True)
-        input_file = os.path.join(calculation_dir, 'in.tde')
+        input_file = os.path.join(vel_hkl_dir, 'in.tde')
         with open(input_file, 'w') as f:
             Vx = velocity * hkl[0]
             Vy = velocity * hkl[1]
@@ -240,10 +252,13 @@ class ThresholdDisplacementEnergy:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings),
                                           mass=self.mass, alat=self.alat, pka_id=self.pka_id,
                                           temp=self.temp, element=self.element,
-                                          V_x=Vx, V_y=Vy, V_z=Vz))   
-        return input_file
-
-    def _setup(self):
+                                          V_x=Vx, V_y=Vy, V_z=Vz))
+        # ---------------------- copy submit-tde.sh ------------------
+        os.copyfile(os.path.join(template_dir, 'submit-tde.sh'), 
+                    os.path.join(vel_hkl_dir, 'submit-tde.sh'))
+        
+    @deprecated(reason="Outside dir is hkl, inside dir is velocity, bad design, use _setup instead.")
+    def _setup_old(self):
         '''
         Setup the input file for the LAMMPS simulation.
         This method prepares the input file with the necessary parameters.
@@ -278,22 +293,53 @@ class ThresholdDisplacementEnergy:
                 self._setup_helper(hkl, next_v)
                 v = next_v
                 prev_kin_eng = next_kin_eng
+    
+
+    def _setup(self):
+        '''
+        Set up the simulation environment for the TDE calculation.
+        Create folders - dir: velocity 
+                         -- dir: hkl 
+                            -- files: in.tde, submit-tde.sh
+        '''
+        v = self.min_velocity
+        while v <= self.max_velocity:
+            velocity_dir = os.path.join(calculation_dir, str(v))
+            for idx, hkl in enumerate(self.hkl_list):
+                vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+                os.makedirs(vel_hkl_dir, exist_ok=True)
+                self._setup_helper(v, hkl, vel_hkl_dir)
+            v += self.velocity_interval
 
 
-    def check_vacancies_with_reference(self):
+    def _check_vacancies_with_reference(self, trajectory_file):
         '''
         Check for vacancies in the thermalized data by comparing with a reference file.
-        Returns
+        Parameters
+        ----------
+        trajectory_file : str
+            Path to the trajectory file containing particle data.
+        Returns 
         -------
-        int
-            Number of vacancies detected.
+        bool
+            True if vacancies are detected, False otherwise.
+        Raises
+        -------
+        ValueError
+            If the thermal file is not set or the trajectory file is not found.
+        Notes
+        -----
+        This method uses the Wigner-Seitz Analysis Modifier to check for vacancies.
+        It requires the thermal file to be set from a previous thermalization step.
+        It raises an error if the trajectory file does not exist.
+        
         '''
+        vac_flag = False
         if not self.thermal_file:
-            raise ValueError("Thermal file not set.")
+            raise FileNotFoundError(f"{self.thermal_file} is not found. Please run thermalization first.")
         reference_file = self.thermal_file
-        trajectory_file = 'dump_out'
         if not os.path.isfile(trajectory_file):
-            return 0
+            raise FileNotFoundError(f"{trajectory_file} is not found.Please run TDE calculation first.")
         reference_pipeline = import_file(reference_file)
         pipeline = import_file(trajectory_file)
         wsam = WignerSeitzAnalysisModifier(per_type_occupancies=True, output_displaced=False)
@@ -303,36 +349,42 @@ class ThresholdDisplacementEnergy:
         data = pipeline.compute(0)
         if 'Occupancy' not in data.particles or 'Particle Identifier' not in data.particles or 'Position' not in data.particles:
             raise ValueError("Required data (Occupancy, Particle Identifier, or Position) not found.")
-        num_vac = 0
         for particle_id, occupancy, position in zip(data.particles['Particle Identifier'],
                                                     data.particles['Occupancy'],
                                                     data.particles['Position']):
-            if occupancy == 0:
-                print(f"Vacancy detected at Particle ID: {particle_id}, Position: {position}")
-                num_vac += 1
-        if num_vac == 0:
-            print(f"no vacancy")
-        return num_vac
+            if occupancy != 0:
+                # print(f"Vacancy detected at Particle ID: {particle_id}, Position: {position}")
+                vac_flag = True
+                break 
+        return vac_flag
 
 
     def thermalize(self):
-        template_dir = os.path.join(module_dir, 'templates', 'tde')
+        '''
+        Thermalize the system using the input template and force field settings.
+        This method creates an input file for the thermalization process,
+        and start the thermalization calculation.
+        The calculation is done in 'module_dir/results/calculation'.
+        '''
+        # ------------------------------ write in.thermalize ------------------------------
         with open(os.path.join(template_dir, 'in.thermalize'), 'r') as f:
             input_template = f.read()
             ff_settings = self.ff_settings
-        input_file = os.path.join(module_dir, 'in.thermalize')
-        output_thermalized = os.path.join(module_dir, 'results', 'calculation', 'data.thermalized')
+        input_file = os.path.join(calculation_dir, 'in.thermalize')
+        self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings),
                                             mass=self.mass, alat=self.alat, size=self.size,
-                                            output_thermalized=output_thermalized)) 
-        # submit_file = os.path.join(module_dir, 'results', 'calculation', 'submit-thermal.sh')
-        # cmd = f'sbatch {submit_file}'
-        # subprocess.run(cmd, shell=True, check=True)
-        # self.thermal_file = output_thermalized  
+                                            output_thermalized=self.thermal_file)) 
+        # ------------------------------ copy submit-thermal.sh ------------------------------
+        os.copyfile(os.path.join(template_dir, 'submit-thermal.sh'), 
+                    os.path.join(calculation_dir, 'submit-thermal.sh'))
+        # ------------------------------------- submit job -----------------------------------
+        subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
 
 
-    def calculate(self):
+    @deprecated(reason="This method is deprecated, use calculate instead.")
+    def calculate_old(self):
         pass
         '''
         bash: 
@@ -344,17 +396,133 @@ class ThresholdDisplacementEnergy:
         sbatch submit-tde.sh
         '''
 
-    def write_results(self):
+ 
+
+    def _exist_trajectory_file(self, file_path, check_interval=1800, max_wait_hours=6):
         '''
-        Write the results of the TDE calculation to a file.
-        This method should be implemented to save the results in a structured format.
-        '''
-        pass
+        Wait for the trajectory file to be created.
+        Parameters
+        ----------
+        file_path : str
+            Path to the trajectory file.
+        check_interval : int, optional
+            Time interval (in seconds) to check for the file's existence. Default is 1800 seconds (30 minutes).
+        max_wait_hours : int, optional
+            Maximum time to wait for the file (in hours). Default is 6 hours.
+        Returns
+        -------
+        bool
+            True if the file exists, False if the wait time exceeds the maximum limit.
+        Raises  
+        -------
+        TimeoutError
+            If the file does not exist after the maximum wait time.
+        ''' 
+        exist_flag = False
+        timeout = max_wait_hours * 3600  
+        start_time = time.time()
+        print(f"Waiting for trajectory file: {file_path}")
+        while True:
+            if os.path.isfile(file_path):
+                exist_flag = True
+                break
+            elapsed = time.time() - start_time
+            if elapsed > timeout:
+                raise TimeoutError(f"Timed out waiting for file: {file_path}")
+            time.sleep(check_interval)
+        return exist_flag
 
 
+    def _write_TDE(self, hkl_idx, velocity):
+        '''
+        Write the threshold displacement energy (TDE) to a file.
+        Parameters
+        ----------
+        hkl_idx : int
+            Index of the HKL direction in the hkl_list.
+        velocity : float
+            Velocity of the primary knock-on atom (in m/s).
+        Raises
+        ------
+        ValueError
+            If the HKL list is empty or if the angle list is empty.
+        Notes
+        -----
+        This method calculates the TDE based on the HKL direction and velocity,
+        and writes the results to a file named 'TDE.txt' in the calculation directory.
+        The TDE is calculated using the formula:
+        TDE = 0.5 * mass * (sum(hkl^2)) * (velocity * ANGSTROM_TO_METER / PS_TO_S)^2 * JOULE_TO_EV
+        where:
+        - mass is the mass of the primary knock-on atom in atomic mass units (AMU).
+        - hkl is the HKL direction vector.
+        - velocity is the velocity of the primary knock-on atom in m/s.
+        '''
+        hkl = np.round(self.hkl_list[hkl_idx], decimals=2)
+        angle = np.round(self.angle_list[hkl_idx], decimals=2)
+        kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (velocity*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
+        tde_file = os.path.join(calculation_dir, 'TDE.txt')
+        with open(tde_file, 'a') as f:
+            f.write(f"{hkl[0]} {hkl[1]} {hkl[2]} {angle[0]} {angle[1]} {velocity:.1f} {kinetic_energy:.2f}\n")
+
+
+    def calculate(self):
+        '''
+        Calculate the threshold displacement energy (TDE) for each HKL direction.
+        The calculated velocity range is [self.min_velocity+self.velocity_interval, self.max_velocity]
         
+        Raises
+        ------
+        ValueError
+            If the HKL list is empty or if the thermal file is not set.
+        FileNotFoundError
+            If the trajectory file is not found.
+        TimeoutError
+            If the trajectory file does not exist after the maximum wait time.
+        Notes
+        -----
+        This method performs the following steps:
+        1. Calls `_setup` to prepare the input files for the TDE calculation.
+        2. Calls `thermalize` to thermalize the system.
+        3. Creates a dummy trajectory file for the minimum velocity.
+        4. Iterates through the velocity range, checking for existing trajectory files.
+        5. If a trajectory file exists, checks for vacancies against the reference thermalized data.
+        6. If vacancies are not detected, submits a job for the next velocity.
+        Raises an error if the trajectory file is not found.
+        '''
+        self._setup()
+        self.thermalize()
 
-            
+        # dummy trajectory file for the minimum velocity
+        # all calculations will start with minumum velocity + velocity interval
+        velocity_dir = os.path.join(calculation_dir, str(self.min_velocity))
+        for idx, hkl in enumerate(self.hkl_list):
+            vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+            os.copyfile(os.path.join(calculation_dir, 'data.thermalized'),
+                        os.path.join(vel_hkl_dir, 'dump_out'))
+
+        finished_hkl = False * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
+        pre_v = self.min_velocity
+        while pre_v < self.max_velocity:
+            for idx, hkl in enumerate(self.hkl_list):
+                if finished_hkl[idx]:
+                    continue
+                velocity_dir = os.path.join(calculation_dir, str(pre_v))
+                vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+                trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
+                if self._exist_trajectory_file(trajectory_file):
+                    if self._check_vacancies_with_reference(trajectory_file):
+                        finished_hkl[idx] = True
+                        self._write_TDE(idx, pre_v)
+                        continue 
+                    else:
+                        next_v = pre_v + self.velocity_interval
+                        velocity_dir = os.path.join(calculation_dir, str(next_v))
+                        vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+                        subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
+                else:
+                    raise FileNotFoundError(f"Trajectory file not found: {trajectory_file}")
+            pre_v += self.velocity_interval
+
 
 # example usage
 # tde = ThresholdDisplacementEnergy()
