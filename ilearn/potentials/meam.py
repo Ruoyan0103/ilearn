@@ -40,14 +40,14 @@ if __name__ == "__main__":
     element_symbol = 'Ge'
     meam = MEAMPotential()
     ff_settings = meam.write_param(library_file, element_file, element_symbol)
-    alat = 3
-    pka_id = 2559
-    temp = 300 
+    alat = 5.658
+    pka_id = 30
+    temp = 20
     element = 'Ge'
     mass = 72.56
     min_velocity = 70
-    max_velocity = 85
-    velocity_interval = 5
+    max_velocity = 110
+    velocity_interval = 10
     kin_eng_threshold = 4
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
