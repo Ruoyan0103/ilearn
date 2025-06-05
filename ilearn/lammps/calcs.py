@@ -62,7 +62,7 @@ class ThresholdDisplacementEnergy:
         self.thermal_file = ''
         self.size = 3       # Size of the simulation box in Angstroms (9 * alat)
         
-    def get_random_angles(min_phi, max_phi, min_theta, max_theta, num_points):
+    def get_random_angles(self, min_phi, max_phi, min_theta, max_theta, num_points):
         '''
         Generate random angles on a sphere within specified ranges.
         Parameters
