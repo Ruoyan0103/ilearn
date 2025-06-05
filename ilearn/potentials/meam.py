@@ -45,9 +45,9 @@ if __name__ == "__main__":
     temp = 20
     element = 'Ge'
     mass = 72.56
-    min_velocity = 70
-    max_velocity = 110
-    velocity_interval = 10
+    min_velocity = 75
+    max_velocity = 85
+    velocity_interval = 5
     kin_eng_threshold = 4
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
