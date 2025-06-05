@@ -5,17 +5,21 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import griddata
 from ovito.io import import_file
 from ovito.modifiers import WignerSeitzAnalysisModifier
+from ilearn.loggers.logger import AppLogger
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
-
-module_dir = os.path.dirname(os.path.abspath(__file__))
-template_dir = os.path.join(module_dir, 'templates', 'tde')
-calculation_dir = os.path.join(module_dir, 'results', 'calculations')
 
 AMU_TO_KG = 1.66053906660E-27 # Atomic mass unit to kg conversion factor
 JOULE_TO_EV = 6.241509074E18  # Joule to eV conversion factor
 ANGSTROM_TO_METER = 1E-10     # Angstroms/picosecond to meters/second conversion factor
 PS_TO_S = 1E-12               # Picoseconds to seconds conversion factor
+
+module_dir = os.path.dirname(os.path.abspath(__file__))
+template_dir = os.path.join(module_dir, 'templates', 'tde')
+calculation_dir = os.path.join(module_dir, 'results', 'calculations')
+log_dir = os.path.join(module_dir, 'logs')
+
+logger = AppLogger(__name__, os.path.join(log_dir, 'tde.log'), overwrite=True).get_logger()
 
 class ThresholdDisplacementEnergy:
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
@@ -151,6 +155,12 @@ class ThresholdDisplacementEnergy:
             k = np.sin(theta) * np.sin(phi)
             l = np.cos(theta)
             self.hkl_list.append(np.array((h, k, l)))
+        hkl_file = os.path.join(calculation_dir, 'hkl_list.dat')
+        with open(hkl_file, 'w') as f:  # 'a' for append, 'w' for overwrite
+            np.savetxt(f, np.array(self.hkl_list), 
+                       fmt='%.8f',      # 8 decimal places
+                       delimiter=' ',   # Space separator
+                       header='h     k     l')  # File header
 
 
     def plot(self):
@@ -265,6 +275,7 @@ class ThresholdDisplacementEnergy:
         This method prepares the input file with the necessary parameters.
         '''
         if not self.hkl_list:
+            logger.error("HKL list is empty. Please use set_hkl_from_angles() first.")
             raise ValueError("HKL list is empty. Please generate HKL values first.")
         for hkl in self.hkl_list:
             hkl = np.array(hkl)
@@ -313,11 +324,15 @@ class ThresholdDisplacementEnergy:
             v += self.velocity_interval
 
 
-    def _check_vacancies_with_reference(self, trajectory_file):
+    def _check_vacancies_with_reference(self, velocity, hkl_idx, trajectory_file):
         '''
         Check for vacancies in the thermalized data by comparing with a reference file.
         Parameters
         ----------
+        velocity : float
+            Previous velocity used for the calculation.
+        hkl_idx : int   
+            Index of the HKL direction in the hkl_list.
         trajectory_file : str
             Path to the trajectory file containing particle data.
         Returns 
@@ -337,10 +352,12 @@ class ThresholdDisplacementEnergy:
         '''
         vac_flag = False
         if not self.thermal_file:
-            raise FileNotFoundError(f"{self.thermal_file} is not found. Please run thermalization first.")
+            logger.error("Thermalized file is not set. Please run thermalize() first.")
+            raise FileNotFoundError("Thermalized file is not set. Please run thermalize() first.")
         reference_file = self.thermal_file
         if not os.path.isfile(trajectory_file):
-            raise FileNotFoundError(f"{trajectory_file} is not found. Please run TDE calculation first.")
+            logger.error(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
+            raise FileNotFoundError(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
         reference_pipeline = import_file(reference_file)
         pipeline = import_file(trajectory_file)
         wsam = WignerSeitzAnalysisModifier(per_type_occupancies=True, output_displaced=False)
@@ -349,16 +366,17 @@ class ThresholdDisplacementEnergy:
 
         data = pipeline.compute(0)
         if 'Occupancy' not in data.particles or 'Particle Identifier' not in data.particles or 'Position' not in data.particles:
-            raise ValueError("Required data (Occupancy, Particle Identifier, or Position) not found.")
+            logger.error("Required data (Occupancy, Particle Identifier, or Position) not found in the trajectory file.")
+            raise ValueError("Required data (Occupancy, Particle Identifier, or Position) not found in the trajectory file.")
         for particle_id, occupancy, position in zip(data.particles['Particle Identifier'],
                                                     data.particles['Occupancy'],
                                                     data.particles['Position']):
             if occupancy == 0:
-                print(f"{trajectory_file}: Vacancy detected at Particle ID: {particle_id}, Position: {position}")
+                logger.info(f"{velocity}/{hkl_idx}/dump_out: Vacancy detected. Particle ID: {particle_id}, Position: {position}")
                 vac_flag = True
                 break 
         if not vac_flag:
-            print(f"{trajectory_file}: No vacancies detected.")
+            logger.info(f"{velocity}/{hkl_idx}/dump_out: No vacancies detected.")
         return vac_flag
 
 
@@ -401,8 +419,8 @@ class ThresholdDisplacementEnergy:
         '''
 
  
-
-    def _exist_trajectory_file(self, file_path, check_interval=1800, max_wait_hours=6):
+    @deprecated(reason="This method is deprecated, the logic changed in calculate().")
+    def _exist_trajectory_file_old(self, file_path, check_interval=1800, max_wait_hours=6):
         '''
         Wait for the trajectory file to be created.
         Parameters
@@ -462,12 +480,24 @@ class ThresholdDisplacementEnergy:
         - hkl is the HKL direction vector.
         - velocity is the velocity of the primary knock-on atom in m/s.
         '''
+        # Check if file exists to determine if we need to write header
+        tde_file = os.path.join(calculation_dir, 'TDE.txt')
+        write_header = not os.path.exists(tde_file)
+        
         hkl = np.round(self.hkl_list[hkl_idx], decimals=2)
         angle = np.round(self.angle_list[hkl_idx], decimals=2)
         kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (velocity*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
-        tde_file = os.path.join(calculation_dir, 'TDE.txt')
+        
         with open(tde_file, 'a') as f:
-            f.write(f"{hkl[0]} {hkl[1]} {hkl[2]} {angle[0]} {angle[1]} {velocity:.1f} {kinetic_energy:.2f}\n")
+            if write_header:
+                # Write header line
+                f.write("# hkl_idx    h    k    l    phi[rad]  theta[rad]  velocity[m/s]  TDE[eV]\n")
+                f.write("# ----------------------------------------------------------------------\n")
+            
+            # Write data line
+            f.write(f"{hkl_idx:<6.2f} {hkl[0]:<6.2f} {hkl[1]:<6.2f} {hkl[2]:<6.2f} "
+                    f"{math.degrees(angle[0]):<8.2f} {math.degrees(angle[1]):<8.2f} "
+                    f"{velocity*ANGSTROM_TO_METER/PS_TO_S:<12.1f} {kinetic_energy:<8.2f}\n")
 
 
     def calculate(self):
@@ -509,7 +539,7 @@ class ThresholdDisplacementEnergy:
         pre_v = self.min_velocity
         while pre_v < self.max_velocity:
             if all(finished_hkl):
-                print("All hkl calculations are finished. TDE is written")
+                logger.info("All TDE values are written")
                 break
             for idx, _ in enumerate(self.hkl_list):
                 if finished_hkl[idx]:                 # If this hkl is already finished, skip it
@@ -518,7 +548,7 @@ class ThresholdDisplacementEnergy:
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
                 higher_energy_needed = False
-                if self._check_vacancies_with_reference(trajectory_file):
+                if self._check_vacancies_with_reference(pre_v, idx, trajectory_file):
                     finished_hkl[idx] = True
                     self._write_TDE(idx, pre_v)
                 else:
@@ -528,11 +558,11 @@ class ThresholdDisplacementEnergy:
                     vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                     subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
-                time.sleep(40) # Wait for the job to finish before checking again 
+                time.sleep(80) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
         for idx, finished_flag in enumerate(finished_hkl):
             if not finished_flag:
-                print(f"Hkl {self.hkl_list[idx]} is not finished. TDE is not written for this hkl.")
+                logger.info(f"TDE for {idx}: {self.hkl_list[idx]} direction is not written. The velocity might be too low.")
 
 
 # example usage
