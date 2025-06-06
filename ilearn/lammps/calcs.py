@@ -147,8 +147,10 @@ class ThresholdDisplacementEnergy:
     
 
     def set_hkl_from_angles(self):
-        self.angle_list.append(np.array((np.radians(45), np.radians(5))))  # (phi, theta) : (45°, 5°)
-        self.angle_set.add((np.radians(45), np.radians(5)))      # (phi, theta) : (45°, 5°)
+        self.angle_list.append(np.array((np.radians(45), np.radians(1))))  # (phi, theta) : (45°, 1°)
+        self.angle_set.add((np.radians(45), np.radians(1)))                # (phi, theta) : (45°, 1°)
+        # self.angle_list.append(np.array((np.radians(0), np.radians(5))))   # (phi, theta) : (0°, 5°)
+        # self.angle_set.add((np.radians(0), np.radians(5)))                 # (phi, theta) : (0°, 5°)
         for angle in self.angle_list:
             phi, theta = angle
             h = np.sin(theta) * np.cos(phi)
@@ -165,9 +167,15 @@ class ThresholdDisplacementEnergy:
 
     def plot(self):
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
-        azimuthal = [angle[0] for angle in self.angle_set]
-        polar = [angle[1] for angle in self.angle_set]
-        energy = np.random.uniform(0, 1, len(azimuthal))  # Random energy values for demonstration
+        # azimuthal = [angle[0] for angle in self.angle_set]
+        # polar = [angle[1] for angle in self.angle_set]
+        # energy = np.random.uniform(0, 1, len(azimuthal))  # Random energy values for demonstration
+
+        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
+        azimuthal = np.radians(txt[:, 4])  # Convert degrees to radians
+        polar = np.radians(txt[:, 5])       # Convert degrees to radians
+        energy = txt[:, 7]                   # Energy values in eV
 
         phi_grid = np.linspace(0, np.pi/4, 1000)
         theta_grid = np.linspace(0, np.deg2rad(54.7), 1000)
@@ -202,7 +210,7 @@ class ThresholdDisplacementEnergy:
         # Text 1: Along the arc ("Azimuthal")
         angle = np.pi / 8                                # Position along the arc (midway between 0 and pi/4)
         radius = np.deg2rad(54.7)                        # Maximum polar angle
-        text_radius = radius * 1.12                       # Slightly farther from the arc
+        text_radius = radius * 1.12                      # Slightly farther from the arc
         ax.text(
             angle, text_radius, 'Azimuthal angle, φ', 
             rotation=np.degrees(angle - np.pi / 2),      # Align with the arc's tangent
@@ -245,6 +253,31 @@ class ThresholdDisplacementEnergy:
         )
         plot_file = os.path.join(module_dir, 'results', 'tde.png')
         plt.savefig(plot_file, dpi=300)
+
+    def plot_no_interplation(self):
+        '''
+        Plot the angles without interpolation.
+        This method creates a polar plot of the angles stored in self.angle_set.
+        '''
+        fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
+        azimuthal = np.radians(txt[:, 4])  # Convert degrees to radians
+        polar = np.radians(txt[:, 5])      # Convert degrees to radians
+
+        ax.set_thetalim(0, np.pi/4)
+        ax.set_rlim(0, np.deg2rad(54.7))
+        ax.set_yticks(np.radians([0, 15, 30, 45, 54.7]))            # Set ticks in polar
+        ax.tick_params(axis='y', labelsize=8)
+        ax.set_yticklabels(['0°', '15°', '30°', '45°', '54.7°'])
+        ax.grid(True, linewidth=0.3, color='#D3D3D3')
+
+        ax.set_xticks(np.radians([0, 5, 10, 15, 20, 25, 30, 35, 40, 45]))
+        ax.set_xticklabels(['0°', '5°', '10°', '15°', '20°', '25°', '30°', '35°', '40°', '45°'], fontsize=8)
+        ax.scatter(azimuthal, polar, c='red', s=1.5, edgecolors='red')
+
+        plt.savefig(os.path.join(module_dir, 'results', 'tde_no_interpolation.png'), dpi=300)
+        
 
     def _setup_helper(self, velocity, hkl, vel_hkl_dir):
         '''
@@ -427,7 +460,7 @@ class ThresholdDisplacementEnergy:
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
-        time.sleep(300)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
+        time.sleep(10)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
 
 
     @deprecated(reason="This method is deprecated, use calculate instead.")
@@ -564,15 +597,15 @@ class ThresholdDisplacementEnergy:
         pre_v = self.min_velocity
         while pre_v < self.max_velocity:
             if all(finished_hkl):
-                logger.info("All TDE values are written")
+                logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
                 break
+            higher_energy_needed = False
             for idx, _ in enumerate(self.hkl_list):
                 if finished_hkl[idx]:                 # If this hkl is already finished, skip it
                     continue
                 velocity_dir = os.path.join(calculation_dir, str(pre_v))
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
-                higher_energy_needed = False
                 if self._check_vacancies_with_reference(pre_v, idx, trajectory_file):
                     finished_hkl[idx] = True
                     self._write_TDE(idx, pre_v)
@@ -583,11 +616,14 @@ class ThresholdDisplacementEnergy:
                     vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                     subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
-                time.sleep(80) # Wait for the job to finish before checking again 
+                time.sleep(50) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
+
+        if all(finished_hkl):
+            logger.info("----------------------------------------------All TDE values are written with velocity <= max_velocity.------------------------------------------------")
+        logger.info(f"--------------------------------The velocity might be too low for these directions-------------------------------------------")
         for idx, finished_flag in enumerate(finished_hkl):
-            if not finished_flag:
-                logger.info(f"TDE for {idx}: {self.hkl_list[idx]} direction is not written. The velocity might be too low.")
+            logger.info(f"{idx}: {finished_flag}")
 
 
 # example usage

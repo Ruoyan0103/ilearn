@@ -1,0 +1,763 @@
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/0/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/1/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/2/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/3/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/4/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/5/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/6/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/7/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/8/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/9/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/10/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/11/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/12/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/13/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/14/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/15/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/16/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/17/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/18/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/19/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/20/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/21/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/22/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/23/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/24/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/25/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/26/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/27/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/28/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/29/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/30/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/31/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/32/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/33/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/34/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/35/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/36/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/37/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/38/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/39/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/40/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/41/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/42/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/43/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/44/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/45/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/46/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/47/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/48/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/49/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/50/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/51/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/52/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/53/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/54/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/55/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/56/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/57/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/58/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/59/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/60/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/61/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/62/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/63/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/64/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/65/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/66/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/67/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/68/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/69/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/70/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/71/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/72/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/73/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/74/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/75/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/76/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/77/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/78/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/79/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/80/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/81/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/82/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/83/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/84/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/85/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/86/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/87/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/88/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/89/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/90/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/91/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/92/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/93/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/94/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/95/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/96/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/97/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/98/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/99/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/100/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/101/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/102/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/103/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/104/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/105/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/106/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/107/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/108/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/109/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/110/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/111/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/112/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/113/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/114/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/115/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/116/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/117/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/118/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/119/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/120/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/121/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/122/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/123/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/124/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/125/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/126/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/127/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/128/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/129/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/130/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/131/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/132/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/133/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/134/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/135/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/136/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/137/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/138/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/139/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/140/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/141/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/142/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/143/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/144/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/145/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/146/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/147/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/148/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/149/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/150/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/151/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/152/dump_out: No vacancies detected.
+2025-06-06 14:52 - ilearn.lammps.calcs - INFO - 70/153/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/0/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/1/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/2/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/3/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/4/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/5/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/6/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/7/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/8/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/9/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/10/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/11/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/12/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/13/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/14/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/15/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/16/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/17/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/18/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/19/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/20/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/21/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/22/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/23/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/24/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/25/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/26/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/27/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/28/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/29/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/30/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/31/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/32/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/33/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/34/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/35/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/36/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/37/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/38/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/39/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/40/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/41/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/42/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/43/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/44/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/45/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/46/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/47/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/48/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/49/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/50/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/51/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/52/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/53/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/54/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/55/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/56/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/57/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/58/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/59/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/60/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/61/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/62/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/63/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/64/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/65/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/66/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/67/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/68/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/69/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/70/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/71/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/72/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/73/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/74/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/75/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/76/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/77/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/78/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/79/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/80/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/81/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/82/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/83/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/84/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/85/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/86/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/87/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/88/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/89/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/90/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/91/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/92/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/93/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/94/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/95/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/96/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/97/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/98/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/99/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/100/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/101/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/102/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/103/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/104/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/105/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/106/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/107/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/108/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/109/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/110/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/111/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/112/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/113/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/114/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/115/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/116/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/117/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/118/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/119/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/120/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/121/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/122/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/123/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/124/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/125/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/126/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/127/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/128/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/129/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/130/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/131/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/132/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/133/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/134/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/135/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/136/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/137/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/138/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/139/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/140/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/141/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/142/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/143/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/144/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/145/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/146/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/147/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/148/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/149/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/150/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/151/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/152/dump_out: No vacancies detected.
+2025-06-06 14:53 - ilearn.lammps.calcs - INFO - 75/153/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/1/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/4/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/8/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/21/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/22/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/29/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/31/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/32/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/33/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/34/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/35/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/36/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/37/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/38/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/39/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/41/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/44/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/47/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/48/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/49/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/50/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/51/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/52/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/53/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/54/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/55/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/56/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/57/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/58/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/59/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/60/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/61/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/62/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/63/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/64/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/65/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/67/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/68/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/69/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/70/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/71/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/72/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/73/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/74/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/75/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/76/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/77/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/78/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/79/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/80/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/81/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/82/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/83/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/84/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/85/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/86/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/87/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/88/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/89/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/91/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/92/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/106/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/108/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/109/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/110/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/114/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/115/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/116/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/117/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/118/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/119/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/120/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/121/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/122/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/123/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/124/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/125/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/127/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/128/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/131/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/132/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/134/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/136/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/137/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/138/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/139/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/140/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/141/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/142/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/143/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/144/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/145/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/146/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/147/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/148/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/149/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/150/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/151/dump_out: No vacancies detected.
+2025-06-06 14:54 - ilearn.lammps.calcs - INFO - 80/152/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/1/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/4/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/8/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/22/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/32/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/33/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/34/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/36/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/37/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/38/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/39/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/41/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/48/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/49/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/50/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/51/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/52/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/53/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/54/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/56/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/58/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/59/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/60/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/61/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/62/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/63/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/65/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/68/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/69/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/72/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/73/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/75/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/76/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/77/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/78/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/79/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/80/dump_out: Vacancy detected. Particle ID: 689, Position: [ 5.658 11.316 16.974]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/81/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/82/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/83/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/84/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/85/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/86/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/87/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/88/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/89/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/92/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/106/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/109/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/114/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/115/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/117/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/118/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/119/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/120/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/122/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/123/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/124/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/125/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/127/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/128/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/132/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/134/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/136/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/138/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/139/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/140/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/141/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/142/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/143/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/144/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/145/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/146/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/147/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/148/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/149/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/150/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/151/dump_out: No vacancies detected.
+2025-06-06 14:55 - ilearn.lammps.calcs - INFO - 85/152/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/4/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/36/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/37/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/38/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/41/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/49/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/50/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/51/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/54/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/56/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/58/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/63/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/65/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/68/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/75/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/76/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/78/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/79/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/81/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/82/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/83/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/84/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/85/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/86/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/87/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/92/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/109/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/115/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/117/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/118/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/122/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/123/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/124/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/125/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/132/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/136/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/138/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/139/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/140/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/141/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/142/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/143/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/144/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/145/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/146/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/147/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/148/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/149/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/151/dump_out: No vacancies detected.
+2025-06-06 14:56 - ilearn.lammps.calcs - INFO - 90/152/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/4/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/36/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/49/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/65/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/68/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/75/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/76/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/78/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/79/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/81/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/82/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/83/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/84/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/85/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/86/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/87/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/92/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/117/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/118/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/122/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/123/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/136/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/140/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/141/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/142/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/143/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/144/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/145/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/146/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/147/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/148/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/149/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 95/151/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/4/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/36/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/68/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/75/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/79/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/81/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/82/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/83/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/84/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/85/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/86/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/92/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/118/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/140/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/141/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/144/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/145/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/146/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/147/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/148/dump_out: No vacancies detected.
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/149/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:57 - ilearn.lammps.calcs - INFO - 100/151/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/75/dump_out: No vacancies detected.
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/79/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/81/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/83/dump_out: No vacancies detected.
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/85/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/86/dump_out: No vacancies detected.
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/118/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/144/dump_out: No vacancies detected.
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/145/dump_out: Vacancy detected. Particle ID: 652, Position: [ 8.487  8.487 16.974]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/146/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:58 - ilearn.lammps.calcs - INFO - 105/148/dump_out: No vacancies detected.
+2025-06-06 14:59 - ilearn.lammps.calcs - INFO - 110/75/dump_out: No vacancies detected.
+2025-06-06 14:59 - ilearn.lammps.calcs - INFO - 110/83/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:59 - ilearn.lammps.calcs - INFO - 110/86/dump_out: Vacancy detected. Particle ID: 652, Position: [ 8.487  8.487 16.974]
+2025-06-06 14:59 - ilearn.lammps.calcs - INFO - 110/144/dump_out: Vacancy detected. Particle ID: 450, Position: [ 5.658  8.487 14.145]
+2025-06-06 14:59 - ilearn.lammps.calcs - INFO - 110/148/dump_out: Vacancy detected. Particle ID: 454, Position: [ 7.0725  9.9015 15.5595]
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 115/75/dump_out: Vacancy detected. Particle ID: 652, Position: [ 8.487  8.487 16.974]
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - --------------------------------The velocity might be too low for these directions-------------------------------------------
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 0: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 1: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 2: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 3: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 4: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 5: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 6: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 7: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 8: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 9: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 10: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 11: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 12: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 13: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 14: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 15: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 16: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 17: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 18: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 19: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 20: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 21: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 22: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 23: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 24: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 25: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 26: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 27: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 28: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 29: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 30: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 31: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 32: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 33: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 34: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 35: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 36: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 37: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 38: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 39: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 40: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 41: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 42: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 43: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 44: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 45: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 46: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 47: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 48: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 49: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 50: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 51: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 52: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 53: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 54: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 55: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 56: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 57: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 58: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 59: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 60: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 61: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 62: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 63: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 64: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 65: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 66: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 67: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 68: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 69: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 70: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 71: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 72: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 73: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 74: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 75: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 76: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 77: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 78: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 79: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 80: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 81: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 82: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 83: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 84: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 85: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 86: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 87: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 88: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 89: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 90: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 91: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 92: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 93: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 94: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 95: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 96: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 97: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 98: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 99: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 100: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 101: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 102: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 103: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 104: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 105: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 106: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 107: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 108: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 109: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 110: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 111: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 112: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 113: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 114: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 115: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 116: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 117: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 118: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 119: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 120: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 121: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 122: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 123: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 124: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 125: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 126: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 127: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 128: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 129: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 130: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 131: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 132: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 133: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 134: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 135: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 136: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 137: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 138: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 139: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 140: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 141: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 142: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 143: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 144: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 145: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 146: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 147: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 148: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 149: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 150: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 151: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 152: True
+2025-06-06 15:00 - ilearn.lammps.calcs - INFO - 153: True

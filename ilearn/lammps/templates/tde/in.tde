@@ -27,10 +27,10 @@ region           region_border block $(xlo+v_Xlat) $(xhi-v_Xlat) $(ylo+v_Xlat) &
                  $(yhi-v_Xlat) $(zlo+v_Xlat) $(zhi-v_Xlat) side out units box
 
 group            group_border region region_border
-fix              fix_heatsink group_border temp/berendsen {temp} {temp} $(100.0*dt)
+fix              fix_heatsink group_border temp/csvr {temp} {temp} $(100.0*dt) 54324
 fix              fix_momentum all momentum 1 linear 1 1 1
 fix              fix_nve all nve
-run              500
+run              5000
 dump             final all custom 1 dump_out element x y z id c_peperatom c_keperatom
 dump_modify      final element {element}
 run 0
