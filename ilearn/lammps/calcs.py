@@ -150,8 +150,8 @@ class ThresholdDisplacementEnergy:
     
 
     def set_hkl_from_angles(self):
-        self.angle_list.append(np.array((np.radians(45), np.radians(1))))  # (phi, theta) : (45°, 1°)
-        self.angle_set.add((np.radians(45), np.radians(1)))                # (phi, theta) : (45°, 1°)
+        self.angle_list.append(np.array((np.radians(45), np.radians(1))))    # (phi, theta) : (45°, 1°)
+        self.angle_set.add((np.radians(45), np.radians(1)))                  # (phi, theta) : (45°, 1°)
         # self.angle_list.append(np.array((np.radians(0), np.radians(5))))   # (phi, theta) : (0°, 5°)
         # self.angle_set.add((np.radians(0), np.radians(5)))                 # (phi, theta) : (0°, 5°)
         for angle in self.angle_list:
@@ -176,19 +176,21 @@ class ThresholdDisplacementEnergy:
 
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
-        azimuthal = txt[:, 4]   # Convert degrees to radians
-        polar = txt[:, 5]       # Convert degrees to radians
+        azimuthal = txt[:, 4]   # Azimuthal angles in radians
+        polar = txt[:, 5]       # Polar angles in radians
         energy = txt[:, 7]      # Energy values in eV
 
-        phi_grid = np.linspace(0, np.pi/4, 1000)
-        theta_grid = np.linspace(0, np.deg2rad(54.7), 1000)
+        phi_grid = np.linspace(0, np.max(azimuthal), 1000)
+        theta_grid = np.linspace(0, np.max(polar), 1000)
         phi_grid2, theta_grid2 = np.meshgrid(phi_grid, theta_grid)
         
         # Mask invalid points in the interpolation grid
-        # h*tan(theta) = k/cos(phi)
-        # max_polar = np.arctan((k/h) / cos(phi))
-        # k <= h, so the max polar is when k = h
-        max_polar_grid = np.arctan(1 / np.cos(phi_grid2))
+        # rcos(theta) = l         (1)
+        # rsin(theta)cos(phi) = h (2)
+        # rsin(theta)sin(phi) = k (3)
+        # The maximum polar angle is when k = l, so we can find the maximum polar angle
+        # using (1) and (3), max_polar = np.arctan((k/l) / sin(phi)) = np.arctan(1 / sin(phi))
+        max_polar_grid = np.arctan(1 / np.sin(phi_grid2))
         valid_mask = theta_grid2 <= max_polar_grid    # boolean
     
         # Interpolation with masking
@@ -251,8 +253,8 @@ class ThresholdDisplacementEnergy:
         char.set_label('Threshold displacement energy (eV)', fontsize=9)        
         char.ax.tick_params(
             labelsize=8,          # Smaller font size for numbers
-            length=2,            # Shorter tick marks
-            width=0.5            # Thinner tick marks
+            length=2,             # Shorter tick marks
+            width=0.5             # Thinner tick marks
         )
         plot_file = os.path.join(module_dir, 'results', 'tde.png')
         plt.savefig(plot_file, dpi=300)
@@ -260,13 +262,13 @@ class ThresholdDisplacementEnergy:
     def plot_no_interplation(self):
         '''
         Plot the angles without interpolation.
-        This method creates a polar plot of the angles stored in self.angle_set.
+        Used to show how sampling points are distributed in the polar plot.
         '''
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
-        azimuthal = txt[:, 4]  # Convert degrees to radians
-        polar = txt[:, 5]      # Convert degrees to radians
+        azimuthal = txt[:, 4]  
+        polar = txt[:, 5]      
 
         ax.set_thetalim(0, np.pi/4)
         ax.set_rlim(0, np.deg2rad(54.7))
@@ -280,6 +282,53 @@ class ThresholdDisplacementEnergy:
         ax.scatter(azimuthal, polar, c='red', s=1.5, edgecolors='red')
 
         plt.savefig(os.path.join(module_dir, 'results', 'tde_no_interpolation.png'), dpi=300)
+
+
+    def average_TDE(self):
+        '''
+        Average TDE with angles.
+        Returns
+        -------
+        float
+            Averaged TDE value.
+        '''
+        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
+        azimuthal = txt[:, 4]   # Azimuthal angles in radians
+        polar = txt[:, 5]       # Polar angles in radians
+        energy = txt[:, 7]      # Energy values in eV
+
+        number_of_blocks = 100
+        phi_grid = np.linspace(0, np.max(azimuthal), number_of_blocks)
+        theta_grid = np.linspace(0, np.max(polar), number_of_blocks)
+
+        phi_grid2, theta_grid2 = np.meshgrid(phi_grid, theta_grid)
+        max_polar_grid = np.arctan(1 / np.sin(phi_grid2))
+        valid_mask = theta_grid2 <= max_polar_grid    # boolean
+    
+        # Interpolation with masking
+        energy_grid = griddata(
+            (azimuthal, polar), energy, (phi_grid2, theta_grid2), method='linear'
+        )
+        energy_grid[~valid_mask] = np.nan  # Set invalid regions to NaN
+
+        d_phi = (np.max(azimuthal)-0)/number_of_blocks
+        d_theta = (np.max(polar)-0)/number_of_blocks
+        
+        numberator = 0
+        denominator = 0
+        for i in range(number_of_blocks):
+            for j in range(number_of_blocks):
+                if np.isnan(energy_grid[i][j]):
+                    continue
+                numberator += energy_grid[i][j] * np.sin(theta_grid2[i][j]) * d_theta * d_phi
+                denominator += np.sin(theta_grid2[i][j]) * d_theta * d_phi
+        ave_energy = numberator / denominator
+        
+        logger.info(f"Average TDE: {ave_energy:.2f} eV")
+        return ave_energy
+        
+        
         
 
     def _setup_helper(self, velocity, hkl, vel_hkl_dir):

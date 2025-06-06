@@ -64,6 +64,7 @@ if __name__ == "__main__":
     tde.calculate()
     tde.plot()
     tde.plot_no_interplation()
+    tde.average_TDE()
     
     
 
