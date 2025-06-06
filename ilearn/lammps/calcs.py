@@ -18,9 +18,12 @@ module_dir = os.path.dirname(os.path.abspath(__file__))
 template_dir = os.path.join(module_dir, 'templates', 'tde')
 calculation_dir = os.path.join(module_dir, 'results', 'calculations')
 log_dir = os.path.join(module_dir, 'logs')
+log_file = os.path.join(log_dir, 'tde.log')
 
-logger = AppLogger(__name__, os.path.join(log_dir, 'tde.log'), overwrite=True).get_logger()
-
+if os.path.exists(log_file):
+    os.remove(log_file) 
+logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
+ 
 class ThresholdDisplacementEnergy:
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
                  min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size):
@@ -173,9 +176,9 @@ class ThresholdDisplacementEnergy:
 
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
-        azimuthal = np.radians(txt[:, 4])  # Convert degrees to radians
-        polar = np.radians(txt[:, 5])       # Convert degrees to radians
-        energy = txt[:, 7]                   # Energy values in eV
+        azimuthal = txt[:, 4]   # Convert degrees to radians
+        polar = txt[:, 5]       # Convert degrees to radians
+        energy = txt[:, 7]      # Energy values in eV
 
         phi_grid = np.linspace(0, np.pi/4, 1000)
         theta_grid = np.linspace(0, np.deg2rad(54.7), 1000)
@@ -262,8 +265,8 @@ class ThresholdDisplacementEnergy:
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
-        azimuthal = np.radians(txt[:, 4])  # Convert degrees to radians
-        polar = np.radians(txt[:, 5])      # Convert degrees to radians
+        azimuthal = txt[:, 4]  # Convert degrees to radians
+        polar = txt[:, 5]      # Convert degrees to radians
 
         ax.set_thetalim(0, np.pi/4)
         ax.set_rlim(0, np.deg2rad(54.7))
@@ -542,20 +545,26 @@ class ThresholdDisplacementEnergy:
         tde_file = os.path.join(calculation_dir, 'TDE.txt')
         write_header = not os.path.exists(tde_file)
         
-        hkl = np.round(self.hkl_list[hkl_idx], decimals=2)
-        angle = np.round(self.angle_list[hkl_idx], decimals=2)
+        hkl = self.hkl_list[hkl_idx]
+        angle = self.angle_list[hkl_idx]
         kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (velocity*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
         
         with open(tde_file, 'a') as f:
             if write_header:
                 # Write header line
-                f.write("# hkl_idx    h    k    l    phi[rad]  theta[rad]  velocity[m/s]  TDE[eV]\n")
-                f.write("# ----------------------------------------------------------------------\n")
+                f.write("# hkl_idx  h       k       l       phi[rad]    theta[rad]   velocity[m/s]  TDE[eV]   phi[deg]  theta[deg]\n")
+                f.write("# ----------------------------------------------------------------------------------------------\n")
             
             # Write data line
-            f.write(f"{hkl_idx:<6.2f} {hkl[0]:<6.2f} {hkl[1]:<6.2f} {hkl[2]:<6.2f} "
-                    f"{math.degrees(angle[0]):<8.2f} {math.degrees(angle[1]):<8.2f} "
-                    f"{velocity*ANGSTROM_TO_METER/PS_TO_S:<12.1f} {kinetic_energy:<8.2f}\n")
+            f.write(
+                f"{hkl_idx:<8.2f}{hkl[0]:<8.2f}{hkl[1]:<8.2f}{hkl[2]:<8.2f}"
+                f"{angle[0]} {angle[1]}   "
+                f"{velocity * ANGSTROM_TO_METER / PS_TO_S:<14.1f}"
+                f"{kinetic_energy:<9.2f}"
+                f"{math.degrees(angle[0]):<10.2f}"
+                f"{math.degrees(angle[1]):<10.2f}\n"
+            )
+
 
 
     def calculate(self):
@@ -597,7 +606,7 @@ class ThresholdDisplacementEnergy:
         pre_v = self.min_velocity
         while pre_v <= self.max_velocity:
             if all(finished_hkl):
-                logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
+                logger.info("----------------------------------------------All TDE values are written with velocity <= max_velocity.------------------------------------------------")
                 break
             higher_energy_needed = False
             for idx, _ in enumerate(self.hkl_list):
@@ -620,13 +629,11 @@ class ThresholdDisplacementEnergy:
                 time.sleep(50) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
 
-        if all(finished_hkl):
-            logger.info("----------------------------------------------All TDE values are written with velocity <= max_velocity.------------------------------------------------")
-        else:
-            logger.info(f"--------------------------------The velocity might be too low for these directions-------------------------------------------")
+        if not all(finished_hkl):
+            logger.info(f"--------------------------------The max_velocity is too low for these directions-------------------------------------------")
             for idx, finished_flag in enumerate(finished_hkl):
                 if not finished_flag:
-                    logger.info(f"{idx}: {finished_flag}, HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
+                    logger.info(f"{idx}: HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
                 
 
 

@@ -45,8 +45,8 @@ if __name__ == "__main__":
     temp = 0
     element = 'Ge'
     mass = 72.56
-    min_velocity = 70
-    max_velocity = 120
+    min_velocity = 110
+    max_velocity = 115
     velocity_interval = 5
     kin_eng_threshold = 4
     simulation_size = 5
