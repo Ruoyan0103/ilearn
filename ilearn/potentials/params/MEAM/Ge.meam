@@ -4,7 +4,7 @@ augt1 = 0
 erose_form = 2
 ialloy = 2
 
-zbl(1,1) = 0
+zbl(1,1) = 1
 nn2(1,1) = 1
 rho0(1) = 1.880
 Ec(1,1) = 3.850
