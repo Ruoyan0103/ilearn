@@ -595,7 +595,7 @@ class ThresholdDisplacementEnergy:
 
         finished_hkl = [False] * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
         pre_v = self.min_velocity
-        while pre_v < self.max_velocity:
+        while pre_v <= self.max_velocity:
             if all(finished_hkl):
                 logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
                 break
@@ -610,20 +610,24 @@ class ThresholdDisplacementEnergy:
                     finished_hkl[idx] = True
                     self._write_TDE(idx, pre_v)
                 else:
-                    higher_energy_needed = True
-                    next_v = pre_v + self.velocity_interval
-                    velocity_dir = os.path.join(calculation_dir, str(next_v))
-                    vel_hkl_dir = os.path.join(velocity_dir, str(idx))
-                    subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
+                    if pre_v + self.velocity_interval <= self.max_velocity:   # if next velocity is still in range, otherwise, it runs, but won't be checked
+                        higher_energy_needed = True
+                        next_v = pre_v + self.velocity_interval
+                        velocity_dir = os.path.join(calculation_dir, str(next_v))
+                        vel_hkl_dir = os.path.join(velocity_dir, str(idx))
+                        subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
                 time.sleep(50) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
 
         if all(finished_hkl):
             logger.info("----------------------------------------------All TDE values are written with velocity <= max_velocity.------------------------------------------------")
-        logger.info(f"--------------------------------The velocity might be too low for these directions-------------------------------------------")
-        for idx, finished_flag in enumerate(finished_hkl):
-            logger.info(f"{idx}: {finished_flag}")
+        else:
+            logger.info(f"--------------------------------The velocity might be too low for these directions-------------------------------------------")
+            for idx, finished_flag in enumerate(finished_hkl):
+                if not finished_flag:
+                    logger.info(f"{idx}: {finished_flag}, HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
+                
 
 
 # example usage
