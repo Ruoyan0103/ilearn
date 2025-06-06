@@ -259,6 +259,7 @@ class ThresholdDisplacementEnergy:
         plot_file = os.path.join(module_dir, 'results', 'tde.png')
         plt.savefig(plot_file, dpi=300)
 
+
     def plot_no_interplation(self):
         '''
         Plot the angles without interpolation.
@@ -324,13 +325,11 @@ class ThresholdDisplacementEnergy:
                 numberator += energy_grid[i][j] * np.sin(theta_grid2[i][j]) * d_theta * d_phi
                 denominator += np.sin(theta_grid2[i][j]) * d_theta * d_phi
         ave_energy = numberator / denominator
-        
+
         logger.info(f"Average TDE: {ave_energy:.2f} eV")
         return ave_energy
         
         
-        
-
     def _setup_helper(self, velocity, hkl, vel_hkl_dir):
         '''
         Prepare the input file for the TDE calculation.
@@ -512,7 +511,7 @@ class ThresholdDisplacementEnergy:
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
-        time.sleep(10)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
+        time.sleep(60)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
 
 
     @deprecated(reason="This method is deprecated, use calculate instead.")
@@ -675,7 +674,7 @@ class ThresholdDisplacementEnergy:
                         vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                         subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
-                time.sleep(50) # Wait for the job to finish before checking again 
+                time.sleep(300) # Wait for the job to finish before checking again 
             pre_v += self.velocity_interval
 
         if not all(finished_hkl):
