@@ -45,8 +45,10 @@ if __name__ == "__main__":
     temp = 0
     element = 'Ge'
     mass = 72.56
+    # velocity in angstrom per picosecond
+    # test range (min_velocity, max_velocity] 
     min_velocity = 70
-    max_velocity = 120
+    max_velocity = 120 
     velocity_interval = 5
     kin_eng_threshold = 4
     simulation_size = 9
