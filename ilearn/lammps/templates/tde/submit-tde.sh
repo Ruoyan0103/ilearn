@@ -1,11 +1,11 @@
 #!/bin/bash
 
-#SBATCH --time=00:10:00
-#SBATCH --partition=sumo
-#SBATCH --account=sumo
+#SBATCH --time=06:00:00
+#SBATCH --partition=batch
+##SBATCH --account=sumo
 #SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --mem=2G
+#SBATCH --ntasks=12
+#SBATCH --mem=20G
 #SBATCH --job-name=tde
 
 
