@@ -23,8 +23,9 @@ log_file = os.path.join(log_dir, 'tde_MEAM.log')
 png_file = os.path.join(result_dir, 'tde_MEAM.png')
 png_file_no_interpolation = os.path.join(result_dir, 'tde_no_interpolation_MEAM.png')
 
-if os.path.exists(log_file):
-    os.remove(log_file) 
+# if os.path.exists(log_file):
+#     os.remove(log_file) 
+# delete log file manually
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
  
 
@@ -71,7 +72,8 @@ class ThresholdDisplacementEnergy:
         self.max_velocity = max_velocity
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
-        self.thermal_file = ''
+        self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
+        self.finished_hkl_file = os.path.join(calculation_dir, 'finished_hkl.txt')
         self.size = simulation_size       # simulation box: size*alat
         self.thermal_time = thermal_time  # Time for thermalization in seconds
         self.tde_time = tde_time          # Time for TDE calculation in seconds
@@ -190,9 +192,6 @@ class ThresholdDisplacementEnergy:
         
         '''
         vac_flag = False
-        if not self.thermal_file:
-            logger.error("Thermalized file is not set. Please run thermalize() first.")
-            raise FileNotFoundError("Thermalized file is not set. Please run thermalize() first.")
         reference_file = self.thermal_file
         if not os.path.isfile(trajectory_file):
             logger.error(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
@@ -231,7 +230,7 @@ class ThresholdDisplacementEnergy:
             input_template = f.read()
             ff_settings = self.ff_settings
         input_file = os.path.join(calculation_dir, 'in.thermalize')
-        self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
+        # self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings),
                                             mass=self.mass, alat=self.alat, size=self.size,
@@ -457,6 +456,9 @@ class ThresholdDisplacementEnergy:
         # energy = np.random.uniform(0, 1, len(azimuthal))  # Random energy values for demonstration
 
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        if not os.path.isfile(TDE_txt_file):
+            logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
+            raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot plot.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
         azimuthal = txt[:, 4]   # Azimuthal angles in radians
         polar = txt[:, 5]       # Polar angles in radians
@@ -470,9 +472,9 @@ class ThresholdDisplacementEnergy:
         # rcos(theta) = l         (1)
         # rsin(theta)cos(phi) = h (2)
         # rsin(theta)sin(phi) = k (3)
-        # The maximum polar angle is when k = l, so we can find the maximum polar angle
-        # using (1) and (3), max_polar = np.arctan((k/l) / sin(phi)) = np.arctan(1 / sin(phi))
-        max_polar_grid = np.arctan(1 / np.sin(phi_grid2))
+        # The maximum polar angle is when h = l, so we can find the maximum polar angle
+        # using (1) and (2), max_polar = np.arctan((h/l) / cos(phi)) = np.arctan(1 / cos(phi))
+        max_polar_grid = np.arctan(1 / np.cos(phi_grid2))
         valid_mask = theta_grid2 <= max_polar_grid    # boolean
     
         # Interpolation with masking
@@ -548,6 +550,9 @@ class ThresholdDisplacementEnergy:
         '''
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        if not os.path.isfile(TDE_txt_file):
+            logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
+            raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot plot.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
         azimuthal = txt[:, 4]  
         polar = txt[:, 5]      
@@ -561,7 +566,7 @@ class ThresholdDisplacementEnergy:
 
         ax.set_xticks(np.radians([0, 5, 10, 15, 20, 25, 30, 35, 40, 45]))
         ax.set_xticklabels(['0°', '5°', '10°', '15°', '20°', '25°', '30°', '35°', '40°', '45°'], fontsize=8)
-        ax.scatter(azimuthal, polar, c='red', s=1.5, edgecolors='red')
+        ax.scatter(azimuthal, polar, c='red', s=2, edgecolors='red')
 
         plt.savefig(png_file_no_interpolation, dpi=300)
 
@@ -575,7 +580,12 @@ class ThresholdDisplacementEnergy:
             Averaged TDE value.
         '''
         TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        if not os.path.isfile(TDE_txt_file):
+            logger.error(f"{TDE_txt_file} is not found. Cannot calculate average energy.")
+            raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot calculate average energy.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
+        if len(txt) < len(self.hkl_list):
+            logger.error(f"{len(self.hkl_list)-len(txt)} HKL directions are not calculated. ")
         azimuthal = txt[:, 4]   # Azimuthal angles in radians
         polar = txt[:, 5]       # Polar angles in radians
         energy = txt[:, 7]      # Energy values in eV
@@ -585,7 +595,7 @@ class ThresholdDisplacementEnergy:
         theta_grid = np.linspace(0, np.max(polar), number_of_blocks)
 
         phi_grid2, theta_grid2 = np.meshgrid(phi_grid, theta_grid)
-        max_polar_grid = np.arctan(1 / np.sin(phi_grid2))
+        max_polar_grid = np.arctan(1 / np.cos(phi_grid2))
         valid_mask = theta_grid2 <= max_polar_grid    # boolean
     
         # Interpolation with masking
@@ -636,7 +646,7 @@ class ThresholdDisplacementEnergy:
         return safe_v_interval
     
 
-    def calculate(self):
+    def calculate(self, needed_thermalization):
         '''
         Calculate the threshold displacement energy (TDE) for each HKL direction.
         The calculated velocity range is [self.min_velocity+self.velocity_interval, self.max_velocity]
@@ -664,9 +674,16 @@ class ThresholdDisplacementEnergy:
         # if continue from previous calculation, comment thermalize, 
         # and minimum velocity is the last velocity used in the previous calculation,
         # otherwise, start from thermalization
-        self._thermalize()
+        if needed_thermalization:
+            self._thermalize()
+            
+        
+        if os.path.exists(self.finished_hkl_file):
+            loaded_ints = np.loadtxt(self.finished_hkl_file, dtype=int) 
+            finished_hkl = loaded_ints.astype(bool).tolist()
+        else:
+            finished_hkl = [False] * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
 
-        finished_hkl = [False] * len(self.hkl_list)   # initialize a flag list, all hkl are not finished
         pre_v = self.min_velocity
         while pre_v <= self.max_velocity:
             if all(finished_hkl):
@@ -698,6 +715,9 @@ class ThresholdDisplacementEnergy:
             for idx, finished_flag in enumerate(finished_hkl):
                 if not finished_flag:
                     logger.info(f"{idx}: HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
+        
+        finished_hkl_int = np.array(finished_hkl, dtype=int)
+        np.savetxt(self.finished_hkl_file, finished_hkl_int, fmt='%d')
                 
 
 
