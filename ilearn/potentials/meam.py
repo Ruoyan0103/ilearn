@@ -48,19 +48,22 @@ if __name__ == "__main__":
     # velocity in angstrom per picosecond
     # test range (min_velocity, max_velocity] 
     min_velocity = 70
-    max_velocity = 120 
+    max_velocity = 80 
     velocity_interval = 5
     kin_eng_threshold = 4
-    simulation_size = 9
+    simulation_size = 3
+    thermal_time = 10  # in second
+    tde_time = 30      # in second
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
                                       pka_id, min_velocity, max_velocity, 
-                                      velocity_interval, kin_eng_threshold, simulation_size)
+                                      velocity_interval, kin_eng_threshold, simulation_size,
+                                      thermal_time, tde_time)
     vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
+    tde.get_uniform_angles(vectors, 1)
     tde.set_hkl_from_angles()
     # tde.check_interval()
     tde.calculate()

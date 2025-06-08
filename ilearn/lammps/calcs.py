@@ -30,7 +30,8 @@ logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 
 class ThresholdDisplacementEnergy:
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
-                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size):
+                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size,
+                 thermal_time, tde_time):
         '''
         Initialize the ThresholdDisplacementEnergy class.
         Parameters
@@ -71,7 +72,9 @@ class ThresholdDisplacementEnergy:
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
         self.thermal_file = ''
-        self.size = simulation_size      # simulation box: size*alat
+        self.size = simulation_size       # simulation box: size*alat
+        self.thermal_time = thermal_time  # Time for thermalization in seconds
+        self.tde_time = tde_time          # Time for TDE calculation in seconds
         
         
     def _setup_helper(self, velocity, hkl, vel_hkl_dir):
@@ -238,7 +241,7 @@ class ThresholdDisplacementEnergy:
                     os.path.join(calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
         subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
-        time.sleep(60)  # Wait for 5 minutes to ensure the thermalization job finishes before proceeding
+        time.sleep(self.thermal_time)  
         # dummy trajectory file for the minimum velocity
         # all calculations will start with minumum velocity + velocity interval
         velocity_dir = os.path.join(calculation_dir, str(self.min_velocity))
@@ -687,7 +690,7 @@ class ThresholdDisplacementEnergy:
                         vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                         subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
-                time.sleep(300) # Wait for the job to finish before checking again 
+                time.sleep(self.tde_time) 
             pre_v += self.velocity_interval
 
         if not all(finished_hkl):
