@@ -329,15 +329,18 @@ if __name__ == "__main__":
     temp = 0
     element = 'Ge'
     mass = 72.56
-    min_velocity = 35
-    max_velocity = 100
+    min_velocity = 30
+    max_velocity = 35
     velocity_interval = 5
     kin_eng_threshold = 4
     simulation_size = 9
+    thermal_time = 60     # in second
+    tde_time = 8*3600     # in second
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
                                       pka_id, min_velocity, max_velocity, 
-                                      velocity_interval, kin_eng_threshold, simulation_size)
+                                      velocity_interval, kin_eng_threshold, simulation_size,
+                                      thermal_time, tde_time)
     vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
@@ -345,7 +348,7 @@ if __name__ == "__main__":
     tde.get_uniform_angles(vectors, 4)
     tde.set_hkl_from_angles()
     # tde.check_interval()
-    tde.calculate()
-    tde.plot()
-    tde.plot_no_interplation()
-    tde.average_TDE()
+    tde.calculate(needed_thermalization=True)
+    # tde.plot()
+    # tde.plot_no_interplation()
+    # tde.average_TDE()

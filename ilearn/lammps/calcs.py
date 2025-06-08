@@ -19,9 +19,9 @@ template_dir = os.path.join(module_dir, 'templates', 'tde')
 result_dir = os.path.join(module_dir, 'results')
 calculation_dir = os.path.join(result_dir, 'calculations')
 log_dir = os.path.join(module_dir, 'logs')
-log_file = os.path.join(log_dir, 'tde_MEAM.log')
-png_file = os.path.join(result_dir, 'tde_MEAM.png')
-png_file_no_interpolation = os.path.join(result_dir, 'tde_no_interpolation_MEAM.png')
+log_file = os.path.join(log_dir, 'tde_GAP.log')
+png_file = os.path.join(result_dir, 'tde_GAP.png')
+png_file_no_interpolation = os.path.join(result_dir, 'tde_no_interpolation_GAP.png')
 
 # if os.path.exists(log_file):
 #     os.remove(log_file) 
@@ -531,7 +531,7 @@ class ThresholdDisplacementEnergy:
         )
 
         vmin, vmax = np.nanmin(energy_grid), np.nanmax(energy_grid)
-        tick_step = 1
+        tick_step = 3
         ticks = np.arange(np.floor(vmin), np.ceil(vmax) + tick_step, tick_step)
         char = fig.colorbar(contourf, ax=ax, pad=0.15, shrink=0.85, ticks=ticks)
         char.set_label('Threshold displacement energy (eV)', fontsize=9)        
@@ -687,7 +687,7 @@ class ThresholdDisplacementEnergy:
         pre_v = self.min_velocity
         while pre_v <= self.max_velocity:
             if all(finished_hkl):
-                logger.info("----------------------------------------------All TDE values are written with velocity <= max_velocity.------------------------------------------------")
+                logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
                 break
             higher_energy_needed = False
             for idx, _ in enumerate(self.hkl_list):
@@ -715,6 +715,8 @@ class ThresholdDisplacementEnergy:
             for idx, finished_flag in enumerate(finished_hkl):
                 if not finished_flag:
                     logger.info(f"{idx}: HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
+        else:
+            logger.info("------------------------------------------------All TDE values are written!------------------------------------------------")
         
         finished_hkl_int = np.array(finished_hkl, dtype=int)
         np.savetxt(self.finished_hkl_file, finished_hkl_int, fmt='%d')

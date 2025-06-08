@@ -41,19 +41,19 @@ if __name__ == "__main__":
     meam = MEAMPotential()
     ff_settings = meam.write_param(library_file, element_file, element_symbol)
     alat = 5.658
-    pka_id = 450
+    pka_id = 2766
     temp = 0
     element = 'Ge'
     mass = 72.56
     # velocity in angstrom per picosecond
     # test range (min_velocity, max_velocity] 
-    min_velocity = 105
-    max_velocity = 120
+    min_velocity = 90
+    max_velocity = 95
     velocity_interval = 5
     kin_eng_threshold = 4
-    simulation_size = 5
+    simulation_size = 9
     thermal_time = 10  # in second
-    tde_time = 50      # in second
+    tde_time = 240     # in second
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
                                       pka_id, min_velocity, max_velocity, 
@@ -63,13 +63,13 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
-    tde.set_hkl_from_angles()
+    #tde.get_uniform_angles(vectors, 4)
+    #tde.set_hkl_from_angles()
     # tde.check_interval()
-    tde.calculate(needed_thermalization=False)
+    # tde.calculate(needed_thermalization=False)
     tde.plot()
-    tde.plot_no_interplation()
-    tde.average_TDE()
+    #tde.plot_no_interplation()
+    #tde.average_TDE()
     
     
 

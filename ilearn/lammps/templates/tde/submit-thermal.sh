@@ -4,8 +4,8 @@
 #SBATCH --partition=sumo
 #SBATCH --account=sumo
 #SBATCH --nodes=1
-#SBATCH --ntasks=1
-#SBATCH --mem=2G
+#SBATCH --ntasks=10
+#SBATCH --mem=5G
 #SBATCH --job-name=thermalize
 
 
