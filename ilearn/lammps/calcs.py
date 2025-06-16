@@ -8,6 +8,7 @@ from ovito.modifiers import WignerSeitzAnalysisModifier
 from ilearn.loggers.logger import AppLogger
 from ase.io import read, write
 from ase.build import bulk 
+from abc import ABC, abstractmethod
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
 
@@ -20,6 +21,24 @@ module_dir = os.path.dirname(os.path.abspath(__file__))
 result_dir = os.path.join(module_dir, 'results')
 log_dir = os.path.join(module_dir, 'logs')
 
+
+class LMPStaticCalculator(ABC):
+    @abstractmethod
+    def _setup(self):
+        """
+        Setup the input file for the LAMMPS simulation.
+        This method prepares the input file with the necessary parameters.
+        """
+        pass
+    @abstractmethod
+    def calculate(self):
+        """
+        Calculate the properties using LAMMPS.
+        This method sets up the simulation and starts the calculation.
+        """
+        pass
+
+
 template_dir = os.path.join(module_dir, 'templates', 'tde')
 calculation_dir = os.path.join(result_dir, 'tde')
 os.makedirs(calculation_dir, exist_ok=True)  
@@ -30,7 +49,7 @@ png_file_no_interpolation = os.path.join(calculation_dir, 'tde_no_interpolation_
 #     os.remove(log_file) 
 # delete log file manually
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
-class ThresholdDisplacementEnergy:
+class ThresholdDisplacementEnergy(LMPStaticCalculator):
     """ 
     Threshold displacement energy calculator.
     """
@@ -730,7 +749,7 @@ calculation_dir = os.path.join(result_dir, 'latt')
 os.makedirs(calculation_dir, exist_ok=True)
 log_file = os.path.join(log_dir, 'latt_GAP.log')
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
-class LatticeConstant:
+class LatticeConstant(LMPStaticCalculator):
     """
     Lattice Constant Relaxation Calculator.
     """
@@ -784,7 +803,7 @@ calculation_dir = os.path.join(result_dir, 'elastic')
 os.makedirs(calculation_dir, exist_ok=True)
 log_file = os.path.join(log_dir, 'elastic_GAP.log')
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
-class ElasticConstant:
+class ElasticConstant(LMPStaticCalculator):
     """ 
     Elastic constant calculator.
     """
@@ -957,6 +976,85 @@ class ElasticConstant:
         logger.info(f"{KR:8.3f} {ER:8.3f} {GR:8.3f}")
         logger.info("KH       EH       GH")
         logger.info(f"{KH:8.3f} {EH:8.3f} {GH:8.3f}")
+
+
+template_dir = os.path.join(module_dir, 'templates', 'defect')
+calculation_dir = os.path.join(result_dir, 'defect', 'vacancy')
+os.makedirs(calculation_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'defect_GAP.log')
+logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
+class VacancyDefectFormation(LMPStaticCalculator):
+    """
+    Defect Formation Energy Calculator.
+    """
+    def __init__(self, ff_settings, mass, lattice, alat, size, del_id):
+        """
+        Initialize the Defect Formation calculator.
+        Parameters
+        ----------
+        ff_settings : Potential or list
+            Force field settings, either as a Potential class or a list of strings.
+        mass : float
+            Mass of the atom in atomic mass units (AMU).
+        lattice : str
+            Lattice type (e.g., 'diamond').
+        alat : float
+            Lattice constant in Angstroms.
+        size : int
+            Size of the supercell.
+        del_id : int
+            ID of the defect to be created.
+        """
+        self.ff_settings = ff_settings
+        self.mass = mass
+        self.lattice = lattice
+        self.alat = alat 
+        self.size = size
+        self.del_id = del_id
+
+
+    def _setup(self):
+        with open(os.path.join(template_dir, 'in.vac'), 'r') as f:
+            input_template = f.read()
+        input_file = os.path.join(calculation_dir, 'in.vac')
+        with open(input_file, 'w') as f:
+            f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, lattice=self.lattice, alat=self.alat,
+                                         size=self.size, del_id=self.del_id))
+        with open(os.path.join(template_dir, 'submit-defect.sh'), 'r') as f:
+            submit_template = f.read()
+        submit_file = os.path.join(calculation_dir, 'submit-defect.sh')
+        with open(submit_file, 'w') as f:
+            f.write(submit_template.format(in_defect='in.vac'))
+
+
+    def calculate(self):
+        """
+        Calculate the defect formation energy by running a LAMMPS simulation.
+        """
+        self._setup()
+        subprocess.run('sbatch submit-defect.sh', shell=True, check=True, cwd=calculation_dir)
+        time.sleep(30)
+        logger.info('-------------------------------Defect Formation Energy-------------------------------')
+        self._vacancy_formation_energy()
+
+
+    def _vacancy_formation_energy(self):
+        with open(os.path.join(calculation_dir, 'log.lammps'), 'r') as logfile:
+            txt = logfile.read()
+        # find line contains "Vacancy formation energy"
+        s1 = txt.find("Vacancy formation energy") 
+        if s1 == -1:
+            logger.error("Failed to find vacancy formation energy in log file")
+            exit(1)
+        
+        next_line_start = txt.find('\n', s1) + 1  
+        next_line_end = txt.find('\n', next_line_start)
+        next_line = txt[next_line_start:next_line_end].strip()
+        words = next_line.split('=')
+        vacancy_energy = float(words[-1])
+        logger.info(f"Vacancy formation energy: {vacancy_energy:.2f} eV")
+
+        
 
 
 
