@@ -19,7 +19,7 @@ import numpy as np
 from ase.io import read 
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
-from ilearn.lammps.calcs import ThresholdDisplacementEnergy
+from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -325,17 +325,17 @@ if __name__ == "__main__":
     gap = GAPotential.from_config(gap_file)
     ff_settings = gap.write_param(gap_file)
     alat = 5.76
-    pka_id = 2766
+    pka_id = 1202
     temp = 0
     element = 'Ge'
     mass = 72.56
-    min_velocity = 30
-    max_velocity = 35
+    min_velocity = 50
+    max_velocity = 70
     velocity_interval = 5
     kin_eng_threshold = 4
     simulation_size = 9
-    thermal_time = 60     # in second
-    tde_time = 8*3600     # in second
+    thermal_time = 60       # in second
+    tde_time = 2.5*3600     # in second
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
                                       pka_id, min_velocity, max_velocity, 
@@ -345,10 +345,16 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
-    tde.set_hkl_from_angles()
+    # tde.get_uniform_angles(vectors, 4)
+    # tde.set_hkl_from_angles()
     # tde.check_interval()
-    tde.calculate(needed_thermalization=True)
+    # tde.calculate(needed_thermalization=True)
     # tde.plot()
     # tde.plot_no_interplation()
     # tde.average_TDE()
+
+    lattice = 'diamond'
+    alat = 5.3
+    cubic = True
+    lc = LatticeConstant(ff_settings, mass, element, lattice, alat, cubic)
+    lc.calculate()

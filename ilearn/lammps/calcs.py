@@ -6,6 +6,9 @@ from scipy.interpolate import griddata
 from ovito.io import import_file
 from ovito.modifiers import WignerSeitzAnalysisModifier
 from ilearn.loggers.logger import AppLogger
+from ase.io import read, write
+from ase.build import bulk 
+
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
 
@@ -15,13 +18,15 @@ ANGSTROM_TO_METER = 1E-10     # Angstroms/picosecond to meters/second conversion
 PS_TO_S = 1E-12               # Picoseconds to seconds conversion factor
 
 module_dir = os.path.dirname(os.path.abspath(__file__))
-template_dir = os.path.join(module_dir, 'templates', 'tde')
 result_dir = os.path.join(module_dir, 'results')
-calculation_dir = os.path.join(result_dir, 'calculations')
 log_dir = os.path.join(module_dir, 'logs')
+
+template_dir = os.path.join(module_dir, 'templates', 'tde')
+calculation_dir = os.path.join(result_dir, 'tde')
+os.makedirs(calculation_dir, exist_ok=True)  
 log_file = os.path.join(log_dir, 'tde_GAP.log')
-png_file = os.path.join(result_dir, 'tde_GAP.png')
-png_file_no_interpolation = os.path.join(result_dir, 'tde_no_interpolation_GAP.png')
+png_file = os.path.join(calculation_dir, 'tde_GAP.png')
+png_file_no_interpolation = os.path.join(calculation_dir, 'tde_no_interpolation_GAP.png')
 
 # if os.path.exists(log_file):
 #     os.remove(log_file) 
@@ -332,7 +337,6 @@ class ThresholdDisplacementEnergy:
         hkl = self.hkl_list[hkl_idx]
         angle = self.angle_list[hkl_idx]
         kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (velocity*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
-        
         with open(tde_file, 'a') as f:
             if write_header:
                 # Write header line
@@ -722,16 +726,62 @@ class ThresholdDisplacementEnergy:
         np.savetxt(self.finished_hkl_file, finished_hkl_int, fmt='%d')
                 
 
+template_dir = os.path.join(module_dir, 'templates', 'latt')
+calculation_dir = os.path.join(result_dir, 'latt')
+os.makedirs(calculation_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'latt_GAP.log')
+logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 
-# example usage
-# tde = ThresholdDisplacementEnergy()
-# vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
-# vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
-# vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
-# vectors = np.array((vector1, vector2, vector3))
-# tde.get_uniform_angles(vectors, 4)
-# tde.get_hkl_from_angles()
-# tde.plot()
+class LatticeConstant:
+    """
+    Lattice Constant Relaxation Calculator.
+    """
+
+    def __init__(self, ff_settings, mass, element, lattice, alat, cubic):
+        """
+        Initialize the Lattice Constant calculator.
+        Parameters
+        ----------
+        ff_settings : String
+            Force field settings.
+        mass : float
+            Mass of the atom in atomic mass units (AMU).
+        element : str
+            Element symbol (e.g., 'Ge').
+        lattice : str
+            Lattice type (e.g., 'diamond').
+        alat : float
+            Lattice constant in Angstroms.
+        cubic : bool
+            Whether the lattice is cubic.
+        """
+        self.ff_settings = ff_settings
+        self.mass = mass
+        static_bulk = bulk(element, lattice, a=alat, cubic=cubic)
+        write(os.path.join(calculation_dir, 'data.static'), static_bulk, format='lammps-data')
+
+
+    def _setup(self):
+        with open(os.path.join(template_dir, 'in.latt'), 'r') as f:
+            input_template = f.read()
+        input_file = os.path.join(calculation_dir, 'in.latt')
+        with open(input_file, 'w') as f:
+            f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
+        return input_file
+
+
+    def calculate(self):
+        """
+        Calculate the lattice constant by running a LAMMPS simulation.
+        This method prepares the input file and submits the job.
+        """
+        input_file = self._setup()
+        shutil.copy(os.path.join(template_dir, 'submit-latt.sh'), 
+                    os.path.join(calculation_dir, 'submit-latt.sh'))
+        subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=calculation_dir)
+        time.sleep(10)
+        a, b, c = np.loadtxt(os.path.join(calculation_dir, 'lattice.txt'))
+        logger.info(f"Lattice constant: {a}, {b}, {c}")
 
 
 
