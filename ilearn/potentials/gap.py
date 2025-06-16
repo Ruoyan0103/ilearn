@@ -19,7 +19,8 @@ import numpy as np
 from ase.io import read 
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
-from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant
+from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
+                                VacancyDefectFormation
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -359,5 +360,10 @@ if __name__ == "__main__":
     # lc = LatticeConstant(ff_settings, mass, element, lattice, my_alat, cubic)
     # lc.calculate()
     alat = 5.76
-    elastic = ElasticConstant(ff_settings, mass, lattice, alat)
-    elastic.calculate()
+    # elastic = ElasticConstant(ff_settings, mass, lattice, alat)
+    # elastic.calculate()
+
+    size = 3
+    del_id = 0
+    vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
+    vf.calculate()
