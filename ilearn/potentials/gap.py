@@ -19,7 +19,7 @@ import numpy as np
 from ase.io import read 
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
-from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant
+from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -354,7 +354,10 @@ if __name__ == "__main__":
     # tde.average_TDE()
 
     lattice = 'diamond'
-    alat = 5.3
+    my_alat = 5.3
     cubic = True
-    lc = LatticeConstant(ff_settings, mass, element, lattice, alat, cubic)
-    lc.calculate()
+    # lc = LatticeConstant(ff_settings, mass, element, lattice, my_alat, cubic)
+    # lc.calculate()
+    alat = 5.76
+    elastic = ElasticConstant(ff_settings, mass, lattice, alat)
+    elastic.calculate()

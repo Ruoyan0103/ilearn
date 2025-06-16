@@ -9,7 +9,6 @@ from ilearn.loggers.logger import AppLogger
 from ase.io import read, write
 from ase.build import bulk 
 
-
 plt.rcParams['font.family'] = 'DejaVu Serif'
 
 AMU_TO_KG = 1.66053906660E-27 # Atomic mass unit to kg conversion factor
@@ -27,14 +26,14 @@ os.makedirs(calculation_dir, exist_ok=True)
 log_file = os.path.join(log_dir, 'tde_GAP.log')
 png_file = os.path.join(calculation_dir, 'tde_GAP.png')
 png_file_no_interpolation = os.path.join(calculation_dir, 'tde_no_interpolation_GAP.png')
-
 # if os.path.exists(log_file):
 #     os.remove(log_file) 
 # delete log file manually
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
- 
-
 class ThresholdDisplacementEnergy:
+    """ 
+    Threshold displacement energy calculator.
+    """
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
                  min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size,
                  thermal_time, tde_time):
@@ -731,12 +730,10 @@ calculation_dir = os.path.join(result_dir, 'latt')
 os.makedirs(calculation_dir, exist_ok=True)
 log_file = os.path.join(log_dir, 'latt_GAP.log')
 logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
-
 class LatticeConstant:
     """
     Lattice Constant Relaxation Calculator.
     """
-
     def __init__(self, ff_settings, mass, element, lattice, alat, cubic):
         """
         Initialize the Lattice Constant calculator.
@@ -767,21 +764,210 @@ class LatticeConstant:
         input_file = os.path.join(calculation_dir, 'in.latt')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
-        return input_file
+        shutil.copy(os.path.join(template_dir, 'submit-latt.sh'), 
+                    os.path.join(calculation_dir, 'submit-latt.sh'))
 
 
     def calculate(self):
         """
         Calculate the lattice constant by running a LAMMPS simulation.
-        This method prepares the input file and submits the job.
         """
-        input_file = self._setup()
-        shutil.copy(os.path.join(template_dir, 'submit-latt.sh'), 
-                    os.path.join(calculation_dir, 'submit-latt.sh'))
+        self._setup()
         subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=calculation_dir)
         time.sleep(10)
         a, b, c = np.loadtxt(os.path.join(calculation_dir, 'lattice.txt'))
         logger.info(f"Lattice constant: {a}, {b}, {c}")
+
+
+template_dir = os.path.join(module_dir, 'templates', 'elastic')
+calculation_dir = os.path.join(result_dir, 'elastic')
+os.makedirs(calculation_dir, exist_ok=True)
+log_file = os.path.join(log_dir, 'elastic_GAP.log')
+logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
+class ElasticConstant:
+    """ 
+    Elastic constant calculator.
+    """
+    def __init__(self, ff_settings, mass, lattice, alat,
+                 deformation_size=1e-6, jiggle=1e-5):
+        """
+        Initialize the Elastic Constant calculator.
+        Parameters
+        ----------
+        ff_settings : Potential or list
+            Force field settings, either as a Potential class or a list of strings.
+        lattice : str
+            Lattice type (e.g., 'diamond').
+        alat : float    
+            Lattice constant in Angstroms.
+        deformation_size : float, optional  
+            Size of the deformation in Angstroms. Default is 1e-6.
+        jiggle : float, optional    
+            Jiggle size in Angstroms. Default is 1e-5.
+        """
+        self.ff_settings = ff_settings
+        self.mass = mass
+        self.lattice = lattice
+        self.alat = alat 
+        self.deformation_size = deformation_size
+        self.jiggle = jiggle
+
+
+    def _setup(self):
+        template_dir = os.path.join(os.path.dirname(__file__), 'templates', 'elastic')
+
+
+        with open(os.path.join(template_dir, 'init.mod'), 'r') as f:
+            init_template = f.read()
+        init_file = os.path.join(calculation_dir, 'init.mod')
+        with open(init_file, 'w') as f:
+            f.write(init_template.format(mass=self.mass, lattice=self.lattice, alat=self.alat,
+                                         deformation_size=self.deformation_size, jiggle=self.jiggle))
+        with open(os.path.join(template_dir, 'potential.mod'), 'r') as f:
+            potential_template = f.read()
+        potential_file = os.path.join(calculation_dir, 'potential.mod')
+        with open(potential_file, 'w') as f:
+            f.write(potential_template.format(ff_settings='\n'.join(self.ff_settings)))
+        shutil.copy(os.path.join(template_dir, 'in.elastic'),
+                    os.path.join(calculation_dir, 'in.elastic'))
+        shutil.copy(os.path.join(template_dir, 'displace.mod'),
+                    os.path.join(calculation_dir, 'displace.mod'))
+        shutil.copy(os.path.join(template_dir, 'submit-elastic.sh'),
+                    os.path.join(calculation_dir, 'submit-elastic.sh'))
+
+        
+    def calculate(self):
+        self._setup()
+        subprocess.run('sbatch submit-elastic.sh', shell=True, check=True, cwd=calculation_dir)
+        time.sleep(30)
+        logger.info('-------------------------------KRH Expression-------------------------------')
+        self._KRH_expression()
+
+
+    def _KRH_expression(self):
+        """
+        Calculate the KRH expression for the elastic constant.
+        This file reads in the file log.lammps generated by the script in.elastic
+        It prints out the 6x6 tensor of elastic constants Cij
+        followed by the 6x6 tensor of compliance constants Sij
+        It uses the same conventions as described in:
+        Sprik, Impey and Klein PRB (1984).
+        The units of Cij are whatever was used in log.lammps (usually GPa)
+        The units of Sij are the inverse of that (usually 1/GPa)
+        origin from lammps github
+
+        Returns
+        -------
+        float
+            KRH expression value.
+        """
+        nvals = 21
+        valpos = 4
+        valstr = '\nElastic Constant C'
+
+        # define order of Cij in logfile
+        cindices = [0]*nvals
+        cindices[0] = (0,0)
+        cindices[1] = (1,1)
+        cindices[2] = (2,2)
+        cindices[3] = (0,1)
+        cindices[4] = (0,2)
+        cindices[5] = (1,2)
+        cindices[6] = (3,3)
+        cindices[7] = (4,4)
+        cindices[8] = (5,5)
+        cindices[9] = (0,3)
+        cindices[10] = (0,4)
+        cindices[11] = (0,5)
+        cindices[12] = (1,3)
+        cindices[13] = (1,4)
+        cindices[14] = (1,5)
+        cindices[15] = (2,3)
+        cindices[16] = (2,4)
+        cindices[17] = (2,5)
+        cindices[18] = (3,4)
+        cindices[19] = (3,5)
+        cindices[20] = (4,5)
+
+        with open(os.path.join(calculation_dir, 'log.lammps'), 'r') as logfile:
+            txt = logfile.read()
+
+        # search for 21 elastic constants
+        c = np.zeros((6,6))
+        s2 = 0
+
+        for ival in range(nvals):
+            s1 = txt.find(valstr,s2)
+            if (s1 == -1):
+                logger.error("Failed to find elastic constants in log file")
+                exit(1)
+            s1 += 1
+            s2 = txt.find("\n",s1)
+            line = txt[s1:s2]
+        # print line
+            words = line.split()
+            (i1,i2) = cindices[ival]
+            c[i1,i2] = float(words[valpos])
+            c[i2,i1] = c[i1,i2]
+        logger.info("C tensor [GPa]")
+        for i in range(6):
+            row_str = " ".join(f"{c[i][j]:8.3f}" for j in range(6))
+            logger.info(row_str)
+
+        KV = 1/9*((c[0][0] + c[1][1] + c[2][2]) + \
+            2 * (c[0][1] + c[1][2] + c[2][0]))
+        GV = 1/15*((c[0][0] + c[1][1] + c[2][2]) - \
+            (c[0][1] + c[1][2] + c[2][0]) + \
+            3 * (c[3][3] + c[4][4] + c[5][5]))
+        EV = 9*KV*GV/(3*KV+GV)
+
+        # Ruoyan: factor parts are in original script, but the equations are conflict to Vaspkit
+        # apply factor of 2 to columns of off-diagonal elements
+
+        # for i in range(6):
+        #     for j in range(3,6):
+        #         c[i][j] *= 2.0
+
+        s = np.linalg.inv(c)
+
+        # apply factor of 1/2 to columns of off-diagonal elements
+
+        # for i in range(6):
+        #     for j in range(3,6):
+        #         s[i][j] *= 0.5
+
+        
+        KR = 1 / ((s[0][0] + s[1][1] + s[2][2]) + 2 * (s[0][1] + s[1][2] + s[2][0]))
+        # --------- or KR = KV
+
+        GR = 15 / (4 * ((s[0][0] + s[1][1] + s[2][2]) - 4 * (s[0][1] + s[1][2] + s[2][0]) + 3 * (s[3][3] + s[4][4] + s[5][5])))
+        GR = 5 / (4*(s[0][0]-s[0][1])+3*s[3][3]) # cubic
+        # --------- or GR = 15/(12/(c[0][0]-c[0][1])+9/c[3][3])  Solid State Communications 324 (2021) 114136
+
+        ER = 9*KR*GR/(3*KR+GR)
+
+        KH = (KV+KR)/2
+        GH = (GV+GR)/2
+        EH = 9*KH*GH/(3*KH+GH)
+
+        logger.info("")
+        logger.info("KV       EV       GV")
+        logger.info(f"{KV:8.3f} {EV:8.3f} {GV:8.3f}")
+        logger.info("KR       ER       GR")
+        logger.info(f"{KR:8.3f} {ER:8.3f} {GR:8.3f}")
+        logger.info("KH       EH       GH")
+        logger.info(f"{KH:8.3f} {EH:8.3f} {GH:8.3f}")
+
+
+
+
+
+        
+
+        
+   
+
+
 
 
 

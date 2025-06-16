@@ -1,0 +1,25 @@
+2025-06-16 15:52 - ilearn.lammps.calcs - INFO - -------------------------------KRH Expression-------------------------------
+2025-06-16 15:52 - ilearn.lammps.calcs - INFO - C tensor [GPa]
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO - -------------------------------KRH Expression-------------------------------
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO - C tensor [GPa]
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -  106.975   35.332   35.332    1.691   -0.444    0.707
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -   35.332  106.972   35.332   -1.690    0.444   -0.708
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -   35.332   35.332  106.971    2.749   -0.720    1.149
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -    1.691   -1.690    2.749   42.527   -1.595   -3.444
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -   -0.444    0.444   -0.720   -1.595   49.422   -0.139
+2025-06-16 15:55 - ilearn.lammps.calcs - INFO -    0.707   -0.708    1.149   -3.444   -0.139   46.857
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - -------------------------------KRH Expression-------------------------------
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - C tensor [GPa]
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -  106.975   35.332   35.332    1.691   -0.444    0.707
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   35.332  106.972   35.332   -1.690    0.444   -0.708
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   35.332   35.332  106.971    2.749   -0.720    1.149
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -    1.691   -1.690    2.749   42.527   -1.595   -3.444
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   -0.444    0.444   -0.720   -1.595   49.422   -0.139
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -    0.707   -0.708    1.149   -3.444   -0.139   46.857
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - 
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - KV       EV       GV
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   59.212  102.081   42.089
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - KR       ER       GR
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   59.187   96.508   39.287
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO - KH       EH       GH
+2025-06-16 15:56 - ilearn.lammps.calcs - INFO -   59.199   99.312   40.688
