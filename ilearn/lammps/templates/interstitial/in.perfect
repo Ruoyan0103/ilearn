@@ -1,0 +1,40 @@
+# Lammps input script for relaxed system energy calculation
+# Parameters: ff_settings, mass
+# ------------------------------- INITIALIZATION ------------------------------
+clear
+units           metal
+dimension       3
+boundary        p p p      
+atom_style      atomic
+
+# ------------------------------ ATOM DEFINITION ------------------------------
+read_data in.perfect
+
+# --------------------------------- FORCE FIELD -------------------------------
+{ff_settings}
+mass            1 {mass}
+
+#------------------------------------ SETING ----------------------------------
+#compute csym all centro/atom fcc
+compute         eng all pe/atom
+compute         eatoms all reduce sum c_eng
+
+#------------------------------------- OPTIMIZATION ----------------------------
+thermo          10
+thermo_style    custom step pe lx ly lz press pxx pyy pzz c_eatoms
+
+#dump 1 all custom 400 dump.relax.1.* id type xs ys zs c_csym c_eng
+dump            1 all custom 400 dump.relax.1.* id type xs ys zs c_eng
+min_style       cg
+minimize        1e-10 1e-10 5000 5000
+undump          1
+
+variable        Ef equal "c_eatoms"
+
+# ------------------------------------------ OUTPUT -------------------------------
+
+######################################
+# SIMULATION DONE
+print "All done"
+print "Energy of perfect system = ${{Ef}}"
+

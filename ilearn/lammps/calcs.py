@@ -23,6 +23,27 @@ log_dir = os.path.join(module_dir, 'logs')
 
 
 class LMPStaticCalculator(ABC):
+    def __init__(self, task_name, ff_settings, mass, alat, size=None, element=None, lattice=None):
+        self.template_dir = os.path.join(module_dir, 'templates', task_name)
+        self.calculation_dir = os.path.join(result_dir, task_name)
+        self.log_file = os.path.join(log_dir, f'{task_name}_GAP.log')
+
+        os.makedirs(self.template_dir, exist_ok=True)
+        os.makedirs(self.calculation_dir, exist_ok=True)
+        os.makedirs(log_dir, exist_ok=True)
+
+        # if os.path.exists(log_file):
+        #     os.remove(log_file) 
+        # delete log file manually
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
+        self.ff_settings = ff_settings
+        self.mass = mass
+        self.element = element
+        self.lattice = lattice
+        self.alat = alat
+        self.size = size
+
+
     @abstractmethod
     def _setup(self):
         """
@@ -39,22 +60,12 @@ class LMPStaticCalculator(ABC):
         pass
 
 
-template_dir = os.path.join(module_dir, 'templates', 'tde')
-calculation_dir = os.path.join(result_dir, 'tde')
-os.makedirs(calculation_dir, exist_ok=True)  
-log_file = os.path.join(log_dir, 'tde_GAP.log')
-png_file = os.path.join(calculation_dir, 'tde_GAP.png')
-png_file_no_interpolation = os.path.join(calculation_dir, 'tde_no_interpolation_GAP.png')
-# if os.path.exists(log_file):
-#     os.remove(log_file) 
-# delete log file manually
-logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 class ThresholdDisplacementEnergy(LMPStaticCalculator):
     """ 
     Threshold displacement energy calculator.
     """
     def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
-                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold, simulation_size,
+                 min_velocity, max_velocity, velocity_interval, kin_eng_threshold, size,
                  thermal_time, tde_time):
         '''
         Initialize the ThresholdDisplacementEnergy class.
@@ -81,23 +92,19 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         kin_eng_threshold : float   
             Threshold for kinetic energy difference (in eV).
         '''
+        super().__init__('tde', ff_settings, mass, alat, size=size, element=element)
         self.angle_set = set()
         self.angle_list = []
         self.listCoords = []
         self.hkl_list = []
-        self.ff_settings = ff_settings
-        self.element = element
-        self.mass = mass
-        self.alat = alat
         self.temp = temp
         self.pka_id = pka_id
         self.min_velocity = min_velocity
         self.max_velocity = max_velocity
         self.velocity_interval = velocity_interval
         self.kin_eng_threshold = kin_eng_threshold  
-        self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
-        self.finished_hkl_file = os.path.join(calculation_dir, 'finished_hkl.txt')
-        self.size = simulation_size       # simulation box: size*alat
+        self.thermal_file = os.path.join(self.calculation_dir, 'data.thermalized')
+        self.finished_hkl_file = os.path.join(self.calculation_dir, 'finished_hkl.txt')
         self.thermal_time = thermal_time  # Time for thermalization in seconds
         self.tde_time = tde_time          # Time for TDE calculation in seconds
         
@@ -115,7 +122,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
             Directory path for the current velocity and HKL combination.
         '''
         # ---------------------- write in.tde -----------------------
-        with open(os.path.join(template_dir, 'in.tde'), 'r') as f:
+        with open(os.path.join(self.template_dir, 'in.tde'), 'r') as f:
             input_template = f.read()
         ff_settings = self.ff_settings
         input_file = os.path.join(vel_hkl_dir, 'in.tde')
@@ -128,7 +135,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
                                           temp=self.temp, element=self.element,
                                           V_x=Vx, V_y=Vy, V_z=Vz))
         # ---------------------- copy submit-tde.sh ------------------
-        shutil.copy(os.path.join(template_dir, 'submit-tde.sh'), 
+        shutil.copy(os.path.join(self.template_dir, 'submit-tde.sh'), 
                     os.path.join(vel_hkl_dir, 'submit-tde.sh'))
         
 
@@ -139,7 +146,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         This method prepares the input file with the necessary parameters.
         '''
         if not self.hkl_list:
-            logger.error("HKL list is empty. Please use set_hkl_from_angles() first.")
+            self.logger.error("HKL list is empty. Please use set_hkl_from_angles() first.")
             raise ValueError("HKL list is empty. Please generate HKL values first.")
         for hkl in self.hkl_list:
             hkl = np.array(hkl)
@@ -180,7 +187,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         '''
         v = self.min_velocity
         while v <= self.max_velocity:
-            velocity_dir = os.path.join(calculation_dir, str(v))
+            velocity_dir = os.path.join(self.calculation_dir, str(v))
             for idx, hkl in enumerate(self.hkl_list):
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 os.makedirs(vel_hkl_dir, exist_ok=True)
@@ -217,7 +224,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         vac_flag = False
         reference_file = self.thermal_file
         if not os.path.isfile(trajectory_file):
-            logger.error(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
+            self.logger.error(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
             raise FileNotFoundError(f"{trajectory_file} is not found. Please wait for TDE simulation to finish.")
         reference_pipeline = import_file(reference_file)
         pipeline = import_file(trajectory_file)
@@ -227,17 +234,17 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
 
         data = pipeline.compute(0)
         if 'Occupancy' not in data.particles or 'Particle Identifier' not in data.particles or 'Position' not in data.particles:
-            logger.error("Required data (Occupancy, Particle Identifier, or Position) not found in the trajectory file.")
+            self.logger.error("Required data (Occupancy, Particle Identifier, or Position) not found in the trajectory file.")
             raise ValueError("Required data (Occupancy, Particle Identifier, or Position) not found in the trajectory file.")
         for particle_id, occupancy, position in zip(data.particles['Particle Identifier'],
                                                     data.particles['Occupancy'],
                                                     data.particles['Position']):
             if occupancy == 0:
-                logger.info(f"{velocity}/{hkl_idx}/dump_out: Vacancy detected. Particle ID: {particle_id}, Position: {position}")
+                self.logger.info(f"{velocity}/{hkl_idx}/dump_out: Vacancy detected. Particle ID: {particle_id}, Position: {position}")
                 vac_flag = True
                 break 
         if not vac_flag:
-            logger.info(f"{velocity}/{hkl_idx}/dump_out: No vacancies detected.")
+            self.logger.info(f"{velocity}/{hkl_idx}/dump_out: No vacancies detected.")
         return vac_flag
     
 
@@ -249,27 +256,27 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         The calculation is done in 'module_dir/results/calculation'.
         '''
         # ------------------------------ write in.thermalize ------------------------------
-        with open(os.path.join(template_dir, 'in.thermalize'), 'r') as f:
+        with open(os.path.join(self.template_dir, 'in.thermalize'), 'r') as f:
             input_template = f.read()
             ff_settings = self.ff_settings
-        input_file = os.path.join(calculation_dir, 'in.thermalize')
+        input_file = os.path.join(self.calculation_dir, 'in.thermalize')
         # self.thermal_file = os.path.join(calculation_dir, 'data.thermalized')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(ff_settings),
                                             mass=self.mass, alat=self.alat, size=self.size,
                                             output_thermalized=self.thermal_file)) 
         # ------------------------------ copy submit-thermal.sh ------------------------------
-        shutil.copy(os.path.join(template_dir, 'submit-thermal.sh'), 
-                    os.path.join(calculation_dir, 'submit-thermal.sh'))
+        shutil.copy(os.path.join(self.template_dir, 'submit-thermal.sh'), 
+                    os.path.join(self.calculation_dir, 'submit-thermal.sh'))
         # ------------------------------------- submit job -----------------------------------
-        subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=calculation_dir)
+        subprocess.run('sbatch submit-thermal.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(self.thermal_time)  
         # dummy trajectory file for the minimum velocity
         # all calculations will start with minumum velocity + velocity interval
-        velocity_dir = os.path.join(calculation_dir, str(self.min_velocity))
+        velocity_dir = os.path.join(self.calculation_dir, str(self.min_velocity))
         for idx, _ in enumerate(self.hkl_list):
             vel_hkl_dir = os.path.join(velocity_dir, str(idx))
-            shutil.copy(os.path.join(calculation_dir, 'data.thermalized'),
+            shutil.copy(os.path.join(self.calculation_dir, 'data.thermalized'),
                         os.path.join(vel_hkl_dir, 'dump_out'))
 
 
@@ -349,7 +356,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         - velocity is the velocity of the primary knock-on atom in m/s.
         '''
         # Check if file exists to determine if we need to write header
-        tde_file = os.path.join(calculation_dir, 'TDE.txt')
+        tde_file = os.path.join(self.calculation_dir, 'TDE.txt')
         write_header = not os.path.exists(tde_file)
         
         hkl = self.hkl_list[hkl_idx]
@@ -463,7 +470,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
             k = np.sin(theta) * np.sin(phi)
             l = np.cos(theta)
             self.hkl_list.append(np.array((h, k, l)))
-        hkl_file = os.path.join(calculation_dir, 'hkl_list.dat')
+        hkl_file = os.path.join(self.calculation_dir, 'hkl_list.dat')
         with open(hkl_file, 'w') as f:  # 'a' for append, 'w' for overwrite
             np.savetxt(f, np.array(self.hkl_list), 
                        fmt='%.8f',      # 8 decimal places
@@ -472,14 +479,15 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
 
 
     def plot(self):
+        png_file = os.path.join(self.calculation_dir, 'tde_GAP.png')
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
         # azimuthal = [angle[0] for angle in self.angle_set]
         # polar = [angle[1] for angle in self.angle_set]
         # energy = np.random.uniform(0, 1, len(azimuthal))  # Random energy values for demonstration
 
-        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        TDE_txt_file = os.path.join(self.calculation_dir, 'TDE.txt')
         if not os.path.isfile(TDE_txt_file):
-            logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
+            self.logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
             raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot plot.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
         azimuthal = txt[:, 4]   # Azimuthal angles in radians
@@ -570,10 +578,11 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         Plot the angles without interpolation.
         Used to show how sampling points are distributed in the polar plot.
         '''
+        png_file_no_interpolation = os.path.join(self.calculation_dir, 'tde_no_interpolation_GAP.png')
         fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
-        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        TDE_txt_file = os.path.join(self.calculation_dir, 'TDE.txt')
         if not os.path.isfile(TDE_txt_file):
-            logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
+            self.logger.error(f"{TDE_txt_file} is not found. Cannot plot.")
             raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot plot.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
         azimuthal = txt[:, 4]  
@@ -601,13 +610,13 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         float
             Averaged TDE value.
         '''
-        TDE_txt_file = os.path.join(calculation_dir, 'TDE.txt')
+        TDE_txt_file = os.path.join(self.calculation_dir, 'TDE.txt')
         if not os.path.isfile(TDE_txt_file):
-            logger.error(f"{TDE_txt_file} is not found. Cannot calculate average energy.")
+            self.logger.error(f"{TDE_txt_file} is not found. Cannot calculate average energy.")
             raise FileNotFoundError(f"{TDE_txt_file} is not found. Cannot calculate average energy.")
         txt = np.loadtxt(TDE_txt_file, skiprows=2, usecols=(0, 1, 2, 3, 4, 5, 6, 7))
         if len(txt) < len(self.hkl_list):
-            logger.error(f"{len(self.hkl_list)-len(txt)} HKL directions are not calculated. ")
+            self.logger.error(f"{len(self.hkl_list)-len(txt)} HKL directions are not calculated. ")
         azimuthal = txt[:, 4]   # Azimuthal angles in radians
         polar = txt[:, 5]       # Polar angles in radians
         energy = txt[:, 7]      # Energy values in eV
@@ -639,7 +648,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
                 denominator += np.sin(theta_grid2[i][j]) * d_theta * d_phi
         ave_energy = numberator / denominator
 
-        logger.info(f"Average TDE: {ave_energy:.2f} eV")
+        self.logger.info(f"Average TDE: {ave_energy:.2f} eV")
         return ave_energy
     
 
@@ -709,13 +718,13 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         pre_v = self.min_velocity
         while pre_v <= self.max_velocity:
             if all(finished_hkl):
-                logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
+                self.logger.info("----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------")
                 break
             higher_energy_needed = False
             for idx, _ in enumerate(self.hkl_list):
                 if finished_hkl[idx]:                 # If this hkl is already finished, skip it
                     continue
-                velocity_dir = os.path.join(calculation_dir, str(pre_v))
+                velocity_dir = os.path.join(self.calculation_dir, str(pre_v))
                 vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                 trajectory_file = os.path.join(vel_hkl_dir, 'dump_out')
                 if self._check_vacancies_with_reference(pre_v, idx, trajectory_file):
@@ -725,7 +734,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
                     if pre_v + self.velocity_interval <= self.max_velocity:   # if next velocity is still in range, otherwise, it runs, but won't be checked
                         higher_energy_needed = True
                         next_v = pre_v + self.velocity_interval
-                        velocity_dir = os.path.join(calculation_dir, str(next_v))
+                        velocity_dir = os.path.join(self.calculation_dir, str(next_v))
                         vel_hkl_dir = os.path.join(velocity_dir, str(idx))
                         subprocess.run('sbatch submit-tde.sh', shell=True, check=True, cwd=vel_hkl_dir)
             if higher_energy_needed:
@@ -733,22 +742,17 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
             pre_v += self.velocity_interval
 
         if not all(finished_hkl):
-            logger.info(f"--------------------------------The max_velocity is too low for these directions-------------------------------------------")
+            self.logger.info(f"--------------------------------The max_velocity is too low for these directions-------------------------------------------")
             for idx, finished_flag in enumerate(finished_hkl):
                 if not finished_flag:
-                    logger.info(f"{idx}: HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
+                    self.logger.info(f"{idx}: HKL: {self.hkl_list[idx]}, Angle: {math.degrees(self.angle_list[idx][0]):.2f}°/{math.degrees(self.angle_list[idx][1]):.2f}°")
         else:
-            logger.info("------------------------------------------------All TDE values are written!------------------------------------------------")
+            self.logger.info("------------------------------------------------All TDE values are written!------------------------------------------------")
         
         finished_hkl_int = np.array(finished_hkl, dtype=int)
         np.savetxt(self.finished_hkl_file, finished_hkl_int, fmt='%d')
                 
 
-template_dir = os.path.join(module_dir, 'templates', 'latt')
-calculation_dir = os.path.join(result_dir, 'latt')
-os.makedirs(calculation_dir, exist_ok=True)
-log_file = os.path.join(log_dir, 'latt_GAP.log')
-logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 class LatticeConstant(LMPStaticCalculator):
     """
     Lattice Constant Relaxation Calculator.
@@ -771,20 +775,19 @@ class LatticeConstant(LMPStaticCalculator):
         cubic : bool
             Whether the lattice is cubic.
         """
-        self.ff_settings = ff_settings
-        self.mass = mass
-        static_bulk = bulk(element, lattice, a=alat, cubic=cubic)
-        write(os.path.join(calculation_dir, 'data.static'), static_bulk, format='lammps-data')
+        super().__init__('latt', ff_settings, mass, alat, element=element, lattice=lattice)
+        static_bulk = bulk(self.element, self.lattice, a=self.alat, cubic=cubic)
+        write(os.path.join(self.calculation_dir, 'data.static'), static_bulk, format='lammps-data')
 
 
     def _setup(self):
-        with open(os.path.join(template_dir, 'in.latt'), 'r') as f:
+        with open(os.path.join(self.template_dir, 'in.latt'), 'r') as f:
             input_template = f.read()
-        input_file = os.path.join(calculation_dir, 'in.latt')
+        input_file = os.path.join(self.calculation_dir, 'in.latt')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
-        shutil.copy(os.path.join(template_dir, 'submit-latt.sh'), 
-                    os.path.join(calculation_dir, 'submit-latt.sh'))
+        shutil.copy(os.path.join(self.template_dir, 'submit-latt.sh'), 
+                    os.path.join(self.calculation_dir, 'submit-latt.sh'))
 
 
     def calculate(self):
@@ -792,17 +795,12 @@ class LatticeConstant(LMPStaticCalculator):
         Calculate the lattice constant by running a LAMMPS simulation.
         """
         self._setup()
-        subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=calculation_dir)
+        subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(10)
-        a, b, c = np.loadtxt(os.path.join(calculation_dir, 'lattice.txt'))
-        logger.info(f"Lattice constant: {a}, {b}, {c}")
+        a, b, c = np.loadtxt(os.path.join(self.calculation_dir, 'lattice.txt'))
+        self.logger.info(f"Lattice constant: {a}, {b}, {c}")
 
 
-template_dir = os.path.join(module_dir, 'templates', 'elastic')
-calculation_dir = os.path.join(result_dir, 'elastic')
-os.makedirs(calculation_dir, exist_ok=True)
-log_file = os.path.join(log_dir, 'elastic_GAP.log')
-logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 class ElasticConstant(LMPStaticCalculator):
     """ 
     Elastic constant calculator.
@@ -824,10 +822,7 @@ class ElasticConstant(LMPStaticCalculator):
         jiggle : float, optional    
             Jiggle size in Angstroms. Default is 1e-5.
         """
-        self.ff_settings = ff_settings
-        self.mass = mass
-        self.lattice = lattice
-        self.alat = alat 
+        super().__init__('tde', ff_settings, mass, alat, lattice=lattice)
         self.deformation_size = deformation_size
         self.jiggle = jiggle
 
@@ -838,28 +833,28 @@ class ElasticConstant(LMPStaticCalculator):
 
         with open(os.path.join(template_dir, 'init.mod'), 'r') as f:
             init_template = f.read()
-        init_file = os.path.join(calculation_dir, 'init.mod')
+        init_file = os.path.join(self.calculation_dir, 'init.mod')
         with open(init_file, 'w') as f:
             f.write(init_template.format(mass=self.mass, lattice=self.lattice, alat=self.alat,
                                          deformation_size=self.deformation_size, jiggle=self.jiggle))
         with open(os.path.join(template_dir, 'potential.mod'), 'r') as f:
             potential_template = f.read()
-        potential_file = os.path.join(calculation_dir, 'potential.mod')
+        potential_file = os.path.join(self.calculation_dir, 'potential.mod')
         with open(potential_file, 'w') as f:
             f.write(potential_template.format(ff_settings='\n'.join(self.ff_settings)))
         shutil.copy(os.path.join(template_dir, 'in.elastic'),
-                    os.path.join(calculation_dir, 'in.elastic'))
+                    os.path.join(self.calculation_dir, 'in.elastic'))
         shutil.copy(os.path.join(template_dir, 'displace.mod'),
-                    os.path.join(calculation_dir, 'displace.mod'))
+                    os.path.join(self.calculation_dir, 'displace.mod'))
         shutil.copy(os.path.join(template_dir, 'submit-elastic.sh'),
-                    os.path.join(calculation_dir, 'submit-elastic.sh'))
+                    os.path.join(self.calculation_dir, 'submit-elastic.sh'))
 
         
     def calculate(self):
         self._setup()
-        subprocess.run('sbatch submit-elastic.sh', shell=True, check=True, cwd=calculation_dir)
+        subprocess.run('sbatch submit-elastic.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(30)
-        logger.info('-------------------------------KRH Expression-------------------------------')
+        self.logger.info('-------------------------------KRH Expression-------------------------------')
         self._KRH_expression()
 
 
@@ -908,7 +903,7 @@ class ElasticConstant(LMPStaticCalculator):
         cindices[19] = (3,5)
         cindices[20] = (4,5)
 
-        with open(os.path.join(calculation_dir, 'log.lammps'), 'r') as logfile:
+        with open(os.path.join(self.calculation_dir, 'log.lammps'), 'r') as logfile:
             txt = logfile.read()
 
         # search for 21 elastic constants
@@ -918,7 +913,7 @@ class ElasticConstant(LMPStaticCalculator):
         for ival in range(nvals):
             s1 = txt.find(valstr,s2)
             if (s1 == -1):
-                logger.error("Failed to find elastic constants in log file")
+                self.logger.error("Failed to find elastic constants in log file")
                 exit(1)
             s1 += 1
             s2 = txt.find("\n",s1)
@@ -928,10 +923,10 @@ class ElasticConstant(LMPStaticCalculator):
             (i1,i2) = cindices[ival]
             c[i1,i2] = float(words[valpos])
             c[i2,i1] = c[i1,i2]
-        logger.info("C tensor [GPa]")
+        self.logger.info("C tensor [GPa]")
         for i in range(6):
             row_str = " ".join(f"{c[i][j]:8.3f}" for j in range(6))
-            logger.info(row_str)
+            self.logger.info(row_str)
 
         KV = 1/9*((c[0][0] + c[1][1] + c[2][2]) + \
             2 * (c[0][1] + c[1][2] + c[2][0]))
@@ -969,20 +964,15 @@ class ElasticConstant(LMPStaticCalculator):
         GH = (GV+GR)/2
         EH = 9*KH*GH/(3*KH+GH)
 
-        logger.info("")
-        logger.info("KV       EV       GV")
-        logger.info(f"{KV:8.3f} {EV:8.3f} {GV:8.3f}")
-        logger.info("KR       ER       GR")
-        logger.info(f"{KR:8.3f} {ER:8.3f} {GR:8.3f}")
-        logger.info("KH       EH       GH")
-        logger.info(f"{KH:8.3f} {EH:8.3f} {GH:8.3f}")
+        self.logger.info("")
+        self.logger.info("KV       EV       GV")
+        self.logger.info(f"{KV:8.3f} {EV:8.3f} {GV:8.3f}")
+        self.logger.info("KR       ER       GR")
+        self.logger.info(f"{KR:8.3f} {ER:8.3f} {GR:8.3f}")
+        self.logger.info("KH       EH       GH")
+        self.logger.info(f"{KH:8.3f} {EH:8.3f} {GH:8.3f}")
 
 
-template_dir = os.path.join(module_dir, 'templates', 'defect')
-calculation_dir = os.path.join(result_dir, 'defect', 'vacancy')
-os.makedirs(calculation_dir, exist_ok=True)
-log_file = os.path.join(log_dir, 'defect_GAP.log')
-logger = AppLogger(__name__, log_file, overwrite=True).get_logger()
 class VacancyDefectFormation(LMPStaticCalculator):
     """
     Defect Formation Energy Calculator.
@@ -1005,26 +995,19 @@ class VacancyDefectFormation(LMPStaticCalculator):
         del_id : int
             ID of the defect to be created.
         """
-        self.ff_settings = ff_settings
-        self.mass = mass
-        self.lattice = lattice
-        self.alat = alat 
-        self.size = size
+        super().__init__('vacancy', ff_settings, mass, alat, size, lattice=lattice)
         self.del_id = del_id
 
 
     def _setup(self):
-        with open(os.path.join(template_dir, 'in.vac'), 'r') as f:
+        with open(os.path.join(self.template_dir, 'in.vac'), 'r') as f:
             input_template = f.read()
-        input_file = os.path.join(calculation_dir, 'in.vac')
+        input_file = os.path.join(self.calculation_dir, 'in.vac')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, lattice=self.lattice, alat=self.alat,
                                          size=self.size, del_id=self.del_id))
-        with open(os.path.join(template_dir, 'submit-defect.sh'), 'r') as f:
-            submit_template = f.read()
-        submit_file = os.path.join(calculation_dir, 'submit-defect.sh')
-        with open(submit_file, 'w') as f:
-            f.write(submit_template.format(in_defect='in.vac'))
+        shutil.copy(os.path.join(self.template_dir, 'submit-vac.sh'),
+                    os.path.join(self.calculation_dir, 'submit-vac.sh'))
 
 
     def calculate(self):
@@ -1032,19 +1015,19 @@ class VacancyDefectFormation(LMPStaticCalculator):
         Calculate the defect formation energy by running a LAMMPS simulation.
         """
         self._setup()
-        subprocess.run('sbatch submit-defect.sh', shell=True, check=True, cwd=calculation_dir)
+        subprocess.run('sbatch submit-defect.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(30)
-        logger.info('-------------------------------Defect Formation Energy-------------------------------')
+        self.logger.info('-------------------------------Vacancy Formation Energy-------------------------------')
         self._vacancy_formation_energy()
 
 
     def _vacancy_formation_energy(self):
-        with open(os.path.join(calculation_dir, 'log.lammps'), 'r') as logfile:
+        with open(os.path.join(self.calculation_dir, 'log.lammps'), 'r') as logfile:
             txt = logfile.read()
         # find line contains "Vacancy formation energy"
         s1 = txt.find("Vacancy formation energy") 
         if s1 == -1:
-            logger.error("Failed to find vacancy formation energy in log file")
+            self.logger.error("Failed to find vacancy formation energy in log file")
             exit(1)
         
         next_line_start = txt.find('\n', s1) + 1  
@@ -1052,7 +1035,123 @@ class VacancyDefectFormation(LMPStaticCalculator):
         next_line = txt[next_line_start:next_line_end].strip()
         words = next_line.split('=')
         vacancy_energy = float(words[-1])
-        logger.info(f"Vacancy formation energy: {vacancy_energy:.2f} eV")
+        self.logger.info(f"Vacancy formation energy: {vacancy_energy:.2f} eV")
+
+
+class InterstitialDefectFormation(LMPStaticCalculator):
+    """
+    Interstitial Defect Formation Energy Calculator.
+    """
+    def __init__(self, ff_settings, mass, element, lattice, alat, size):
+        """
+        Initialize the Interstitial Defect Formation calculator.
+        Parameters
+        ----------
+        ff_settings : Potential or list
+            Force field settings, either as a Potential class or a list of strings.
+        mass : float
+            Mass of the atom in atomic mass units (AMU).
+        lattice : str
+            Lattice type (e.g., 'diamond').
+        alat : float
+            Lattice constant in Angstroms.
+        size : int
+            Size of the supercell.
+        """
+        super().__init__('interstitial', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.interstitials_types = ['split', 'hex', 'tet', 'bond']
+
+
+    def _find_value(self, log_file, keyword):
+        """
+        Find the value associated with a keyword in the text.
+        Parameters
+        ----------
+        log_file : str
+            The text to search in.
+        keyword : str
+            The keyword to search for.
+        Returns
+        -------
+        float
+            The value associated with the keyword.
+        """
+        with open(log_file, 'r') as logfile:
+            txt = logfile.read()
+        s1 = txt.find(keyword)
+        if s1 == -1:
+            self.logger.error(f"Failed to find {keyword} in log file")
+            exit(1)
+        next_line_start = txt.find('\n', s1) + 1  
+        next_line_end = txt.find('\n', next_line_start)
+        next_line = txt[next_line_start:next_line_end].strip()
+        words = next_line.split('=')
+        return float(words[-1])
+    
+    def _setup_helper(self):
+        """
+        Helper function to set up the perfect structure for interstitial defect calculations.
+        This function creates the perfect structure data file and input file for LAMMPS.
+        Returns
+        -------
+        float
+            The energy of the perfect system.
+        """
+        data_perfect = bulk(self.element, self.lattice, a=self.alat, cubic=True)
+        write(os.path.join(self.calculation_dir, 'data.perfect'), data_perfect, format='lammps-data')
+
+        with open(os.path.join(self.template_dir, 'in.perfect'), 'r') as f:
+            input_template = f.read()
+        input_file = os.path.join(self.calculation_dir, 'in.perfect')
+        with open(input_file, 'w') as f:
+            f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
+
+        with open(os.path.join(self.template_dir, 'submit.sh'), 'r') as f:
+            submit_template = f.read()
+        submit_file = os.path.join(self.calculation_dir, 'submit.sh')
+        with open(submit_file, 'w') as f:
+            f.write(submit_template.format(in_file='in.perfect'))
+        subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=self.calculation_dir)
+        time.sleep(20)
+
+        log_file = os.path.join(self.calculation_dir, 'log.lammps')
+        perfect_energy = self._find_value(log_file, "Energy of perfect system")
+        self.logger.info('-------------------------------Perfect system Energy-------------------------------')
+        self.logger.info(f"Perfect system energy: {perfect_energy:.2f} eV")
+        return perfect_energy
+
+
+    def _setup(self):
+        perfect_energy = self._setup_helper()
+        with open(os.path.join(self.template_dir, 'in.inter'), 'r') as f:
+            input_template = f.read()
+        for inter_type in self.interstitials_types:
+            inter_dir = os.path.join(self.calculation_dir, inter_type)
+            os.makedirs(inter_dir, exist_ok=True)
+            input_file = os.path.join(inter_dir, 'in.inter')
+            with open(input_file, 'w') as f:
+                f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, data_interstitial=f'data.{inter_type}', perfect_energy=perfect_energy))
+            with open(os.path.join(self.template_dir, 'submit.sh'), 'r') as f:
+                submit_template = f.read()
+            submit_file = os.path.join(inter_dir, 'submit.sh')
+            with open(submit_file, 'w') as f:
+                f.write(submit_template.format(in_file=f'in.{inter_type}'))
+
+
+    def calculate(self):
+        """
+        Calculate the interstitial defect formation energy by running a LAMMPS simulation.
+        """
+        self._setup()
+        self.logger.info('-------------------------------Interstitial Formation Energy-------------------------------')
+        for inter_type in self.interstitials_types:
+            inter_dir = os.path.join(self.calculation_dir, inter_type)
+            subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=inter_dir)
+            time.sleep(20)
+            log_file = os.path.join(inter_dir, 'log.lammps')
+            inter_formation_energy = self._find_value(log_file, "Interstitial formation energy")
+            self.logger.info(f"Interstitial formation energy for {inter_type}: {inter_formation_energy:.2f} eV")
+        
 
         
 

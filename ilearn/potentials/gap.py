@@ -330,8 +330,8 @@ if __name__ == "__main__":
     temp = 0
     element = 'Ge'
     mass = 72.56
-    min_velocity = 50
-    max_velocity = 70
+    min_velocity = 25
+    max_velocity = 30
     velocity_interval = 5
     kin_eng_threshold = 4
     simulation_size = 9
@@ -354,16 +354,16 @@ if __name__ == "__main__":
     # tde.plot_no_interplation()
     # tde.average_TDE()
 
-    lattice = 'diamond'
-    my_alat = 5.3
-    cubic = True
+    # lattice = 'diamond'
+    # my_alat = 5.3
+    # cubic = True
     # lc = LatticeConstant(ff_settings, mass, element, lattice, my_alat, cubic)
     # lc.calculate()
-    alat = 5.76
+    # alat = 5.76
     # elastic = ElasticConstant(ff_settings, mass, lattice, alat)
     # elastic.calculate()
 
-    size = 3
-    del_id = 0
-    vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
-    vf.calculate()
+    # size = 3
+    # del_id = 0
+    # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
+    # vf.calculate()
