@@ -1,0 +1,47 @@
+# LAMMPS input script for optimized lattice constant calculation
+
+# --------------- INITIALIZATION ------------------
+clear
+units             metal
+atom_style        atomic
+boundary          p p p
+
+# ------------------ ATOM DEFINITION -------------------
+# box               tilt large
+read_data         data.static 
+# change_box        all x scale 1.1 y scale 1.1 z scale 1.1 remap
+# ------------------------ FORCE FIELDS -----------------------
+pair_style        quip
+pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/GAP/Ge-v10.xml "Potential xml_label=GAP_2025_3_8_120_22_43_25_989" 32
+mass              1 72.56
+#---------------------------Settings----------------------------
+neigh_modify      delay 0 every 1 check yes page 200000 one 20000
+
+#----------------------Run Minimization-------------------------
+reset_timestep    0
+
+thermo            1
+thermo_style      custom pe cella cellb cellc cellalpha cellbeta cellgamma
+
+fix               1 all box/relax aniso 0.0 vmax 0.001
+min_style         cg
+minimize          1e-10 1e-10 5000 5000
+#minimize          0 1e-10 400 400
+
+
+variable          a equal cella
+variable          b equal cellb
+variable          c equal cellc
+variable          alpha equal cellalpha
+variable          beta equal cellbeta
+variable          gamma equal cellgamma
+variable          energy equal pe
+
+#---------------------------------------------
+
+######################################
+# SIMULATION DONE
+print             "All done"
+print             "${a} ${b} ${c}" file lattice.txt
+write_data        data.relaxed
+
