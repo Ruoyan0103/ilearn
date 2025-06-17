@@ -45,7 +45,7 @@ variable        Ev equal (v_Ef-(v_No/(v_No-1))*v_Ei)
 ######################################
 # SIMULATION DONE
 print "All done"
-print "Total number of atoms = ${{No}-1}"
+print "Total number of atoms = ${{No}}"
 print "Initial energy of atoms = ${{Ei}}"
 print "Final energy of atoms = ${{Ef}}"
 print "Interstitial formation energy = ${{Ev}}"
