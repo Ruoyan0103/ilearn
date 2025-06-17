@@ -1061,7 +1061,7 @@ class InterstitialDefectFormation(LMPStaticCalculator):
             Size of the supercell.
         """
         super().__init__('interstitial', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
-        self.interstitials_types = ['split', 'hex', 'tet', 'bond']
+        self.interstitials_types = ['split_110', 'hex', 'tet', 'bond']
 
 
     def _find_value(self, log_file, keyword):
@@ -1100,21 +1100,18 @@ class InterstitialDefectFormation(LMPStaticCalculator):
         float
             The energy of the perfect system.
         """
-        data_perfect = bulk(self.element, self.lattice, a=self.alat, cubic=True)
-        write(os.path.join(self.calculation_dir, 'data.perfect'), data_perfect, format='lammps-data')
+        unit_cell = bulk(self.element, self.lattice, a=self.alat, cubic=True)
+        super_cell = unit_cell * [self.size, self.size, self.size]
+        write(os.path.join(self.calculation_dir, 'data.perfect'), super_cell, format='lammps-data')
 
         with open(os.path.join(self.template_dir, 'in.perfect'), 'r') as f:
             input_template = f.read()
         input_file = os.path.join(self.calculation_dir, 'in.perfect')
         with open(input_file, 'w') as f:
             f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
-
-        with open(os.path.join(self.template_dir, 'submit.sh'), 'r') as f:
-            submit_template = f.read()
-        submit_file = os.path.join(self.calculation_dir, 'submit.sh')
-        with open(submit_file, 'w') as f:
-            f.write(submit_template.format(in_file='in.perfect'))
-        subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=self.calculation_dir)
+        shutil.copy(os.path.join(self.template_dir, 'submit-perfect.sh'),
+                    os.path.join(self.calculation_dir, 'submit-perfect.sh'))
+        subprocess.run('sbatch submit-perfect.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(10)
 
         log_file = os.path.join(self.calculation_dir, 'log.lammps')
@@ -1131,10 +1128,10 @@ class InterstitialDefectFormation(LMPStaticCalculator):
         for inter_type in self.interstitials_types:
             inter_dir = os.path.join(self.calculation_dir, inter_type)
             os.makedirs(inter_dir, exist_ok=True)
-###########
+
             Ge_cubic = bulk(self.element, self.lattice, a=self.alat, cubic=True)
             Ge_sup = Ge_cubic * [self.size, self.size, self.size]
-            if inter_type == 'split':
+            if inter_type == 'split_110':
                 del Ge_sup[1]
                 alpha = (self.alat/2*np.sqrt(3)/2/self.alat)
                 interstitial_position1 = np.array([(0.25-alpha)*self.alat, (0.25-alpha)*self.alat, 0.25*self.alat])
@@ -1155,15 +1152,12 @@ class InterstitialDefectFormation(LMPStaticCalculator):
                 interstitial_atom = Atoms(self.element, positions=[interstitial_position])
                 combined_structure = Ge_sup + interstitial_atom
             write(os.path.join(inter_dir, 'data.interstitial'), combined_structure, format='lammps-data')
-################
+
             input_file = os.path.join(inter_dir, 'in.interstitial')
             with open(input_file, 'w') as f:
                 f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, perfect_energy=perfect_energy))
-            with open(os.path.join(self.template_dir, 'submit.sh'), 'r') as f:
-                submit_template = f.read()
-            submit_file = os.path.join(inter_dir, 'submit.sh')
-            with open(submit_file, 'w') as f:
-                f.write(submit_template.format(in_file=f'in.{inter_type}'))
+            shutil.copy(os.path.join(self.template_dir, 'submit-interstitial.sh'),
+                        os.path.join(inter_dir, 'submit-interstitial.sh'))
 
 
     def calculate(self):
@@ -1172,13 +1166,14 @@ class InterstitialDefectFormation(LMPStaticCalculator):
         """
         self._setup()
         self.logger.info('-------------------------------Interstitial Formation Energy-------------------------------')
+        self.logger.info(f'--------------------------------Supercell: [{self.size} {self.size} {self.size}]---------------------------------')
         for inter_type in self.interstitials_types:
             inter_dir = os.path.join(self.calculation_dir, inter_type)
-            subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=inter_dir)
-            time.sleep(20)
+            subprocess.run('sbatch submit-interstitial.sh', shell=True, check=True, cwd=inter_dir)
+            time.sleep(30)
             log_file = os.path.join(inter_dir, 'log.lammps')
             inter_formation_energy = self._find_value(log_file, "Interstitial formation energy")
-            self.logger.info(f"Interstitial formation energy for {inter_type}: {inter_formation_energy:.2f} eV")
+            self.logger.info(f"{inter_type}: {inter_formation_energy:.2f} eV")
         
 
 class NudgedElasticBand(LMPStaticCalculator):

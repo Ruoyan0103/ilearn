@@ -368,13 +368,13 @@ if __name__ == "__main__":
     # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
     # vf.calculate()
 
-    size = 2
-    lattice = 'diamond'
-    num_images = 5
-    neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='2NN')
-    neb.calculate()
-
-    # lattice = 'diamond'
     # size = 2
-    # inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
-    # inter._setup_helper()
+    # lattice = 'diamond'
+    # num_images = 5
+    # neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='2NN')
+    # neb.calculate()
+
+    lattice = 'diamond'
+    size = 2
+    inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
+    inter.calculate()
