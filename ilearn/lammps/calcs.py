@@ -1307,6 +1307,10 @@ class NudgedElasticBand(LMPStaticCalculator):
         return migration_barrier
 
 
+### phononpy 
+### QHA
+### RDF 
+### Energy vs Volume
 
 
 
