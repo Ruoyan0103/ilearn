@@ -1158,7 +1158,7 @@ class NudgedElasticBand(LMPStaticCalculator):
     """
     Nudged Elastic Band (NEB) migration barrier Calculator.
     """
-    def __init__(self, ff_settings, mass, alat, size, element, lattice, num_images):
+    def __init__(self, ff_settings, mass, alat, size, element, lattice, num_images, path='1NN'):
         """
         Initialize the Nudged Elastic Band calculator.
         Parameters
@@ -1173,9 +1173,16 @@ class NudgedElasticBand(LMPStaticCalculator):
             Size of the supercell.
         lattice : str, optional
             Lattice type (default is 'diamond').
+        element : str
+            Element symbol (e.g., 'Ge').
+        num_images : int
+            Number of images for the NEB calculation.
+        path : str 
+            '1NN' or '2NN', indicating the path for the NEB calculation.
         """
         super().__init__('neb', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
         self.num_images = num_images
+        self.path = path
     
 
     def _setup(self):
@@ -1189,61 +1196,64 @@ class NudgedElasticBand(LMPStaticCalculator):
         scale_factor = [self.size, self.size, self.size]
         super_cell = unit_cell * scale_factor
         write(os.path.join(self.calculation_dir, 'data.supercell'), super_cell, format='lammps-data')
-################
-        if self.size == 2:
-            start_idx = 0
-            final_idx = 1
-        elif self.size == 3:
-            start_idx = 0
-            final_idx = 2
-        elif self.size == 4:
-            start_idx = 0
-            final_idx = 3
-        elif self.size == 5:
-            start_idx = 0
-            final_idx = 4
-        else:
-            self.logger.error(f"Unsupported NEB supercell size: {self.size}. Supported sizes are 2, 3, 4, or 5.")
-###############
+
+        start_idx = len(super_cell) - 1
+        if self.path == '1NN':
+            final_idx = len(super_cell) - 2
+        elif self.path == '2NN':
+            final_idx = len(super_cell) - 3
+       
         relax_file = os.path.join(self.calculation_dir, 'in.relax')
         shutil.copy(os.path.join(self.template_dir, 'submit-relax.sh'),
                     os.path.join(self.calculation_dir, 'submit-relax.sh'))
         with open(relax_file, 'w') as f:
             f.write(relax_template.format(ff_settings='\n'.join(self.ff_settings),
-                                          lattice=self.lattice, alat=a, element=self.element,
+                                          lattice=self.lattice, alat=a, element=self.element, mass=self.mass,
                                           del_id=start_idx + 1, relaxed_file='initial.relaxed'))
         subprocess.run('sbatch submit-relax.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(30)
         with open(relax_file, 'w') as f:
             f.write(relax_template.format(ff_settings='\n'.join(self.ff_settings),
-                                          lattice=self.lattice, alat=a, element=self.element,
+                                          lattice=self.lattice, alat=a, element=self.element, mass=self.mass,
                                           del_id=final_idx + 1, relaxed_file='final.relaxed'))
         subprocess.run('sbatch submit-relax.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(30)
 
-###########
-        final_relaxed_struct = read(os.path.join(self.calculation_dir, 'final.relaxed'), format='lammps-data')
-        lines = ['{}'.format(final_relaxed_struct.num_sites)]
-        for idx, site in enumerate(final_relaxed_struct):
-            if idx == final_idx:
-                idx = final_relaxed_struct.num_sites
-            elif idx == start_idx:
-                idx = final_idx
-            else:
-                idx = idx
-            lines.append('{}  {:.3f}  {:.3f}  {:.3f}'.format(idx + 1, site.x, site.y, site.z))
-        with open('data.final_replica', 'w') as f:
-            f.write('\n'.join(lines))
-############
+        def process_lammps_atoms(input_file, output_file, start_idx, final_idx):
+            with open(input_file, 'r') as f:
+                lines = f.readlines()
+            for i, line in enumerate(lines):
+                if 'Velocities' in line:
+                    end = i
+                    break
+            lines = lines[15:end]   # file from 16th line 
+
+            processed_lines = [f'{len(lines)-1}\n']
+
+            for line in lines:
+                tokens = line.strip().split()
+                if len(tokens) >= 5:
+                    new_line = f"{tokens[0]} {tokens[2]} {tokens[3]} {tokens[4]}\n"
+                    if int(tokens[0]) == start_idx + 1:
+                        new_line = f"{final_idx + 1} {tokens[2]} {tokens[3]} {tokens[4]}\n"
+                    processed_lines.append(new_line)
+
+            with open(output_file, 'w') as f:
+                f.writelines(processed_lines)
+
+        input_file = os.path.join(self.calculation_dir, 'final.relaxed')
+        output_file = os.path.join(self.calculation_dir, 'data.final_replica')
+        process_lammps_atoms(input_file, output_file, start_idx, final_idx)
+
         input_file = os.path.join(self.calculation_dir, 'in.neb')
         with open(input_file, 'w') as f:
-            f.write(neb_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass,
-                                        start_replica='initial.relaxed',
-                                        final_replica='data.final_replica'))
-        submit_template = os.path.join(self.template_dir, 'submit-neb.sh')
+            f.write(neb_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
+        with open(os.path.join(self.template_dir, 'submit-neb.sh'), 'r') as f:
+            submit_template = f.read()
         submit_file = os.path.join(self.calculation_dir, 'submit-neb.sh')
         with open(submit_file, 'w') as f:
-            f.write(submit_template.format(ntasks=self.num_images*10, size=self.num_images))
+            ntasks = self.num_images * 10
+            f.write(submit_template.format(ntasks=ntasks, size=self.num_images))
 
 
     def calculate(self):
@@ -1252,7 +1262,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         """
         self._setup()
         subprocess.run('sbatch submit-neb.sh', shell=True, check=True, cwd=self.calculation_dir)
-        time.sleep(30)
+        time.sleep(180)
         self.logger.info('-------------------------------NEB Barrier-------------------------------')
         migration_barrier = self._parse()
         self.logger.info(f"Migration barrier: {migration_barrier:.2f} eV")
@@ -1264,7 +1274,7 @@ class NudgedElasticBand(LMPStaticCalculator):
         Parse results from dump files.
 
         """
-        with open('log.lammps') as f:
+        with open(os.path.join(self.calculation_dir, 'log.lammps')) as f:
             lines = f.readlines()[-1:]
         migration_barrier = float(lines[0].split()[6]) # read EBF
         return migration_barrier

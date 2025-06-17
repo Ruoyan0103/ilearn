@@ -9,7 +9,7 @@ atom_modify     sort 0 0.0
 
 # read start replica
 
-read_data       {start_replica}
+read_data       initial.relaxed
 
 {ff_settings}
 mass            1 {mass}
@@ -22,7 +22,7 @@ variable        u uloop 20
 
 # dump events vacneigh custom 1000 dump.neb.sivac.$u id type x y z
 
-fix             1 all neb 1.0 
+fix             1 all neb 10 
 
 thermo          100
 
@@ -31,4 +31,8 @@ thermo          100
 timestep        0.01
 min_style       quickmin
 
-neb             0.0 0.001 10000 10000 100 final {final_replica}
+neb             0.0 0.001 5000 5000 100 final data.final_replica
+
+# ---------------------------------- OUTPUT -------------------------------------------------
+write_data      neb_path.$i.data
+

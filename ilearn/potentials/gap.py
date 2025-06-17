@@ -20,7 +20,7 @@ from ase.io import read
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
-                                VacancyDefectFormation
+                                VacancyDefectFormation, NudgedElasticBand
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -346,10 +346,10 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
-    tde.set_hkl_from_angles()
+    # tde.get_uniform_angles(vectors, 4)
+    # tde.set_hkl_from_angles()
     # tde.check_interval()
-    tde.calculate(needed_thermalization=False)
+    # tde.calculate(needed_thermalization=False)
     # tde.plot()
     # tde.plot_no_interplation()
     # tde.average_TDE()
@@ -367,3 +367,9 @@ if __name__ == "__main__":
     # del_id = 0
     # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
     # vf.calculate()
+
+    size = 2
+    lattice = 'diamond'
+    num_images = 5
+    neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='1NN')
+    neb.calculate()
