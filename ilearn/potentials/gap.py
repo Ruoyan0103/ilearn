@@ -20,7 +20,7 @@ from ase.io import read
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
-                                VacancyDefectFormation, NudgedElasticBand
+                                VacancyDefectFormation, InterstitialDefectFormation, NudgedElasticBand
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -368,8 +368,13 @@ if __name__ == "__main__":
     # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
     # vf.calculate()
 
-    size = 2
+    # size = 2
+    # lattice = 'diamond'
+    # num_images = 5
+    # neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='1NN')
+    # neb.calculate()
+
     lattice = 'diamond'
-    num_images = 5
-    neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='1NN')
-    neb.calculate()
+    size = 2
+    inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
+    inter._setup_helper()

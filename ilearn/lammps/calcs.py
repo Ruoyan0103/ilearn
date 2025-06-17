@@ -7,7 +7,8 @@ from ovito.io import import_file
 from ovito.modifiers import WignerSeitzAnalysisModifier
 from ilearn.loggers.logger import AppLogger
 from ase.io import read, write
-from ase.build import bulk 
+from ase import Atoms 
+from ase.build import bulk, make_supercell 
 from abc import ABC, abstractmethod
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
@@ -1089,6 +1090,7 @@ class InterstitialDefectFormation(LMPStaticCalculator):
         words = next_line.split('=')
         return float(words[-1])
     
+
     def _setup_helper(self):
         """
         Helper function to set up the perfect structure for interstitial defect calculations.
@@ -1113,7 +1115,7 @@ class InterstitialDefectFormation(LMPStaticCalculator):
         with open(submit_file, 'w') as f:
             f.write(submit_template.format(in_file='in.perfect'))
         subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=self.calculation_dir)
-        time.sleep(20)
+        time.sleep(10)
 
         log_file = os.path.join(self.calculation_dir, 'log.lammps')
         perfect_energy = self._find_value(log_file, "Energy of perfect system")
@@ -1124,14 +1126,39 @@ class InterstitialDefectFormation(LMPStaticCalculator):
 
     def _setup(self):
         perfect_energy = self._setup_helper()
-        with open(os.path.join(self.template_dir, 'in.inter'), 'r') as f:
+        with open(os.path.join(self.template_dir, 'in.interstitial'), 'r') as f:
             input_template = f.read()
         for inter_type in self.interstitials_types:
             inter_dir = os.path.join(self.calculation_dir, inter_type)
             os.makedirs(inter_dir, exist_ok=True)
-            input_file = os.path.join(inter_dir, 'in.inter')
+###########
+            Ge_cubic = bulk(self.element, self.lattice, a=self.alat, cubic=True)
+            Ge_sup = Ge_cubic * [self.size, self.size, self.size]
+            if inter_type == 'split':
+                del Ge_sup[1]
+                alpha = (self.alat/2*np.sqrt(3)/2/self.alat)
+                interstitial_position1 = np.array([(0.25-alpha)*self.alat, (0.25-alpha)*self.alat, 0.25*self.alat])
+                interstitial_atom1 = Atoms(self.element, positions=[interstitial_position1])
+                interstitial_position2 = np.array([(0.25+alpha)*self.alat, (0.25+alpha)*self.alat, 0.25*self.alat])
+                interstitial_atom2 = Atoms(self.element, positions=[interstitial_position2])
+                combined_structure = Ge_sup + interstitial_atom1 + interstitial_atom2
+            elif inter_type == 'hex':
+                interstitial_position = np.array([0.625*self.alat, 0.625*self.alat, 0.625*self.alat])
+                interstitial_atom = Atoms(self.element, positions=[interstitial_position])
+                combined_structure = Ge_sup + interstitial_atom          
+            elif inter_type == 'tet':
+                interstitial_position = np.array([0.5*self.alat, 0.5*self.alat, 0.5*self.alat])
+                interstitial_atom = Atoms(self.element, positions=[interstitial_position])
+                combined_structure = Ge_sup + interstitial_atom
+            else:
+                interstitial_position = np.array([0.125*self.alat, 0.125*self.alat, 0.125*self.alat]) 
+                interstitial_atom = Atoms(self.element, positions=[interstitial_position])
+                combined_structure = Ge_sup + interstitial_atom
+            write(os.path.join(inter_dir, 'data.interstitial'), combined_structure, format='lammps-data')
+################
+            input_file = os.path.join(inter_dir, 'in.interstitial')
             with open(input_file, 'w') as f:
-                f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, data_interstitial=f'data.{inter_type}', perfect_energy=perfect_energy))
+                f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass, perfect_energy=perfect_energy))
             with open(os.path.join(self.template_dir, 'submit.sh'), 'r') as f:
                 submit_template = f.read()
             submit_file = os.path.join(inter_dir, 'submit.sh')

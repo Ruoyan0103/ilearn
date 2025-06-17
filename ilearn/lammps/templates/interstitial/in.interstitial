@@ -8,7 +8,7 @@ boundary        p p p
 atom_style      atomic
 
 # ------------------------------ ATOM DEFINITION ------------------------------
-read_data       {data_interstitial}
+read_data       data.interstitial
 
 # --------------------------------- FORCE FIELD -------------------------------
 {ff_settings}
