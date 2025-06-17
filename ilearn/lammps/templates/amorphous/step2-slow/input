@@ -1,0 +1,23 @@
+atoms_file = "Ge_melted.xyz"
+pot_file = "gap_files/Ge-v10-gap"
+n_species = 1
+species = Ge
+masses = 72.64
+
+! MD options
+md_nsteps = 1500000 ! quench rate: 10e12 K/s
+md_step = 1.
+thermostat = berendsen
+t_beg = 300
+t_end = 300
+tau_t = 100.
+barostat = berendsen
+barostat_sym = diag
+p_beg = 1.
+p_end = 1.
+tau_p = 1000.
+gamma_p = 30.
+write_thermo = 100
+write_xyz = 1000
+neighbors_buffer = 0.5
+

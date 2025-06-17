@@ -6,9 +6,9 @@ from scipy.interpolate import griddata
 from ovito.io import import_file
 from ovito.modifiers import WignerSeitzAnalysisModifier
 from ilearn.loggers.logger import AppLogger
-from ase.io import read, write
+from ase.io import write
 from ase import Atoms 
-from ase.build import bulk, make_supercell 
+from ase.build import bulk
 from abc import ABC, abstractmethod
 
 plt.rcParams['font.family'] = 'DejaVu Serif'
@@ -1302,10 +1302,18 @@ class NudgedElasticBand(LMPStaticCalculator):
         return migration_barrier
 
 
+class Liquid:
+    # Use TurboGAP MD, files in self.templates/liquid
+    pass
+
+class Amorphous:
+    # Use TurboGAP MD, files in self.templates/amorphous
+    pass
+
+
 ### phononpy 
 ### QHA
-### RDF 
-### Energy vs Volume
+### EV 
 
 
 
