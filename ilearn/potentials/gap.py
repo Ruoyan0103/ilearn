@@ -336,7 +336,7 @@ if __name__ == "__main__":
     kin_eng_threshold = 4
     simulation_size = 9
     thermal_time = 60       # in second
-    tde_time = 2.5*3600     # in second
+    tde_time = 2.25*3600    # in second
 
     tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
                                       pka_id, min_velocity, max_velocity, 
@@ -348,8 +348,8 @@ if __name__ == "__main__":
     vectors = np.array((vector1, vector2, vector3))
     # tde.get_uniform_angles(vectors, 4)
     # tde.set_hkl_from_angles()
-    # tde.check_interval()
-    # tde.calculate(needed_thermalization=False)
+    # # tde.check_interval()
+    # tde.calculate(needed_thermalization=True)
     # tde.plot()
     # tde.plot_no_interplation()
     # tde.average_TDE()
@@ -368,13 +368,13 @@ if __name__ == "__main__":
     # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
     # vf.calculate()
 
-    # size = 2
-    # lattice = 'diamond'
-    # num_images = 5
-    # neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='1NN')
-    # neb.calculate()
-
-    lattice = 'diamond'
     size = 2
-    inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
-    inter._setup_helper()
+    lattice = 'diamond'
+    num_images = 5
+    neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='2NN')
+    neb.calculate()
+
+    # lattice = 'diamond'
+    # size = 2
+    # inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
+    # inter._setup_helper()

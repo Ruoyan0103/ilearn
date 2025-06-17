@@ -34,5 +34,6 @@ min_style       quickmin
 neb             0.0 0.001 5000 5000 100 final data.final_replica
 
 # ---------------------------------- OUTPUT -------------------------------------------------
+variable        i equal part
 write_data      neb_path.$i.data
 
