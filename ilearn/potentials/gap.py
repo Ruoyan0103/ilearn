@@ -374,7 +374,7 @@ if __name__ == "__main__":
     # neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='2NN')
     # neb.calculate()
 
-    lattice = 'diamond'
-    size = 2
-    inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
-    inter.calculate()
+    # lattice = 'diamond'
+    # size = 2
+    # inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
+    # inter.calculate()
