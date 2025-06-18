@@ -1,6 +1,7 @@
 import os 
 from ilearn.potentials import IPotential
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy
+from ilearn.phonopy.calcs import PhononDispersion
 import numpy as np
 
 module_dir = os.path.dirname(__file__)
@@ -63,13 +64,15 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 2)
-    tde.set_hkl_from_angles()
+    # tde.get_uniform_angles(vectors, 2)
+    # tde.set_hkl_from_angles()
     # tde.check_interval()
-    tde.calculate(needed_thermalization=True)
+    # tde.calculate(needed_thermalization=True)
     #tde.plot()
     #tde.plot_no_interplation()
     #tde.average_TDE()
+    ph = PhononDispersion(ff_settings, mass, alat, size=2, element=element, lattice='diamond')
+    ph.calculate()
     
     
 
