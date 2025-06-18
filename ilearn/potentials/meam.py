@@ -1,7 +1,7 @@
 import os 
 from ilearn.potentials import IPotential
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy
-from ilearn.phonopy.calcs import PhononDispersion
+from ilearn.phonopy.calcs import PhononDispersion, Quasiharmonic
 import numpy as np
 
 module_dir = os.path.dirname(__file__)
@@ -71,8 +71,10 @@ if __name__ == "__main__":
     #tde.plot()
     #tde.plot_no_interplation()
     #tde.average_TDE()
-    ph = PhononDispersion(ff_settings, mass, alat, size=2, element=element, lattice='diamond')
-    ph.calculate()
+    # ph = PhononDispersion(ff_settings, mass, alat, size=2, element=element, lattice='diamond')
+    # ph.calculate()
+    qha = Quasiharmonic(ff_settings, mass, alat, size=2, element=element, lattice='diamond',start_rate=-0.05, end_rate=0.05, step_rate=0.05)
+    qha.calculate()
     
     
 

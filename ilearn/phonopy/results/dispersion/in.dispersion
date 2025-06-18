@@ -1,0 +1,11 @@
+units           metal
+
+read_data       supercell-001
+
+pair_style        meam
+pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/MEAM/library.meam Ge /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/MEAM/Ge.meam Ge
+mass            1 72.56
+
+dump            phonopy all custom 1 force.* id type x y z fx fy fz
+dump_modify     phonopy format line "%d %d %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f"
+run             0
