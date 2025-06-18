@@ -281,57 +281,6 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
                         os.path.join(vel_hkl_dir, 'dump_out'))
 
 
-    @deprecated(reason="This method is deprecated, use calculate instead.")
-    def calculate_old(self):
-        pass
-        '''
-        bash: 
-        cd os.path.join(module_dir, 'results', 'calculation')
-        find . -mindepth 2 -maxdepth 2 -type d | sort > folder_list.txt
-        wc -l folder_list.txt
-        copy os.path.join(module_dir, 'submit-tde.sh') to os.path.join(module_dir, 'results', 'calculation')
-        set array in submit-tde.sh to the number of lines in folder_list.txt
-        sbatch submit-tde.sh
-        '''
-
- 
-    @deprecated(reason="This method is deprecated, the logic changed in calculate().")
-    def _exist_trajectory_file_old(self, file_path, check_interval=1800, max_wait_hours=6):
-        '''
-        Wait for the trajectory file to be created.
-        Parameters
-        ----------
-        file_path : str
-            Path to the trajectory file.
-        check_interval : int, optional
-            Time interval (in seconds) to check for the file's existence. Default is 1800 seconds (30 minutes).
-        max_wait_hours : int, optional
-            Maximum time to wait for the file (in hours). Default is 6 hours.
-        Returns
-        -------
-        bool
-            True if the file exists, False if the wait time exceeds the maximum limit.
-        Raises  
-        -------
-        TimeoutError
-            If the file does not exist after the maximum wait time.
-        ''' 
-        exist_flag = False
-        timeout = max_wait_hours * 3600  
-        start_time = time.time()
-        print(f"Waiting for trajectory file: {file_path}")
-        while True:
-            if os.path.isfile(file_path):
-                exist_flag = True
-                print(f"Trajectory file {file_path} found")
-                break
-            elapsed = time.time() - start_time
-            if elapsed > timeout:
-                raise TimeoutError(f"Timed out waiting for file: {file_path}")
-            time.sleep(check_interval)
-        return exist_flag
-
-
     def _write_TDE(self, hkl_idx, velocity):
         '''
         Write the threshold displacement energy (TDE) to a file.
@@ -1311,8 +1260,8 @@ class Amorphous:
     pass
 
 
-### phononpy 
-### QHA
+
+
 ### EV 
 
 
