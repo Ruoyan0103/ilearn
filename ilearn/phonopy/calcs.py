@@ -7,10 +7,11 @@ from ase.io import read, write
 import phonopy 
 from phonopy import Phonopy
 from phonopy.structure.atoms import PhonopyAtoms
-from phonopy.interface.calculator import read_crystal_structure, write_crystal_structure
+from phonopy.interface.calculator import write_crystal_structure
 from phonopy.file_IO import parse_FORCE_SETS
 from phonopy.phonon.band_structure import get_band_qpoints_and_path_connections
-
+from phonopy import PhonopyQHA
+import yaml
 
 module_dir = os.path.dirname(os.path.abspath(__file__))
 result_dir = os.path.join(module_dir, 'results')
@@ -56,8 +57,11 @@ class PhonopyCalculator(ABC):
 
 
 class PhononDispersion(PhonopyCalculator):
-    def __init__(self, ff_settings, mass, alat, size, element, lattice):
-        super().__init__('dispersion', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+    def __init__(self, task_name, ff_settings, mass, alat, size, element, lattice):
+        super().__init__(task_name, ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+
+        self.unitcell_volume = None
+        self.unitcell_energy = None
 
 
     def _setup(self):
@@ -95,6 +99,7 @@ class PhononDispersion(PhonopyCalculator):
             phonon.save(os.path.join(self.calculation_dir, 'phonopy_disp.yaml'))
 
             unitcell_file = os.path.join(self.calculation_dir, 'unitcell')
+            self.unitcell_volume = unitcell.get_volume()
             write_crystal_structure(unitcell_file, unitcell, interface_mode='lammps')
             supercells = phonon.supercells_with_displacements
             supercell_file = os.path.join(self.calculation_dir, 'supercell-001')
@@ -106,6 +111,16 @@ class PhononDispersion(PhonopyCalculator):
         # get force sets
         subprocess.run('sbatch submit.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(10)
+        
+        file_path = os.path.join(self.calculation_dir, 'log.lammps')
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        eng_idx = 0
+        for index, line in enumerate(lines):
+            if 'Loop' in line:
+                eng_idx = index - 1
+        self.unitcell_energy = lines[eng_idx].split()[3]
+
         subprocess.run('phonopy -f force.0', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(5)
 
@@ -116,6 +131,7 @@ class PhononDispersion(PhonopyCalculator):
 
         return phonon 
     
+
     def calculate(self):
         phonon = self._setup()
         if self.lattice == 'diamond':
@@ -130,7 +146,91 @@ class PhononDispersion(PhonopyCalculator):
             # time.sleep(20)
             phonon.run_mesh([45, 45, 45])
             phonon.run_total_dos()
+            phonon.run_thermal_properties(t_step=10,
+                              t_max=1000,
+                              t_min=0)
+            phonon.write_yaml_thermal_properties(filename=os.path.join(self.calculation_dir, 'thermal_properties.yaml'))
             phonon.write_total_dos(filename=os.path.join(self.calculation_dir, 'total_dos.dat'))
+
+
+class Quasiharmonic(PhonopyCalculator):
+    def __init__(self, ff_settings, mass, alat, size, element, lattice, start_rate, end_rate, step_rate):
+        """
+        Initialize the Quasiharmonic calculator.
+        Args:
+            ff_settings (str): Force field settings for the simulation.
+            mass (float): Atomic mass of the element.
+            alat (float): Lattice constant in Angstrom.
+            size (int): Supercell size.
+            element (str): Chemical symbol of the element.
+            lattice (str): Type of lattice structure ('diamond', 'fcc', etc.).
+            start_rate (float): Starting rate for volume compression, negative.
+            end_rate (float): Ending rate for volume expansion, positive. 
+            step_rate (float): Step rate for volume change
+        """
+        super().__init__('quasiharmonic', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.start_rate = start_rate
+        self.end_rate = end_rate
+        self.step_rate = step_rate
+        self.volumes = []
+        self.energies = []
+
+
+    def _setup(self):
+        rates = np.arange(self.start_rate, self.end_rate, self.step_rate)
+        start_idx = int(self.start_rate/self.step_rate)
+        for index, rate in enumerate(rates, start=start_idx):
+            l = self.alat * (1+round(rate, 3))
+            ph_unitcell = PhononDispersion(f'quasiharmonic', self.ff_settings, self.mass, 
+                                           l, size=1, element=self.element, lattice=self.lattice)
+            ph_unitcell.calculate()
+            e, v = ph_unitcell.unitcell_energy, ph_unitcell.unitcell_volume
+            self.volumes.append(v)
+            self.energies.append(e)
+
+            ph_supercell = PhononDispersion(f'quasiharmonic', self.ff_settings, self.mass,
+                                            l, size=self.size, element=self.element, lattice=self.lattice)
+            ph_supercell.calculate()
+            shutil.copyfile(os.path.join(ph_supercell.calculation_dir, 'thermal_properties.yaml'),
+                            os.path.join(self.calculation_dir, f'thermal_properties{index}.yaml'))
+            
+
+    def calculate(self):
+        self._setup()
+        # post-process
+        entropy = []
+        cv = []
+        fe = []
+        rates = np.arange(self.start_rate, self.end_rate, self.step_rate)
+        start_idx = int(self.start_rate/ self.step_rate)
+        for index, _ in enumerate(rates, start=start_idx):
+            file_name = f'{self.calculation_dir}/thermal_properties{index}.yaml'
+            thermal_properties = yaml.load(open(file_name), Loader=yaml.CLoader)['thermal_properties']
+            temperatures = [v['temperature'] for v in thermal_properties]
+            cv.append([v['heat_capacity'] for v in thermal_properties])
+            entropy.append([v['entropy'] for v in thermal_properties])
+            fe.append([v['free_energy'] for v in thermal_properties])
+
+        qha = PhonopyQHA(
+            self.volumes,
+            self.energies,
+            temperatures=temperatures,
+            free_energy=np.transpose(fe),
+            cv=np.transpose(cv),
+            entropy=np.transpose(entropy),
+            t_max=1100,
+            eos='vinet',
+            verbose=True
+        )
+
+        qha.write_thermal_expansion(os.path.join({self.calculation_dir}, 'thermal_expansion.dat'))
+
+
+    
+
+    
+
+    
             
 
         
