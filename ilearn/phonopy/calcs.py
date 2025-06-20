@@ -1,10 +1,7 @@
-import os, subprocess, time, shutil 
+import os, subprocess, time
 import numpy as np
 from ilearn.loggers.logger import AppLogger
 from abc import ABC, abstractmethod
-from ase.build import bulk 
-from ase.io import read, write
-import phonopy 
 from phonopy import Phonopy
 from phonopy.structure.atoms import PhonopyAtoms
 from phonopy.interface.calculator import write_crystal_structure
@@ -57,6 +54,9 @@ class PhonopyCalculator(ABC):
 
 
 class PhononDispersion(PhonopyCalculator):
+    """
+    Phonon dispersion calculator
+    """
     def __init__(self, task_name, ff_settings, mass, alat, size, element, lattice):
         super().__init__(task_name, ff_settings, mass, alat, size=size, element=element, lattice=lattice)
 
@@ -119,7 +119,7 @@ class PhononDispersion(PhonopyCalculator):
         for index, line in enumerate(lines):
             if 'Loop' in line:
                 eng_idx = index - 1
-        self.unitcell_energy = lines[eng_idx].split()[3]
+        self.unitcell_energy = lines[eng_idx].split()[4]
 
         subprocess.run('phonopy -f force.0', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(5)
@@ -141,7 +141,7 @@ class PhononDispersion(PhonopyCalculator):
             qpoints, connections = get_band_qpoints_and_path_connections(path, npoints=11)
             phonon.run_band_structure(qpoints, path_connections=connections, labels=labels)
             phonon.write_yaml_band_structure(filename=os.path.join(self.calculation_dir, 'band.yaml')) 
-            time.sleep(20)
+            time.sleep(10)
             # subprocess.run('phonopy-bandplot --gnuplot band.yaml > raw-data.txt', shell=True, check=True, cwd=self.calculation_dir)
             # time.sleep(20)
             phonon.run_mesh([45, 45, 45])
@@ -154,7 +154,10 @@ class PhononDispersion(PhonopyCalculator):
 
 
 class Quasiharmonic(PhonopyCalculator):
-    def __init__(self, ff_settings, mass, alat, size, element, lattice, start_rate, end_rate, step_rate):
+    """
+    Quasiharmonic approximation calculator.
+    """
+    def __init__(self, ff_settings, mass, alat, size, element, lattice, start_rate, end_rate, num_points):
         """
         Initialize the Quasiharmonic calculator.
         Args:
@@ -171,15 +174,14 @@ class Quasiharmonic(PhonopyCalculator):
         super().__init__('quasiharmonic', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
         self.start_rate = start_rate
         self.end_rate = end_rate
-        self.step_rate = step_rate
+        self.num_points = num_points
         self.volumes = []
         self.energies = []
 
 
     def _setup(self):
-        rates = np.arange(self.start_rate, self.end_rate, self.step_rate)
-        start_idx = int(self.start_rate/self.step_rate)
-        for index, rate in enumerate(rates, start=start_idx):
+        rates = np.linspace(self.start_rate, self.end_rate, self.num_points)
+        for index, rate in enumerate(rates):
             l = self.alat * (1+round(rate, 3))
             ph_unitcell = PhononDispersion(f'quasiharmonic', self.ff_settings, self.mass, 
                                            l, size=1, element=self.element, lattice=self.lattice)
@@ -191,20 +193,26 @@ class Quasiharmonic(PhonopyCalculator):
             ph_supercell = PhononDispersion(f'quasiharmonic', self.ff_settings, self.mass,
                                             l, size=self.size, element=self.element, lattice=self.lattice)
             ph_supercell.calculate()
-            shutil.copyfile(os.path.join(ph_supercell.calculation_dir, 'thermal_properties.yaml'),
-                            os.path.join(self.calculation_dir, f'thermal_properties{index}.yaml'))
+            os.rename(os.path.join(ph_supercell.calculation_dir, 'thermal_properties.yaml'),
+                      os.path.join(self.calculation_dir, f'thermal_properties{index}.yaml'))
+        if os.path.exists(os.path.join(self.calculation_dir, 'e-v.dat')):
+            os.remove(os.path.join(self.calculation_dir, 'e-v.dat'))
+        for v, e in zip(self.volumes, self.energies):
+            with open(os.path.join(self.calculation_dir, 'e-v.dat'), 'a') as f:
+                f.write(f'{v} {e}\n')
             
 
     def calculate(self):
         self._setup()
         # post-process
+        self.volumes = np.loadtxt(os.path.join(self.calculation_dir, 'e-v.dat'), usecols=0)
+        self.energies = np.loadtxt(os.path.join(self.calculation_dir, 'e-v.dat'), usecols=1)
         entropy = []
         cv = []
         fe = []
-        rates = np.arange(self.start_rate, self.end_rate, self.step_rate)
-        start_idx = int(self.start_rate/ self.step_rate)
-        for index, _ in enumerate(rates, start=start_idx):
-            file_name = f'{self.calculation_dir}/thermal_properties{index}.yaml'
+        rates = np.linspace(self.start_rate, self.end_rate, self.num_points)
+        for index, _ in enumerate(rates):
+            file_name = os.path.join(self.calculation_dir, f'thermal_properties{index}.yaml')
             thermal_properties = yaml.load(open(file_name), Loader=yaml.CLoader)['thermal_properties']
             temperatures = [v['temperature'] for v in thermal_properties]
             cv.append([v['heat_capacity'] for v in thermal_properties])
@@ -218,12 +226,14 @@ class Quasiharmonic(PhonopyCalculator):
             free_energy=np.transpose(fe),
             cv=np.transpose(cv),
             entropy=np.transpose(entropy),
-            t_max=1100,
+            t_max=1000,
             eos='vinet',
             verbose=True
         )
-
-        qha.write_thermal_expansion(os.path.join({self.calculation_dir}, 'thermal_expansion.dat'))
+        qha.write_thermal_expansion(os.path.join(self.calculation_dir, 'thermal_expansion.dat'))
+        qha.write_heat_capacity_P_polyfit(os.path.join(self.calculation_dir, 'cp_polyfit.dat'))
+        qha.write_gruneisen_temperature(os.path.join(self.calculation_dir, 'gruneisen.dat'))
+        qha.write_bulk_modulus_temperature(os.path.join(self.calculation_dir, 'bulk.dat'))
 
 
     

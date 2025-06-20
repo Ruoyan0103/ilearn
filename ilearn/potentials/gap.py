@@ -20,7 +20,8 @@ from ase.io import read
 from quippy.potential import Potential
 from sklearn.metrics import mean_squared_error
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
-                                VacancyDefectFormation, InterstitialDefectFormation, NudgedElasticBand
+                                VacancyDefectFormation,InterstitialDefectFormation, NudgedElasticBand
+from ilearn.phonopy.calcs import PhononDispersion, Quasiharmonic
 from ilearn.potentials import IPotential
 
 module_dir = os.path.dirname(__file__)
@@ -42,119 +43,11 @@ class GAPotential(IPotential):
         """
         self.name = name if name else "GAPotential"
         self.param = param if param else {}
-        self.specie = None
+        self.element = None
 
     def train(self, dataset_filename, default_sigma=[0.0005, 0.1, 0.05, 0.01],
              use_energies=True, use_forces=True, use_stress=False, **kwargs):
-        """
-        Training data with gaussian process regression.
-
-        Args:
-            dataset_filename (string): File containing a list of ASE Structure objects.
-            default_sigma (list): Error criteria in energies, forces, stress
-                and hessian. Should have 4 numbers.
-            use_energies (bool): Whether to use dft total energies for training.
-                Default to True.
-            use_forces (bool): Whether to use dft atomic forces for training.
-                Default to True.
-            use_stress (bool): Whether to use dft virial stress for training.
-                Default to False.
-
-            kwargs:
-                l_max (int): Parameter to configure GAP. The band limit of
-                    spherical harmonics basis function. Default to 12.
-                n_max (int): Parameter to configure GAP. The number of radial basis
-                    function. Default to 10.
-                atom_sigma (float): Parameter to configure GAP. The width of gaussian
-                    atomic density. Default to 0.5.
-                zeta (float): Present when covariance function type is do product.
-                    Default to 4.
-                cutoff (float): Parameter to configure GAP. The cutoff radius.
-                    Default to 4.0.
-                cutoff_transition_width (float): Parameter to configure GAP.
-                    The transition width of cutoff radial. Default to 0.5.
-                delta (float): Parameter to configure Sparsification.
-                    The signal variance of noise. Default to 1.
-                f0 (float): Parameter to configure Sparsification.
-                    The signal mean of noise. Default to 0.0.
-                n_sparse (int): Parameter to configure Sparsification.
-                    Number of sparse points.
-                covariance_type (str): Parameter to configure Sparsification.
-                    The type of convariance function. Default to dot_product.
-                sparse_method (str): Method to perform clustering in sparsification.
-                    Default to 'cur_points'.
-
-                sparse_jitter (float): Intrisic error of atomic/bond energy,
-                    used to regularise the sparse covariance matrix.
-                    Default to 1e-8.
-                e0 (float): Atomic energy value to be subtracted from energies
-                    before fitting. Default to 0.0.
-                e0_offset (float): Offset of baseline. If zero, the offset is
-                    the average atomic energy of the input data or the e0
-                    specified manually. Default to 0.0.
-        """
-        exe_command = ["gap_fit"]
-        exe_command.append('at_file={}'.format(dataset_filename))
-        gap_configure_params = ['l_max', 'n_max', 'atom_sigma', 'zeta', 'cutoff',
-                                'cutoff_transition_width', 'delta', 'f0', 'n_sparse',
-                                'covariance_type', 'sparse_method']
-
-        preprocess_params = ['sparse_jitter', 'e0', 'e0_offset']
-        if len(default_sigma) != 4:
-            raise ValueError("The default sigma is supposed to have 4 numbers.")
-
-        gap_command = ['soap']
-        for param_name in gap_configure_params:
-            param = kwargs.get(param_name) if kwargs.get(param_name) \
-                else soap_params.get(param_name)
-            gap_command.append(param_name + '=' + '{}'.format(param))
-        exe_command.append("gap=" + "{" + "{}".format(' '.join(gap_command)) + "}")
-
-        for param_name in preprocess_params:
-            param = kwargs.get(param_name) if kwargs.get(param_name) \
-                else soap_params.get(param_name)
-            exe_command.append(param_name + '=' + '{}'.format(param))
-
-        default_sigma = [str(f) for f in default_sigma]
-        exe_command.append("default_sigma={%s}" % (' '.join(default_sigma)))
-
-        if use_energies:
-            exe_command.append('energy_parameter_name=dft_energy')
-        if use_forces:
-            exe_command.append('force_parameter_name=dft_force')
-        if use_stress:
-            exe_command.append('virial_parameter_name=dft_virial')
-        exe_command.append('gp_file={}'.format(xml_filename))
-
-        with ScratchDir('.'):
-            p = subprocess.Popen(exe_command, stdout=subprocess.PIPE)
-            stdout = p.communicate()[0]
-            rc = p.returncode
-            if rc != 0:
-                error_msg = 'QUIP exited with return code %d' % rc
-                msg = stdout.decode("utf-8").split('\n')[:-1]
-                try:
-                    error_line = [i for i, m in enumerate(msg)
-                                  if m.startswith('ERROR')][0]
-                    error_msg += ', '.join([e for e in msg[error_line:]])
-                except Exception:
-                    error_msg += msg[-1]
-                raise RuntimeError(error_msg)
-
-            def get_xml(xml_file):
-                tree = ET.parse(xml_file)
-                root = tree.getroot()
-                potential_label = root.tag
-                gpcoordinates = list(root.iter('gpCoordinates'))[0]
-                param_file = gpcoordinates.get('sparseX_filename')
-                param = np.loadtxt(param_file)
-                return tree, param, potential_label
-
-            tree, param, potential_label = get_xml(xml_filename)
-            self.param['xml'] = tree
-            self.param['param'] = param
-            self.param['potential_label'] = potential_label
-        return rc
+        pass 
 
     @staticmethod
     def from_config(filename):
@@ -190,7 +83,7 @@ class GAPotential(IPotential):
         Args:
             xml_filename (str): Filename to store xml formatted parameters.
         """
-        self.specie = self.param.get('specie_z', None)
+        self.element = self.param.get('specie_z', None)
         self.pair_coeff = self.pair_coeff.format(xml_filename, 
                                             '\"Potential xml_label={}\"'.format(self.param.get('potential_label', None)),
                                             self.param.get('specie_z', None))
@@ -279,16 +172,15 @@ class GAPotential(IPotential):
     #             file.write(' '.join(map(str, {values_dict['pred_virials']})) + '\n')
 
 
-    def evaluate(self, test_structures_dataset, config_type, config_type_set=None,
+    def evaluate(self, test_structures_dataset, use_config_type, config_type_set=None,
                  predict_energies=True, predict_forces=True, predict_virials=False):
         """
-        Evaluate energies, forces and stresses of structures with trained
-        interatomic potentials.
+        Evaluate energies, forces and stresses of structures with the interatomic potential.
 
         Args:
             test_structures_dataset (list): A list of ASE Structure objects, 
                                             with reference energies, forces and stresses.
-            config_type (boll): Whether to evaluate configurations of a specific type.
+            use_config_type (bull): Whether to evaluate configurations of a specific type.
             config_type_set (set): Set of configuration types to evaluate.
             predict_energies (bool): Whether to predict energies of configurations.
             predict_forces (bool): Whether to predict forces of configurations.
@@ -297,10 +189,9 @@ class GAPotential(IPotential):
             Dict{True_energys, True_forces, True_stresses, Predicted_energies, Predicted_forces, Predicted_stresses}.
             RMSE of energies, forces and stresses.
         """
-        # test_structures = read(test_structures_dataset, format='extxyz', index=':')
-                    
-        if config_type:
-            if config_type_set is None:  # not recommended to use this option
+        test_structures = read(test_structures_dataset, format='extxyz', index=':')   
+        if use_config_type:
+            if config_type_set is None:  
                 config_type_set = set()
                 for struct in test_structures:
                     if 'config_type' in struct.info:
@@ -311,14 +202,18 @@ class GAPotential(IPotential):
             for struct in test_structures:
                 if 'config_type' in struct.info:
                     config_type = struct.info['config_type']
-                    data_config_type[config_type].append(struct)
-                    values_dict, rmse_dict = self._evaluate_helper(data_config_type[config_type], 
-                                                                  predict_energies=True, predict_forces=True, predict_virials=False)
+                    config_type_dict[config_type].append(struct)
+            for config_type in config_type_set:
+                values_dict, rmse_dict = self._evaluate_helper(config_type_dict[config_type], 
+                                                            predict_energies=True, predict_forces=True, predict_virials=False)
         else:
             values_dict, rmse_dict = self._evaluate_helper(test_structures_dataset, 
                                                           predict_energies=True, predict_forces=True, predict_virials=False)
             
-    #def predict(self, test_structures_dataset):
+
+    def predict(self, test_structures_dataset):
+        pass
+    
 
 # example usage
 if __name__ == "__main__":
@@ -330,51 +225,48 @@ if __name__ == "__main__":
     temp = 0
     element = 'Ge'
     mass = 72.56
-    min_velocity = 75
-    max_velocity = 105
-    velocity_interval = 5
+    min_velocity = 95
+    max_velocity = 107
+    velocity_interval = 3
     kin_eng_threshold = 4
     simulation_size = 9
     thermal_time = 60       # in second
-    tde_time = 2.25*3600    # in second
+    tde_time = 1*3600       # in second
+    lattice = 'diamond'
 
-    tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
-                                      pka_id, min_velocity, max_velocity, 
-                                      velocity_interval, kin_eng_threshold, simulation_size,
-                                      thermal_time, tde_time)
-    vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
-    vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
-    vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
-    vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
-    tde.set_hkl_from_angles()
-    # tde.check_interval()
-    tde.calculate(needed_thermalization=False)
+    # example usage
+    # tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
+    #                                   pka_id, min_velocity, max_velocity, 
+    #                                   velocity_interval, kin_eng_threshold, simulation_size,
+    #                                   thermal_time, tde_time)
+    # vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
+    # vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
+    # vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
+    # vectors = np.array((vector1, vector2, vector3))
+    # tde.get_uniform_angles(vectors, 4)
+    # tde.set_hkl_from_angles()
+    # # tde.check_interval()
+    # tde.calculate(needed_thermalization=False)
     # tde.plot()
     # tde.plot_no_interplation()
     # tde.average_TDE()
 
-    # lattice = 'diamond'
-    # my_alat = 5.3
-    # cubic = True
-    # lc = LatticeConstant(ff_settings, mass, element, lattice, my_alat, cubic)
+    # example usage 
+    # lc = LatticeConstant(ff_settings, mass, element, lattice, alat=5.3, cubic=True)
     # lc.calculate()
-    # alat = 5.76
+
+    # example usage
     # elastic = ElasticConstant(ff_settings, mass, lattice, alat)
     # elastic.calculate()
 
-    # size = 3
-    # del_id = 0
-    # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size, del_id)
+    # example usage
+    # vf = VacancyDefectFormation(ff_settings, mass, lattice, alat, size=3, del_id=0)
     # vf.calculate()
 
-    # size = 2
-    # lattice = 'diamond'
-    # num_images = 5
-    # neb = NudgedElasticBand(ff_settings, mass, alat, size, element, lattice, num_images, path='2NN')
+    # example usage
+    # neb = NudgedElasticBand(ff_settings, mass, alat, size=2, element, lattice, num_images=5, path='2NN')
     # neb.calculate()
 
-    # lattice = 'diamond'
-    # size = 2
-    # inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size)
+    # example usage
+    # inter = InterstitialDefectFormation(ff_settings, mass, element, lattice, alat, size=2)
     # inter.calculate()

@@ -802,3 +802,159 @@
 2025-06-18 13:20 - ilearn.lammps.calcs - INFO - 88: HKL: [0.63270923 0.11523224 0.76576796], Angle: 10.32°/40.02°
 2025-06-18 13:20 - ilearn.lammps.calcs - INFO - 89: HKL: [0.59376461 0.1168257  0.79611265], Angle: 11.13°/37.24°
 2025-06-18 13:20 - ilearn.lammps.calcs - INFO - 140: HKL: [0.40145099 0.20277393 0.89315163], Angle: 26.80°/26.73°
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/28/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/48/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/53/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/57/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/58/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/60/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/61/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/63/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/65/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/66/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/67/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/68/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/69/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/70/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/71/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/72/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/74/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/82/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/87/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/88/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/89/dump_out: No vacancies detected.
+2025-06-18 22:58 - ilearn.lammps.calcs - INFO - 75/140/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/28/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/48/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/53/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/57/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/58/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/60/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/61/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/63/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/65/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/66/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/67/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/68/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/69/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/70/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/71/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/72/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/74/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/82/dump_out: Vacancy detected. Particle ID: 1552, Position: [27.36 21.6  24.48]
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/87/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/88/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/89/dump_out: No vacancies detected.
+2025-06-19 01:13 - ilearn.lammps.calcs - INFO - 80/140/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/48/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/57/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/58/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/63/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/65/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/68/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/69/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/70/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/71/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/72/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/74/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/87/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/88/dump_out: No vacancies detected.
+2025-06-19 03:28 - ilearn.lammps.calcs - INFO - 85/89/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/48/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/57/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/58/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/63/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/65/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/68/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/69/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/70/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/71/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/74/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/87/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/88/dump_out: No vacancies detected.
+2025-06-19 05:43 - ilearn.lammps.calcs - INFO - 90/89/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/48/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/57/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/58/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/65/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/69/dump_out: Vacancy detected. Particle ID: 1552, Position: [27.36 21.6  24.48]
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/70/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/71/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/87/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/88/dump_out: No vacancies detected.
+2025-06-19 07:58 - ilearn.lammps.calcs - INFO - 95/89/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 08:13 - ilearn.lammps.calcs - ERROR - /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/lammps/results/tde/95/28/dump_out is not found. Please wait for TDE simulation to finish.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/48/dump_out: No vacancies detected.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/57/dump_out: No vacancies detected.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/58/dump_out: No vacancies detected.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/70/dump_out: No vacancies detected.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/87/dump_out: No vacancies detected.
+2025-06-19 08:30 - ilearn.lammps.calcs - INFO - 95/88/dump_out: No vacancies detected.
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/48/dump_out: Vacancy detected. Particle ID: 1552, Position: [27.36 21.6  24.48]
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/57/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/58/dump_out: No vacancies detected.
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/70/dump_out: Vacancy detected. Particle ID: 1552, Position: [27.36 21.6  24.48]
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/87/dump_out: No vacancies detected.
+2025-06-19 09:45 - ilearn.lammps.calcs - INFO - 100/88/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 11:00 - ilearn.lammps.calcs - INFO - 105/58/dump_out: Vacancy detected. Particle ID: 1164, Position: [27.36 21.6  18.72]
+2025-06-19 11:00 - ilearn.lammps.calcs - INFO - 105/87/dump_out: Vacancy detected. Particle ID: 1605, Position: [28.8  23.04 23.04]
+2025-06-19 11:00 - ilearn.lammps.calcs - INFO - ----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------
+2025-06-19 11:00 - ilearn.lammps.calcs - INFO - ------------------------------------------------All TDE values are written!------------------------------------------------
+2025-06-19 15:14 - ilearn.lammps.calcs - INFO - Average TDE: 15.69 eV
+2025-06-19 15:17 - ilearn.lammps.calcs - INFO - Average TDE: 22.07 eV
+2025-06-19 16:44 - ilearn.lammps.calcs - INFO - 30/0/dump_out: No vacancies detected.
+2025-06-19 16:45 - ilearn.lammps.calcs - INFO - 35/0/dump_out: No vacancies detected.
+2025-06-19 16:46 - ilearn.lammps.calcs - ERROR - /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/lammps/results/tde/40/0/dump_out is not found. Please wait for TDE simulation to finish.
+2025-06-19 16:49 - ilearn.lammps.calcs - INFO - 30/0/dump_out: No vacancies detected.
+2025-06-19 16:49 - ilearn.lammps.calcs - INFO - 35/0/dump_out: No vacancies detected.
+2025-06-19 16:50 - ilearn.lammps.calcs - INFO - 40/0/dump_out: No vacancies detected.
+2025-06-19 16:51 - ilearn.lammps.calcs - INFO - 45/0/dump_out: No vacancies detected.
+2025-06-19 16:52 - ilearn.lammps.calcs - INFO - 50/0/dump_out: No vacancies detected.
+2025-06-19 16:53 - ilearn.lammps.calcs - INFO - 55/0/dump_out: No vacancies detected.
+2025-06-19 16:54 - ilearn.lammps.calcs - INFO - 60/0/dump_out: No vacancies detected.
+2025-06-19 16:55 - ilearn.lammps.calcs - INFO - 65/0/dump_out: No vacancies detected.
+2025-06-19 16:55 - ilearn.lammps.calcs - INFO - 70/0/dump_out: No vacancies detected.
+2025-06-19 16:56 - ilearn.lammps.calcs - INFO - 75/0/dump_out: No vacancies detected.
+2025-06-19 16:56 - ilearn.lammps.calcs - INFO - --------------------------------The max_velocity is too low for these directions-------------------------------------------
+2025-06-19 16:56 - ilearn.lammps.calcs - INFO - 0: HKL: [-0.57738155 -0.57738155 -0.57728771], Angle: 225.00°/125.26°
+2025-06-19 17:00 - ilearn.lammps.calcs - INFO - 75/0/dump_out: No vacancies detected.
+2025-06-19 17:00 - ilearn.lammps.calcs - INFO - 80/0/dump_out: No vacancies detected.
+2025-06-19 17:01 - ilearn.lammps.calcs - INFO - 85/0/dump_out: Vacancy detected. Particle ID: 2762, Position: [16.974 14.145 48.093]
+2025-06-19 17:01 - ilearn.lammps.calcs - INFO - ----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------
+2025-06-19 17:01 - ilearn.lammps.calcs - INFO - ------------------------------------------------All TDE values are written!------------------------------------------------
+2025-06-19 17:05 - ilearn.lammps.calcs - INFO - 30/0/dump_out: No vacancies detected.
+2025-06-19 17:06 - ilearn.lammps.calcs - INFO - 35/0/dump_out: No vacancies detected.
+2025-06-19 17:07 - ilearn.lammps.calcs - INFO - 40/0/dump_out: No vacancies detected.
+2025-06-19 17:08 - ilearn.lammps.calcs - INFO - 45/0/dump_out: No vacancies detected.
+2025-06-19 17:08 - ilearn.lammps.calcs - INFO - 50/0/dump_out: No vacancies detected.
+2025-06-19 17:09 - ilearn.lammps.calcs - INFO - 55/0/dump_out: No vacancies detected.
+2025-06-19 17:10 - ilearn.lammps.calcs - INFO - 60/0/dump_out: No vacancies detected.
+2025-06-19 17:11 - ilearn.lammps.calcs - INFO - 65/0/dump_out: No vacancies detected.
+2025-06-19 17:12 - ilearn.lammps.calcs - INFO - 70/0/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.461 22.632 19.803]
+2025-06-19 17:12 - ilearn.lammps.calcs - INFO - ----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------
+2025-06-19 17:12 - ilearn.lammps.calcs - INFO - ------------------------------------------------All TDE values are written!------------------------------------------------
+2025-06-19 17:20 - ilearn.lammps.calcs - INFO - 35/0/dump_out: No vacancies detected.
+2025-06-19 18:35 - ilearn.lammps.calcs - INFO - 40/0/dump_out: No vacancies detected.
+2025-06-19 19:50 - ilearn.lammps.calcs - INFO - 45/0/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 19:50 - ilearn.lammps.calcs - INFO - ----------------------------------------------All TDE values are written with velocity < max_velocity.------------------------------------------------
+2025-06-19 19:50 - ilearn.lammps.calcs - INFO - ------------------------------------------------All TDE values are written!------------------------------------------------
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/48/dump_out: No vacancies detected.
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/57/dump_out: No vacancies detected.
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/58/dump_out: No vacancies detected.
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/70/dump_out: No vacancies detected.
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/87/dump_out: No vacancies detected.
+2025-06-19 21:31 - ilearn.lammps.calcs - INFO - 95/88/dump_out: No vacancies detected.
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/48/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/57/dump_out: No vacancies detected.
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/58/dump_out: No vacancies detected.
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/70/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/87/dump_out: No vacancies detected.
+2025-06-19 22:31 - ilearn.lammps.calcs - INFO - 98/88/dump_out: Vacancy detected. Particle ID: 1202, Position: [25.92 23.04 20.16]
+2025-06-19 23:31 - ilearn.lammps.calcs - INFO - 101/57/dump_out: No vacancies detected.
+2025-06-19 23:31 - ilearn.lammps.calcs - INFO - 101/58/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-19 23:31 - ilearn.lammps.calcs - INFO - 101/87/dump_out: No vacancies detected.
+2025-06-20 00:31 - ilearn.lammps.calcs - INFO - 104/57/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-20 00:31 - ilearn.lammps.calcs - INFO - 104/87/dump_out: No vacancies detected.
+2025-06-20 01:31 - ilearn.lammps.calcs - INFO - 107/87/dump_out: Vacancy detected. Particle ID: 1292, Position: [27.36 24.48 21.6 ]
+2025-06-20 01:31 - ilearn.lammps.calcs - INFO - ------------------------------------------------All TDE values are written!------------------------------------------------
+2025-06-20 11:45 - ilearn.lammps.calcs - INFO - Average TDE: 15.66 eV

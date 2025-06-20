@@ -1,5 +1,9 @@
 from ase.io import read, write
 
+"""
+modify config type from liquid* to liquid
+"""
+
 datafile = 'datasets/test.xyz'
 datafile_pached= 'datasets/test_pached.xyz'
 for struct in read(datafile, format='extxyz', index=':'):
