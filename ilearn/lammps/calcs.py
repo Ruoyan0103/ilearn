@@ -402,18 +402,19 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
                 sierpenski([vectors[2], vmid_12, vmid_02], degree - 1)
                 sierpenski([vmid_01, vmid_02, vmid_12], degree - 1)
             return
-
-        append(vectors[0])
-        append(vectors[1])
-        append(vectors[2])
-        sierpenski(vectors, degree)
+        if degree >= 0:       # do not use this method
+            append(vectors[0])
+            append(vectors[1])
+            append(vectors[2])
+            sierpenski(vectors, degree)
     
 
     def set_hkl_from_angles(self):
+        # self.angle_list.append(np.array((np.radians(225), np.radians(125.26)))) # [-1 -1 -1] direction
+        # self.angle_set.add((np.radians(225), np.radians(125.26)))
         self.angle_list.append(np.array((np.radians(45), np.radians(1))))    # (phi, theta) : (45°, 1°)
         self.angle_set.add((np.radians(45), np.radians(1)))                  # (phi, theta) : (45°, 1°)
-        # self.angle_list.append(np.array((np.radians(0), np.radians(5))))   # (phi, theta) : (0°, 5°)
-        # self.angle_set.add((np.radians(0), np.radians(5)))                 # (phi, theta) : (0°, 5°)
+
         for angle in self.angle_list:
             phi, theta = angle
             h = np.sin(theta) * np.cos(phi)
@@ -926,7 +927,7 @@ class ElasticConstant(LMPStaticCalculator):
 
 class VacancyDefectFormation(LMPStaticCalculator):
     """
-    Defect Formation Energy Calculator.
+    Vacancy defect Formation Energy Calculator.
     """
     def __init__(self, ff_settings, mass, lattice, alat, size, del_id):
         """
@@ -991,7 +992,7 @@ class VacancyDefectFormation(LMPStaticCalculator):
 
 class InterstitialDefectFormation(LMPStaticCalculator):
     """
-    Interstitial Defect Formation Energy Calculator.
+    Interstitial defect Formation Energy Calculator.
     """
     def __init__(self, ff_settings, mass, element, lattice, alat, size):
         """
@@ -1259,10 +1260,9 @@ class Amorphous:
     # Use TurboGAP MD, files in self.templates/amorphous
     pass
 
-
-
-
-### EV 
+class EnergyVolume:
+    # Calculate energy-volume curve
+    pass 
 
 
 
