@@ -35,7 +35,6 @@ class LMPStaticCalculator(ABC):
         # if os.path.exists(log_file):
         #     os.remove(log_file) 
         # delete log file manually
-        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.ff_settings = ff_settings
         self.mass = mass
         self.element = element
@@ -96,6 +95,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         '''
         super().__init__('tde', ff_settings, mass, alat, size=size, element=element)
         self.log_file = os.path.join(log_dir, f'tde_{pot_name}.log')
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.angle_set = set()
         self.angle_list = []
         self.listCoords = []
@@ -733,6 +733,7 @@ class LatticeConstant(LMPStaticCalculator):
         """
         super().__init__('latt', ff_settings, mass, alat, element=element, lattice=lattice)
         self.log_file = os.path.join(log_dir, f'latt_{pot_name}.log')
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         static_bulk = bulk(self.element, self.lattice, a=self.alat, cubic=cubic)
         write(os.path.join(self.calculation_dir, 'data.static'), static_bulk, format='lammps-data')
 
@@ -784,6 +785,7 @@ class ElasticConstant(LMPStaticCalculator):
         """
         super().__init__('elastic', ff_settings, mass, alat, lattice=lattice)
         self.log_file = os.path.join(log_dir, f'elastic_{pot_name}.log')
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.deformation_size = deformation_size
         self.jiggle = jiggle
 
@@ -959,6 +961,7 @@ class VacancyDefectFormation(LMPStaticCalculator):
             ID of the defect to be created.
         """
         super().__init__('vacancy', ff_settings, mass, alat, size, lattice=lattice)
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.log_file = os.path.join(log_dir, f'vacancy_{pot_name}.log')
         self.del_id = del_id
 
@@ -1025,6 +1028,7 @@ class InterstitialDefectFormation(LMPStaticCalculator):
             Size of the supercell.
         """
         super().__init__('interstitial', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.log_file = os.path.join(log_dir, f'interstitial_{pot_name}.log')
         self.interstitials_types = ['split_110', 'hex', 'tet', 'bond']
 
@@ -1170,6 +1174,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             '1NN' or '2NN', indicating the path for the NEB calculation.
         """
         super().__init__('neb', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.log_file = os.path.join(log_dir, f'neb_{pot_name}.log')
         self.num_images = num_images
         self.path = path
