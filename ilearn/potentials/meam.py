@@ -10,6 +10,7 @@ module_dir = os.path.dirname(__file__)
 class MEAMPotential(IPotential):
     pair_style = 'pair_style        meam'
     pair_coeff = 'pair_coeff        * * {} {} {} {}'
+    pot_name = 'MEAM'
 
 
     def __init__(self, name=None, param=None):
@@ -45,33 +46,34 @@ if __name__ == "__main__":
     element_file = os.path.join(module_dir, 'params', 'MEAM', 'Ge.meam')
     element_symbol = 'Ge'
     meam = MEAMPotential()
+    pot_name = meam.pot_name
     ff_settings = meam.write_param(library_file, element_file, element_symbol)
     alat = 5.658
     pka_id = 1202
     temp = 0
     element = 'Ge'
-    mass = 72.56
-    min_velocity = 30        # range: (min_velocity, max_velocity], unit: angstrom per picosecond
-    max_velocity = 110
-    velocity_interval = 5
+    mass = 72.64
+    min_velocity = 51       # range: (min_velocity, max_velocity], unit: angstrom per picosecond
+    max_velocity = 126
+    velocity_interval = 3
     kin_eng_threshold = 4
     simulation_size = 9
-    thermal_time = 5  # in second
-    tde_time = 50     # in second
+    thermal_time = 5        # in second
+    tde_time = 240          # in second
 
     # example usage 
-    # tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
-    #                                   pka_id, min_velocity, max_velocity, 
-    #                                   velocity_interval, kin_eng_threshold, simulation_size,
-    #                                   thermal_time, tde_time)
-    # vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
-    # vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
-    # vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
-    # vectors = np.array((vector1, vector2, vector3))
-    # tde.get_uniform_angles(vectors, -1)
-    # tde.set_hkl_from_angles()
+    tde = ThresholdDisplacementEnergy(pot_name, ff_settings, element, mass, alat, temp,
+                                       pka_id, min_velocity, max_velocity, 
+                                       velocity_interval, kin_eng_threshold, simulation_size,
+                                       thermal_time, tde_time)
+    vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
+    vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
+    vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
+    vectors = np.array((vector1, vector2, vector3))
+    tde.get_uniform_angles(vectors, 4)
+    tde.set_hkl_from_angles()
     # # tde.check_interval()
-    # tde.calculate(needed_thermalization=True)
+    tde.calculate(needed_thermalization=True)
     #tde.plot()
     #tde.plot_no_interplation()
     #tde.average_TDE()
