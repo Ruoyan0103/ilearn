@@ -27,7 +27,6 @@ class LMPStaticCalculator(ABC):
     def __init__(self, task_name, ff_settings, mass, alat, size=None, element=None, lattice=None):
         self.template_dir = os.path.join(module_dir, 'templates', task_name)
         self.calculation_dir = os.path.join(result_dir, task_name)
-        self.log_file = os.path.join(log_dir, f'{task_name}_GAP.log')
 
         os.makedirs(self.template_dir, exist_ok=True)
         os.makedirs(self.calculation_dir, exist_ok=True)
@@ -65,14 +64,16 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
     """ 
     Threshold displacement energy calculator.
     """
-    def __init__(self, ff_settings, element, mass, alat, temp, pka_id,
+    def __init__(self, pot_name, ff_settings, element, mass, alat, temp, pka_id,
                  min_velocity, max_velocity, velocity_interval, kin_eng_threshold, size,
                  thermal_time, tde_time):
         '''
         Initialize the ThresholdDisplacementEnergy class.
         Parameters
         ----------
-        ff_settings : list
+        pot_name : str
+            Name of the potential, used for logging and directory naming.
+        ff_settings : str
             Force field settings, either as a Potential object or a list of strings.
         element : str
             Element symbol for the primary knock-on atom.
@@ -94,6 +95,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
             Threshold for kinetic energy difference (in eV).
         '''
         super().__init__('tde', ff_settings, mass, alat, size=size, element=element)
+        self.log_file = os.path.join(log_dir, f'tde_{pot_name}.log')
         self.angle_set = set()
         self.angle_list = []
         self.listCoords = []
@@ -311,19 +313,20 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         
         hkl = self.hkl_list[hkl_idx]
         angle = self.angle_list[hkl_idx]
-        kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(hkl**2) * (velocity*ANGSTROM_TO_METER/PS_TO_S)**2 * JOULE_TO_EV
+        vel = [(direction * velocity * ANGSTROM_TO_METER / PS_TO_S)**2 for direction in hkl]
+        kinetic_energy = 0.5 * self.mass * AMU_TO_KG * np.sum(vel) * JOULE_TO_EV
         with open(tde_file, 'a') as f:
             if write_header:
                 # Write header line
-                f.write("# hkl_idx  h       k       l       phi[rad]    theta[rad]   velocity[m/s]  TDE[eV]   phi[deg]  theta[deg]\n")
+                f.write("# hkl_idx  h       k       l       phi[rad]    theta[rad]   velocity[Å/ps]  TDE[eV]   phi[deg]  theta[deg]\n")
                 f.write("# ----------------------------------------------------------------------------------------------\n")
             
             # Write data line
             f.write(
                 f"{hkl_idx:<8.2f}{hkl[0]:<8.2f}{hkl[1]:<8.2f}{hkl[2]:<8.2f}"
                 f"{angle[0]} {angle[1]}   "
-                f"{velocity * ANGSTROM_TO_METER / PS_TO_S:<14.1f}"
-                f"{kinetic_energy:<9.2f}"
+                f"{velocity:<14}"
+                f"{kinetic_energy:<9.3f}"
                 f"{math.degrees(angle[0]):<10.2f}"
                 f"{math.degrees(angle[1]):<10.2f}\n"
             )
@@ -410,10 +413,10 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
     
 
     def set_hkl_from_angles(self):
-        # self.angle_list.append(np.array((np.radians(225), np.radians(125.26)))) # [-1 -1 -1] direction
-        # self.angle_set.add((np.radians(225), np.radians(125.26)))
-        self.angle_list.append(np.array((np.radians(45), np.radians(1))))    # (phi, theta) : (45°, 1°)
-        self.angle_set.add((np.radians(45), np.radians(1)))                  # (phi, theta) : (45°, 1°)
+        self.angle_list.append(np.array((np.radians(225), np.radians(125.26)))) # [-1 -1 -1] direction
+        self.angle_set.add((np.radians(225), np.radians(125.26)))
+        self.angle_list.append(np.array((np.radians(45), np.radians(1))))       # (phi, theta) : (45°, 1°)
+        self.angle_set.add((np.radians(45), np.radians(1)))                     # (phi, theta) : (45°, 1°)
 
         for angle in self.angle_list:
             phi, theta = angle
@@ -708,11 +711,13 @@ class LatticeConstant(LMPStaticCalculator):
     """
     Lattice Constant Relaxation Calculator.
     """
-    def __init__(self, ff_settings, mass, element, lattice, alat, cubic):
+    def __init__(self, pot_name, ff_settings, mass, element, lattice, alat, cubic):
         """
         Initialize the Lattice Constant calculator.
         Parameters
         ----------
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
         ff_settings : String
             Force field settings.
         mass : float
@@ -727,6 +732,7 @@ class LatticeConstant(LMPStaticCalculator):
             Whether the lattice is cubic.
         """
         super().__init__('latt', ff_settings, mass, alat, element=element, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'latt_{pot_name}.log')
         static_bulk = bulk(self.element, self.lattice, a=self.alat, cubic=cubic)
         write(os.path.join(self.calculation_dir, 'data.static'), static_bulk, format='lammps-data')
 
@@ -757,13 +763,15 @@ class ElasticConstant(LMPStaticCalculator):
     """ 
     Elastic constant calculator.
     """
-    def __init__(self, ff_settings, mass, lattice, alat,
+    def __init__(self, pot_name, ff_settings, mass, lattice, alat,
                  deformation_size=1e-6, jiggle=1e-5):
         """
         Initialize the Elastic Constant calculator.
         Parameters
         ----------
-        ff_settings : Potential or list
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
+        ff_settings : str
             Force field settings, either as a Potential class or a list of strings.
         lattice : str
             Lattice type (e.g., 'diamond').
@@ -774,7 +782,8 @@ class ElasticConstant(LMPStaticCalculator):
         jiggle : float, optional    
             Jiggle size in Angstroms. Default is 1e-5.
         """
-        super().__init__('tde', ff_settings, mass, alat, lattice=lattice)
+        super().__init__('elastic', ff_settings, mass, alat, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'elastic_{pot_name}.log')
         self.deformation_size = deformation_size
         self.jiggle = jiggle
 
@@ -929,12 +938,14 @@ class VacancyDefectFormation(LMPStaticCalculator):
     """
     Vacancy defect Formation Energy Calculator.
     """
-    def __init__(self, ff_settings, mass, lattice, alat, size, del_id):
+    def __init__(self, pot_name, ff_settings, mass, lattice, alat, size, del_id):
         """
         Initialize the Defect Formation calculator.
         Parameters
         ----------
-        ff_settings : Potential or list
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
+        ff_settings : str
             Force field settings, either as a Potential class or a list of strings.
         mass : float
             Mass of the atom in atomic mass units (AMU).
@@ -948,6 +959,7 @@ class VacancyDefectFormation(LMPStaticCalculator):
             ID of the defect to be created.
         """
         super().__init__('vacancy', ff_settings, mass, alat, size, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'vacancy_{pot_name}.log')
         self.del_id = del_id
 
 
@@ -994,12 +1006,14 @@ class InterstitialDefectFormation(LMPStaticCalculator):
     """
     Interstitial defect Formation Energy Calculator.
     """
-    def __init__(self, ff_settings, mass, element, lattice, alat, size):
+    def __init__(self, pot_name, ff_settings, mass, element, lattice, alat, size):
         """
         Initialize the Interstitial Defect Formation calculator.
         Parameters
         ----------
-        ff_settings : Potential or list
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
+        ff_settings : str
             Force field settings, either as a Potential class or a list of strings.
         mass : float
             Mass of the atom in atomic mass units (AMU).
@@ -1011,6 +1025,7 @@ class InterstitialDefectFormation(LMPStaticCalculator):
             Size of the supercell.
         """
         super().__init__('interstitial', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'interstitial_{pot_name}.log')
         self.interstitials_types = ['split_110', 'hex', 'tet', 'bond']
 
 
@@ -1130,12 +1145,14 @@ class NudgedElasticBand(LMPStaticCalculator):
     """
     Nudged Elastic Band (NEB) migration barrier Calculator.
     """
-    def __init__(self, ff_settings, mass, alat, size, element, lattice, num_images, path='1NN'):
+    def __init__(self, pot_name, ff_settings, mass, alat, size, element, lattice, num_images, path='1NN'):
         """
         Initialize the Nudged Elastic Band calculator.
         Parameters
         ----------
-        ff_settings : Potential or list
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
+        ff_settings : str
             Force field settings, either as a Potential class or a list of strings.
         mass : float
             Mass of the atom in atomic mass units (AMU).
@@ -1153,6 +1170,7 @@ class NudgedElasticBand(LMPStaticCalculator):
             '1NN' or '2NN', indicating the path for the NEB calculation.
         """
         super().__init__('neb', ff_settings, mass, alat, size=size, element=element, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'neb_{pot_name}.log')
         self.num_images = num_images
         self.path = path
     
