@@ -59,7 +59,7 @@ if __name__ == "__main__":
     kin_eng_threshold = 4
     simulation_size = 9
     thermal_time = 5        # in second
-    tde_time = 240          # in second
+    tde_time = 1200         # in second
 
     # example usage 
     tde = ThresholdDisplacementEnergy(pot_name, ff_settings, element, mass, alat, temp,
@@ -70,13 +70,13 @@ if __name__ == "__main__":
     vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
     vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
     vectors = np.array((vector1, vector2, vector3))
-    tde.get_uniform_angles(vectors, 4)
-    tde.set_hkl_from_angles()
+    #tde.get_uniform_angles(vectors, 4)
+    #tde.set_hkl_from_angles()
     # # tde.check_interval()
-    tde.calculate(needed_thermalization=True)
+    #tde.calculate(needed_thermalization=True)
     #tde.plot()
     #tde.plot_no_interplation()
-    #tde.average_TDE()
+    tde.average_TDE()
 
     # example usage
     # ph = PhononDispersion(ff_settings, mass, alat, size=2, element=element, lattice='diamond')

@@ -318,7 +318,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         with open(tde_file, 'a') as f:
             if write_header:
                 # Write header line
-                f.write("# hkl_idx  h       k       l       phi[rad]    theta[rad]   velocity[Å/ps]  TDE[eV]   phi[deg]  theta[deg]\n")
+                f.write("# hkl_idx  h       k       l       phi[rad]    theta[rad]   velocity[angst/ps]  TDE[eV]   phi[deg]  theta[deg]\n")
                 f.write("# ----------------------------------------------------------------------------------------------\n")
             
             # Write data line
@@ -515,7 +515,7 @@ class ThresholdDisplacementEnergy(LMPStaticCalculator):
         )
 
         vmin, vmax = np.nanmin(energy_grid), np.nanmax(energy_grid)
-        tick_step = 3
+        tick_step = 3.5
         ticks = np.arange(np.floor(vmin), np.ceil(vmax) + tick_step, tick_step)
         char = fig.colorbar(contourf, ax=ax, pad=0.15, shrink=0.85, ticks=ticks)
         char.set_label('Threshold displacement energy (eV)', fontsize=9)        
