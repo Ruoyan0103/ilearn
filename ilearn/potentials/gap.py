@@ -224,32 +224,32 @@ if __name__ == "__main__":
     pka_id = 1202
     temp = 0
     element = 'Ge'
-    mass = 72.56
-    min_velocity = 95
-    max_velocity = 107
+    mass = 72.64
+    min_velocity = 39
+    max_velocity = 45
     velocity_interval = 3
     kin_eng_threshold = 4
     simulation_size = 9
     thermal_time = 60       # in second
-    tde_time = 1*3600       # in second
+    tde_time = 1.8*3600       # in second
     lattice = 'diamond'
 
     # example usage
-    # tde = ThresholdDisplacementEnergy(ff_settings, element, mass, alat, temp,
-    #                                   pka_id, min_velocity, max_velocity, 
-    #                                   velocity_interval, kin_eng_threshold, simulation_size,
-    #                                   thermal_time, tde_time)
-    # vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
-    # vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
-    # vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
-    # vectors = np.array((vector1, vector2, vector3))
+    tde = ThresholdDisplacementEnergy('GAP', ff_settings, element, mass, alat, temp,
+                                       pka_id, min_velocity, max_velocity, 
+                                       velocity_interval, kin_eng_threshold, simulation_size,
+                                       thermal_time, tde_time)
+    vector1 = [0., 0., 1.] / np.linalg.norm([0., 0., 1.])  # Normalize the vector
+    vector2 = [1., 0., 1.] / np.linalg.norm([1., 0., 1.])  # Normalize the vector
+    vector3 = [1., 1., 1.] / np.linalg.norm([1., 1., 1.])  # Normalize the vector
+    vectors = np.array((vector1, vector2, vector3))
     # tde.get_uniform_angles(vectors, 4)
     # tde.set_hkl_from_angles()
     # # tde.check_interval()
-    # tde.calculate(needed_thermalization=False)
+    # tde.calculate(needed_thermalization=True)
     # tde.plot()
     # tde.plot_no_interplation()
-    # tde.average_TDE()
+    tde.average_TDE()
 
     # example usage 
     # lc = LatticeConstant(ff_settings, mass, element, lattice, alat=5.3, cubic=True)
