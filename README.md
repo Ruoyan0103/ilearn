@@ -31,9 +31,6 @@ The following Python packages are required to run `ilearn`:
 - `scipy==1.16.0`  
 - `seaborn==0.13.2`  
 
-> **Note**: Duplicate entries (e.g., `PyYAML`) have been removed.
-
----
 
 ### 📥 Installation
 
