@@ -4,8 +4,8 @@ from ase.io import read, write
 modify config type from liquid* to liquid
 """
 
-datafile = 'datasets/test.xyz'
-datafile_pached= 'datasets/test_pached.xyz'
+datafile = 'test.xyz'
+datafile_pached= 'test_pached.xyz'
 for struct in read(datafile, format='extxyz', index=':'):
     if 'config_type' in struct.info:
             config_type = struct.info['config_type']
