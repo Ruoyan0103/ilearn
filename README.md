@@ -13,7 +13,7 @@ The `ilearn` package is organized as follows:
 - **Core modules:**
   - `ilearn.lammps`: Provides methods based on **LAMMPS** for computing properties such as energy, forces, and elastic constants.
   - `ilearn.phonopy`: Integrates with **PHONOPY** to compute vibrational and thermal properties.
-    - `ilearn.errors`: Implements RMSE-based error metrics for comparing potential predictions with reference data.
+  - `ilearn.errors`: Implements RMSE-based error metrics for comparing potential predictions with reference data.
 
 
 ## 📦 Required Dependencies
