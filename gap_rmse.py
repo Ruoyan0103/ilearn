@@ -1,3 +1,5 @@
+"""This class provides RMSE calculation for GAP (config-type/all data).
+In ilearn.potentials.gap.py, the evaluation method of GAP has the same function"""
 from ilearn.errors.rmse import RMSECalculator
 from ilearn.potentials import gap
 import os 
@@ -23,9 +25,9 @@ class getRMSE:
 
 figure, ax = plt.subplots(2, 2, figsize=(7, 7))
 ax = ax.flatten()
-results_path = 'temp2'
+results_path = 'ilearn/errors/results'
 
-dataset_path = 'datasets/t_pached.xyz'
+dataset_path = 'ilearn/errors/datasets/train_pached.xyz'
 potential = gap.GAPotential(
             potential_name='xml_label=GAP_2025_3_8_120_22_43_25_989',
             param_filename=os.path.join('potentials_folder', 'Ge-v10.xml'),
@@ -47,7 +49,7 @@ rmse_calculator = getRMSE(dataset_path, potential, files_folder, energy_path,
 rmse_calculator.rmse_all_type()
 #rmse_calculator.rmse_config_types()
 
-dataset_path = 'datasets/test_pached.xyz'
+dataset_path = 'ilearn/errors/datasets/test_pached.xyz'
 potential = gap.GAPotential(
             potential_name='xml_label=GAP_2025_3_8_120_22_43_25_989',
             param_filename=os.path.join('potentials_folder', 'Ge-v10.xml'),

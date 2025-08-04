@@ -1,0 +1,2 @@
+INCAR-opt: before generating training data, the structure with a monovacancy is optimized with INCAR-opt
+INCAR-cal: do DFT calculation for rattled structure

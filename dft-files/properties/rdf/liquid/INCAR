@@ -1,0 +1,31 @@
+SYSTEM = cd Ge
+
+! ab initio
+ISMEAR = 0         ! Gaussian smearing
+SIGMA  = 0.05      ! smearing in eV
+ENCUT = 350
+
+LREAL  = Auto     ! projection operators in real space
+
+ALGO   = Normal   !
+PREC   = Low      ! precision
+ISYM   = 0        ! no symmetry imposed
+
+! MD
+IBRION = 0        ! MD (treat ionic degrees of freedom)
+NSW    = 8000     ! no of ionic steps
+POTIM  = 1.0      ! MD time step in fs
+
+MDALGO = 3        ! Langevin thermostat
+LANGEVIN_GAMMA = 10       ! Langevin friction coefficient
+LANGEVIN_GAMMA_L = 10    ! Langevin friction coefficient for lattice degrees of freedom
+PMASS = 10               ! the fictitious mass of the lattice degrees of freedom      
+
+TEBEG  = 2000     ! temperature at beginning
+TEEND  = 2000     ! temperature at end
+ISIF   = 3       
+
+NCORE = 12
+ LASPH = .TRUE.
+ LCHARG = .FALSE.
+ LWAVE = .FALSE. 

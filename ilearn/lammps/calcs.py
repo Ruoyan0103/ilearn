@@ -1,3 +1,4 @@
+"""This class provides calculation using LAMMPS."""
 import os, math, subprocess, time, shutil
 import numpy as np
 from deprecated import deprecated

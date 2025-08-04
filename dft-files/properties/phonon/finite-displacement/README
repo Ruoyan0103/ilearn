@@ -1,0 +1,4 @@
+Use lattice constant at 80 K (5.6524 Å)
+M. Y. Hu, H. Sinn, A. Alatas, W. Sturhahn, E. E. Alp, H.-C. Wille, Y. V. Shvydko, J. P. Sutter, J. Bandaru, E. E. Haller et al., Phys. Rev. B 67, 113306 2003.
+
+Calculate phonon-dispersion and phonon density of states with Phonopy, the supercell size is 5*5*5

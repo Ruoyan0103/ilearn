@@ -1,0 +1,22 @@
+atoms_file = "Ge_fixed.xyz"
+pot_file = "gap_files/Ge-v10-gap"
+n_species = 1
+species = Ge
+masses = 72.64
+
+! MD options NVT
+md_nsteps = 10000
+md_step = 2.
+thermostat = berendsen
+t_beg = 1400
+t_end = 1400
+tau_t = 100.
+barostat = none
+! barostat_sym = diag
+! p_beg = 1.
+! p_end = 1.
+! tau_p = 500.
+gamma_p = 30.
+write_thermo = 100
+write_xyz = 1000
+neighbors_buffer = 0.5

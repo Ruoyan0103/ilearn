@@ -1,0 +1,74 @@
+LAMMPS (2 Aug 2023 - Update 3)
+WARNING: Using I/O redirection is unreliable with parallel runs. Better to use the -in switch to read input files. (src/lammps.cpp:548)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+units		metal
+boundary    	p p p
+atom_style  	atomic
+
+
+read_data	bulk.data
+Reading data file ...
+  orthogonal box = (0 0 0) to (6.2 6.2 7.3284)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  12 atoms
+  read_data CPU = 0.002 seconds
+mass 		1 72.64
+
+
+pair_style	quip
+pair_coeff  *  * ../../../../../../00-check/01-pot/Ge-v10.xml "Potential xml_label=GAP_2025_3_8_120_22_43_25_989" 32
+
+thermo		10
+thermo_style custom step pe ke etotal
+
+run		1
+WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 2 2 3
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair quip, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 2.965 | 2.965 | 2.965 Mbytes
+   Step         PotEng         KinEng         TotEng    
+         0  -52.112763      0             -52.112763    
+         1  -52.112763      0             -52.112763    
+Loop time of 0.0329999 on 4 procs for 1 steps with 12 atoms
+
+Performance: 2.618 ns/day, 9.167 hours/ns, 30.303 timesteps/s, 363.637 atom-step/s
+85.5% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.029538   | 0.031436   | 0.03278    |   0.8 | 95.26
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.00011883 | 0.0014619  | 0.0033583  |   3.6 |  4.43
+Output  | 7.3711e-05 | 8.1303e-05 | 8.6438e-05 |   0.0 |  0.25
+Modify  | 8.69e-07   | 1.043e-06  | 1.189e-06  |   0.0 |  0.00
+Other   |            | 2.013e-05  |            |       |  0.06
+
+Nlocal:              3 ave           3 max           3 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+Nghost:            225 ave         225 max         225 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:          190 ave         191 max         189 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 760
+Ave neighs/atom = 63.333333
+Neighbor list builds = 0
+Dangerous builds = 0
+
+
+Total wall time: 0:00:00

@@ -1,0 +1,17 @@
+INCAR created by Atomic Simulation Environment
+ ENCUT = 500.000000
+ KSPACING = 0.150000
+ SIGMA = 0.050000
+ EDIFF = 1.00e-07
+ GGA = PE
+ PREC = Accurate
+ IBRION = -1
+ ISMEAR = 0
+ ISTART = 0
+ NELM = 100
+ NSW = 0
+ NCORE = 12
+ KGAMMA = .TRUE.
+ LASPH = .TRUE.
+ LCHARG = .FALSE.
+ LWAVE = .FALSE.
