@@ -1,0 +1,18 @@
+units		metal
+boundary    	p p p
+atom_style  	atomic
+ 
+
+read_data	bulk.data
+mass 		1 72.64
+
+
+pair_style	quip 
+pair_coeff  *  * ../../../../../../00-check/01-pot/Ge-v10.xml "Potential xml_label=GAP_2025_2_13_120_16_26_34_7" 32
+
+thermo		10
+thermo_style custom step pe ke etotal
+
+run		1
+
+

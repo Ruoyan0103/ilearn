@@ -9,11 +9,18 @@ The `ilearn` package is organized as follows:
 - **Main entry points:**
   - [`ilearn/potentials/gap.py`](ilearn/potentials/gap.py): Implements GAP-related functionality.
   - [`ilearn/potentials/meam.py`](ilearn/potentials/meam.py): Implements MEAM-related functionality.
+  - [`gap_rmse.py`](gap_rmse.py): Calculates RMSE for the GAP.
 
 - **Core modules:**
   - `ilearn.lammps`: Provides methods based on **LAMMPS** for computing properties such as energy, forces, and elastic constants.
   - `ilearn.phonopy`: Integrates with **PHONOPY** to compute vibrational and thermal properties.
   - `ilearn.errors`: Implements RMSE-based error metrics for comparing potential predictions with reference data.
+
+- **DFT files:**
+  - `dft_files/`: Contains scripts to generate training data, and scripts to do calculations based on DFT data. 
+
+- **TurboGAP files:**
+  - `turbogap_files/`: Contains scripts used for calculation with TurboGAP. 
 
 
 ## 📦 Required Dependencies

@@ -1,3 +1,4 @@
+"""This class provides MEAM interatomic potential."""
 import os 
 from ilearn.potentials import IPotential
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \

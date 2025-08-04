@@ -1,0 +1,76 @@
+LAMMPS (2 Aug 2023 - Update 3)
+WARNING: Using I/O redirection is unreliable with parallel runs. Better to use the -in switch to read input files. (src/lammps.cpp:548)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+units		metal
+boundary    	p p p
+atom_style  	atomic
+
+
+read_data	bulk.data
+Reading data file ...
+  triclinic box = (0 0 0) to (3.959798 3.4292856 3.2331615) with tilt (1.979899 1.979899 1.1430952)
+WARNING: Triclinic box skew is large. LAMMPS will run inefficiently. (src/domain.cpp:220)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  2 atoms
+  read_data CPU = 0.002 seconds
+mass 		1 72.64
+
+
+pair_style	quip
+pair_coeff  *  * ../../../../../../00-check/01-pot/Ge-v10.xml "Potential xml_label=GAP_2025_3_8_120_22_43_25_989" 32
+
+thermo		10
+thermo_style custom step pe ke etotal
+
+run		1
+WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 7
+  ghost atom cutoff = 7
+  binsize = 3.5, bins = 3 2 1
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair quip, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:966)
+Per MPI rank memory allocation (min/avg/max) = 3.015 | 3.016 | 3.016 Mbytes
+   Step         PotEng         KinEng         TotEng    
+         0  -8.967898       0             -8.967898     
+         1  -8.967898       0             -8.967898     
+Loop time of 0.0289409 on 4 procs for 1 steps with 2 atoms
+
+Performance: 2.985 ns/day, 8.039 hours/ns, 34.553 timesteps/s, 69.106 atom-step/s
+96.2% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 7.235e-06  | 0.0071818  | 0.028704   |  14.7 | 24.82
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0001288  | 0.014475   | 0.028833   |  11.9 | 50.02
+Output  | 7.9949e-05 | 0.0072676  | 0.02879    |  14.6 | 25.11
+Modify  | 6.07e-07   | 7.875e-07  | 1.093e-06  |   0.0 |  0.00
+Other   |            | 1.577e-05  |            |       |  0.05
+
+Nlocal:            0.5 ave           2 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 1
+Nghost:         250.75 ave         273 max         230 min
+Histogram: 1 0 0 0 2 0 0 0 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:           35 ave         140 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 140
+Ave neighs/atom = 70
+Neighbor list builds = 0
+Dangerous builds = 0
+
+
+Total wall time: 0:00:00

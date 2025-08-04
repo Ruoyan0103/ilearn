@@ -1,0 +1,2 @@
+non-diagonal: programme to generate supercell matrix
+supercell: generate supercells, rattle them and do DFT calculation

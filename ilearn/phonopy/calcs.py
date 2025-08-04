@@ -1,3 +1,4 @@
+"""This class provides calculation using Phonopy."""
 import os, subprocess, time
 import numpy as np
 from ilearn.loggers.logger import AppLogger

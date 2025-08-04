@@ -1,0 +1,5 @@
+*/*.py: generate defect structure
+*/INCAR-opt-step1: optimize structure before generating training data, optimize step1
+*/INCAR-opt-step2: optimize structure before generating training data, optimize step2
+rattle.py: generating rattled structure
+INCAR-cal: calculating training data
