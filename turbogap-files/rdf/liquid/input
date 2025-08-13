@@ -18,5 +18,5 @@ barostat = "none"
 #tau_p = 100.
 #gamma_p = 30.
 write_thermo = 500
-write_xyz = 10
+write_xyz = 1
 neighbors_buffer = 0.5
