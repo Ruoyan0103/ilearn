@@ -17,7 +17,7 @@ The `ilearn` package is organized as follows:
   - `ilearn.errors`: Implements RMSE-based error metrics for comparing potential predictions with reference data.
 
 - **DFT files:**
-  - `dft_files/`: Contains scripts to generate training data, and scripts to do calculations based on DFT data. 
+  - `dft_files/`: Contains scripts to generate training data, and scripts to do calculations with DFT.
 
 - **TurboGAP files:**
   - `turbogap_files/`: Contains scripts used for calculation with TurboGAP. 
