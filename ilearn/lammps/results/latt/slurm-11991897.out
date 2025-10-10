@@ -1,43 +1,15 @@
 LAMMPS (2 Aug 2023 - Update 3)
 OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
   using 1 OpenMP thread(s) per MPI task
-# LAMMPS input script for optimized lattice constant calculation
-
-# --------------- INITIALIZATION ------------------
-clear
 OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
   using 1 OpenMP thread(s) per MPI task
-units             metal
-atom_style        atomic
-boundary          p p p
-
-# ------------------ ATOM DEFINITION -------------------
-# box               tilt large
-read_data         data.static
 Reading data file ...
   orthogonal box = (0 0 0) to (5.3 5.3 5.3)
   1 by 1 by 3 MPI processor grid
   reading atoms ...
   8 atoms
   read_data CPU = 0.015 seconds
-# change_box        all x scale 1.1 y scale 1.1 z scale 1.1 remap
-# ------------------------ FORCE FIELDS -----------------------
-pair_style        sw
-pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw Ge
 Reading sw potential file /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw with DATE: 2025-10-10
-mass              1 72.64
-#---------------------------Settings----------------------------
-neigh_modify      delay 0 every 1 check yes page 200000 one 20000
-
-#----------------------Run Minimization-------------------------
-reset_timestep    0
-
-thermo            1
-thermo_style      custom pe cella cellb cellc cellalpha cellbeta cellgamma
-
-fix               1 all box/relax aniso 0.0 vmax 0.001
-min_style         cg
-minimize          1e-10 1e-10 5000 5000
 Neighbor list info ...
   update: every = 1 steps, delay = 0 steps, check = yes
   max neighbors/atom: 20000, page size: 200000
@@ -51,6 +23,9 @@ Neighbor list info ...
       stencil: full/bin/3d
       bin: standard
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:966)
+Setting up cg style minimization ...
+  Unit style    : metal
+  Current step  : 0
 WARNING: Energy due to 3 extra global DOFs will be included in minimizer energies
  (src/min.cpp:228)
 Per MPI rank memory allocation (min/avg/max) = 4.479 | 4.479 | 4.479 Mbytes
@@ -160,27 +135,8 @@ Total # of neighbors = 368
 Ave neighs/atom = 46
 Neighbor list builds = 0
 Dangerous builds = 0
-#minimize          0 1e-10 400 400
-
-
-variable          a equal cella
-variable          b equal cellb
-variable          c equal cellc
-variable          alpha equal cellalpha
-variable          beta equal cellbeta
-variable          gamma equal cellgamma
-variable          energy equal pe
-
-#---------------------------------------------
-
-######################################
-# SIMULATION DONE
-print             "All done"
 All done
-print             "${a} ${b} ${c}" file lattice.txt
 5.65362105313883 5.65362105313883 5.65362105313883
-write_data        data.relaxed
 System init for write_data ...
 WARNING: Proc sub-domain size < neighbor skin, could lead to lost atoms (src/domain.cpp:966)
-
 Total wall time: 0:00:00

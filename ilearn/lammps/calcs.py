@@ -759,7 +759,58 @@ class LatticeConstant(LMPStaticCalculator):
         a, b, c = np.loadtxt(os.path.join(self.calculation_dir, 'lattice.txt'))
         self.logger.info(f"Lattice constant: {a}, {b}, {c}")
         return a, b, c
+    
+class CohesiveEnergy(LMPStaticCalculator):
+    """
+    Cohesive energy calculator.
+    """
+    def __init__(self, pot_name, ff_settings, mass, element, lattice, alat, cubic):
+        """
+        Initialize the Lattice Constant calculator.
+        Parameters
+        ----------
+        pot_name : str
+            Name of the potential (e.g., 'MEAM').
+        ff_settings : String
+            Force field settings.
+        mass : float
+            Mass of the atom in atomic mass units (AMU).
+        element : str
+            Element symbol (e.g., 'Ge').
+        lattice : str
+            Lattice type (e.g., 'diamond').
+        alat : float
+            Lattice constant in Angstroms.
+        cubic : bool
+            Whether the lattice is cubic.
+        """
+        super().__init__('cohesive', ff_settings, mass, alat, element=element, lattice=lattice)
+        self.log_file = os.path.join(log_dir, f'cohesive_{pot_name}.log')
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
+        static_bulk = bulk(self.element, self.lattice, a=self.alat, cubic=cubic)
+        write(os.path.join(self.calculation_dir, 'data.static'), static_bulk, format='lammps-data')
 
+
+    def _setup(self):
+        with open(os.path.join(self.template_dir, 'in.latt'), 'r') as f:
+            input_template = f.read()
+        input_file = os.path.join(self.calculation_dir, 'in.latt')
+        with open(input_file, 'w') as f:
+            f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
+        shutil.copy(os.path.join(self.template_dir, 'submit-latt.sh'), 
+                    os.path.join(self.calculation_dir, 'submit-latt.sh'))
+
+
+    def calculate(self):
+        """
+        Calculate the lattice constant by running a LAMMPS simulation.
+        """
+        self._setup()
+        subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=self.calculation_dir)
+        time.sleep(10)
+        a, b, c = np.loadtxt(os.path.join(self.calculation_dir, 'lattice.txt'))
+        self.logger.info(f"Lattice constant: {a}, {b}, {c}")
+        return a, b, c
 
 class ElasticConstant(LMPStaticCalculator):
     """ 
@@ -962,8 +1013,8 @@ class VacancyDefectFormation(LMPStaticCalculator):
             ID of the defect to be created.
         """
         super().__init__('vacancy', ff_settings, mass, alat, size, lattice=lattice)
-        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.log_file = os.path.join(log_dir, f'vacancy_{pot_name}.log')
+        self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         self.del_id = del_id
 
 
@@ -983,7 +1034,7 @@ class VacancyDefectFormation(LMPStaticCalculator):
         Calculate the defect formation energy by running a LAMMPS simulation.
         """
         self._setup()
-        subprocess.run('sbatch submit-defect.sh', shell=True, check=True, cwd=self.calculation_dir)
+        subprocess.run('sbatch submit-vac.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(30)
         self.logger.info('-------------------------------Vacancy Formation Energy-------------------------------')
         self._vacancy_formation_energy()

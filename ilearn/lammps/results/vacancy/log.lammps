@@ -1,0 +1,189 @@
+LAMMPS (2 Aug 2023 - Update 3)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+# LAMMPS input script for vacancy formation energy calculation.
+# Parameters: lattice, alat, size, ff_settings, mass, del_id
+# ------------------------- INITIALIZATION --------------------------
+clear
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+units          metal
+dimension      3
+boundary       p p p
+atom_style     atomic
+
+# ----------------------- ATOM DEFINITION ----------------------------
+lattice        diamond 5.653
+Lattice spacing in x,y,z = 5.653 5.653 5.653
+region         simbox block -3 3 -3 3 -3 3
+create_box     1 simbox
+Created orthogonal box = (-16.959 -16.959 -16.959) to (16.959 16.959 16.959)
+  3 by 1 by 1 MPI processor grid
+lattice        diamond 5.653  orient x 1 0 0 orient y 0 1 0 orient z 0 0 1
+Lattice spacing in x,y,z = 5.653 5.653 5.653
+create_atoms   1 region simbox
+Created 1728 atoms
+  using lattice units in orthogonal box = (-16.959 -16.959 -16.959) to (16.959 16.959 16.959)
+  create_atoms CPU = 0.001 seconds
+
+# --------------------------- FORCE FIELD ----------------------------
+pair_style        sw
+pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw Ge
+Reading sw potential file /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw with DATE: 2025-10-10
+mass           1 72.64
+
+#--------------------------------- SETING -----------------------------
+#compute csym all centro/atom fcc
+compute        eng all pe/atom
+compute        eatoms all reduce sum c_eng
+
+#------------------------- OPTIMIZATION --------------------------------
+thermo         100
+thermo_style   custom step pe lx ly lz press pxx pyy pzz c_eatoms
+
+#dump 1 all custom 400 dump.relax.1.* id type xs ys zs c_csym c_eng
+dump           1 all custom 400 dump.relax.1.* id type xs ys zs c_eng
+min_style      cg
+minimize       1e-10 1e-10 5000 5000
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.9258
+  ghost atom cutoff = 5.9258
+  binsize = 2.9629, bins = 12 12 12
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair sw, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Per MPI rank memory allocation (min/avg/max) = 4.369 | 4.369 | 4.37 Mbytes
+   Step         PotEng           Lx             Ly             Lz           Press           Pxx            Pyy            Pzz          c_eatoms   
+         0  -5460.4791      33.918         33.918         33.918         216.01154      216.01154      216.01154      216.01154     -5460.4791    
+         1  -5460.4791      33.918         33.918         33.918         216.01154      216.01154      216.01154      216.01154     -5460.4791    
+Loop time of 0.00295617 on 3 procs for 1 steps with 1728 atoms
+
+90.2% CPU use with 3 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -5460.47913303007  -5460.47913303007  -5460.47913303007
+  Force two-norm initial, final = 2.7128872e-13 2.6991453e-13
+  Force max component initial, final = 1.2378553e-14 1.2328463e-14
+  Final line search alpha, max atom move = 1 1.2328463e-14
+  Iterations, force evaluations = 1 2
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.0010794  | 0.0011036  | 0.0011436  |   0.1 | 37.33
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.00016004 | 0.00019336 | 0.00021099 |   0.0 |  6.54
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.001659   |            |       | 56.13
+
+Nlocal:            576 ave         576 max         576 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+Nghost:           1749 ave        1749 max        1749 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+Neighs:              0 ave           0 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+FullNghs:        19584 ave       19584 max       19584 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 58752
+Ave neighs/atom = 34
+Neighbor list builds = 0
+Dangerous builds = 0
+undump 1
+
+#variable N equal count(all), counts the total number of atoms in the cell
+#the total number of atoms is stored to the variable No
+variable       N equal count(all)
+variable       No equal $N
+variable       No equal 1728
+
+#variable Ei equal "c_eatoms" computes the initial energy of the cell system before the vacancy
+#E is needed to store the initial energy of the system to the variable Ei
+variable       E equal "c_eatoms"
+variable       Ei equal $E
+variable       Ei equal -5460.47913303019
+
+# ------------------------------ VACANCY --------------------------------------
+group          del id 1
+1 atoms in group del
+delete_atoms   group del compress no
+Deleted 1 atoms, new total = 1727
+write_data     data.vacancy
+System init for write_data ...
+
+# ---------------------------- OPTMIZATION VACANCY-----------------------------
+reset_timestep 0
+
+thermo         100
+thermo_style   custom step pe lx ly lz press pxx pyy pzz c_eatoms
+#dump 1 all custom 400 dump.relax.2.* id type xs ys zs c_csym c_eng
+dump           1 all custom 400 dump.relax.2.* id type xs ys zs c_eng
+min_style      cg
+minimize       1e-10 1e-10 5000 5000
+Per MPI rank memory allocation (min/avg/max) = 4.494 | 4.494 | 4.495 Mbytes
+   Step         PotEng           Lx             Ly             Lz           Press           Pxx            Pyy            Pzz          c_eatoms   
+         0  -5454.1591      33.918         33.918         33.918         215.76153      215.76153      215.76153      215.76153     -5454.1591    
+         3  -5454.1591      33.918         33.918         33.918         215.03874      215.03874      215.03874      215.03874     -5454.1591    
+Loop time of 0.00474711 on 3 procs for 3 steps with 1727 atoms
+
+95.7% CPU use with 3 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+     -5454.15913403351  -5454.15913657267  -5454.15913693328
+  Force two-norm initial, final = 0.0037312573 0.0017299445
+  Force max component initial, final = 0.0010771212 0.00019646046
+  Final line search alpha, max atom move = 1 0.00019646046
+  Iterations, force evaluations = 3 6
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.0024537  | 0.0025052  | 0.0025342  |   0.1 | 52.77
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.0003692  | 0.00039697 | 0.00043053 |   0.0 |  8.36
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.001845   |            |       | 38.86
+
+Nlocal:        575.667 ave         576 max         575 min
+Histogram: 1 0 0 0 0 0 0 0 0 2
+Nghost:        1746.67 ave        1749 max        1745 min
+Histogram: 1 0 1 0 0 0 0 0 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+FullNghs:      19561.3 ave       19584 max       19529 min
+Histogram: 1 0 0 0 0 0 0 1 0 1
+
+Total # of neighbors = 58684
+Ave neighs/atom = 33.980313
+Neighbor list builds = 0
+Dangerous builds = 0
+
+#variable Ef equal "c_eatoms" computes the final energy of the cell system after the vacancy
+#The final energy is stored to the variable Ef
+variable       Ef equal "c_eatoms"
+variable       Ev equal (v_Ef-((v_No-1)/v_No)*v_Ei)
+
+# ----------------------------------- OUTPUT -----------------------------------
+# SIMULATION DONE
+print "All done"
+All done
+print "Total number of atoms = ${No}"
+Total number of atoms = 1728
+print "Initial energy of atoms = ${Ei}"
+Initial energy of atoms = -5460.47913303019
+print "Final energy of atoms = ${Ef}"
+Final energy of atoms = -5454.15913693338
+print "Vacancy formation energy = ${Ev}"
+Vacancy formation energy = 3.15999659852787
+Total wall time: 0:00:00

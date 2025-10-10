@@ -1,0 +1,15 @@
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - -------------------------------KRH Expression-------------------------------
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - C tensor [GPa]
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   97.810   49.363   49.363    0.000   -0.000    0.000
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   49.363   97.810   49.363   -0.000   -0.000    0.000
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   49.363   49.363   97.810    0.000    0.000    0.000
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -    0.000   -0.000    0.000   36.462    0.000   -0.000
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   -0.000   -0.000    0.000    0.000   36.462   -0.000
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -    0.000    0.000    0.000   -0.000   -0.000   36.462
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - 
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - KV       EV       GV
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   65.512   81.595   31.567
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - KR       ER       GR
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   65.512   78.830   30.332
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO - KH       EH       GH
+2025-10-10 17:28 - ilearn.lammps.calcs - INFO -   65.512   80.216   30.949
