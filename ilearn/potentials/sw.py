@@ -2,7 +2,7 @@
 import os 
 from ilearn.potentials import IPotential
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
-                                VacancyDefectFormation,InterstitialDefectFormation, NudgedElasticBand
+                                VacancyDefectFormation,InterstitialDefectFormation, NudgedElasticBand, CohesiveEnergy
 from ilearn.phonopy.calcs import PhononDispersion, Quasiharmonic
 import numpy as np
 
@@ -56,10 +56,11 @@ if __name__ == "__main__":
     # elastic = ElasticConstant(pot_name, ff_settings, mass, lattice, alat=5.653) # alat from lc calculate
     # elastic.calculate()
 
-    vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.653, size=3, del_id=1)
-    vf.calculate()
+    # vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.653, size=3, del_id=1)
+    # vf.calculate()
 
-
+    coh = CohesiveEnergy(pot_name, ff_settings, mass, element, lattice, alat=5.653, cubic=False)
+    coh.calculate()
 
 
     # alat = 5.658

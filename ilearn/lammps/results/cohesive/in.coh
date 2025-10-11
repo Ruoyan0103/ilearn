@@ -1,0 +1,17 @@
+units           metal
+boundary        p p p
+atom_style      atomic
+
+read_data       data.bulk
+
+pair_style        sw
+pair_coeff        * * /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw Ge
+mass            1 72.64
+
+thermo          10
+thermo_style    custom step pe ke etotal
+
+run             1
+
+variable        energy equal etotal
+print           "${energy}" file bulk.txt 

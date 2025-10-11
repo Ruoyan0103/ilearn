@@ -2,7 +2,7 @@
 import os 
 from ilearn.potentials import IPotential
 from ilearn.lammps.calcs import ThresholdDisplacementEnergy, LatticeConstant, ElasticConstant, \
-                                VacancyDefectFormation,InterstitialDefectFormation, NudgedElasticBand
+                                VacancyDefectFormation,InterstitialDefectFormation, NudgedElasticBand, CohesiveEnergy
 from ilearn.phonopy.calcs import PhononDispersion, Quasiharmonic
 import numpy as np
 
@@ -88,8 +88,11 @@ if __name__ == "__main__":
     # qha = Quasiharmonic(ff_settings, mass, alat, size=2, element=element, lattice='diamond',start_rate=-0.03, end_rate=0.03, num_points=7)
     # qha.calculate()
 
-    vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.658, size=3, del_id=0)
-    vf.calculate()
+    # vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.658, size=3, del_id=0)
+    # vf.calculate()
+
+    coh = CohesiveEnergy(pot_name, ff_settings, mass, element, lattice, alat=5.658, cubic=False)
+    coh.calculate()
     
     
 

@@ -1,0 +1,61 @@
+LAMMPS (2 Aug 2023 - Update 3)
+OMP_NUM_THREADS environment is not set. Defaulting to 1 thread. (src/comm.cpp:98)
+  using 1 OpenMP thread(s) per MPI task
+Reading data file ...
+  orthogonal box = (0 0 0) to (20 20.5 21)
+  1 by 1 by 3 MPI processor grid
+  reading atoms ...
+  1 atoms
+  read_data CPU = 0.005 seconds
+Reading sw potential file /scratch/phys/t30429_nume-dft-ml/04-Ruoyan/00-MLP/04-short_range/ilearn/ilearn/potentials/params/SW/Ge.sw with DATE: 2025-10-10
+WARNING: No fixes with time integration, atoms won't move (src/verlet.cpp:60)
+Neighbor list info ...
+  update: every = 1 steps, delay = 0 steps, check = yes
+  max neighbors/atom: 2000, page size: 100000
+  master list distance cutoff = 5.9258
+  ghost atom cutoff = 5.9258
+  binsize = 2.9629, bins = 7 7 8
+  1 neighbor lists, perpetual/occasional/extra = 1 0 0
+  (1) pair sw, perpetual
+      attributes: full, newton on
+      pair build: full/bin/atomonly
+      stencil: full/bin/3d
+      bin: standard
+Setting up Verlet run ...
+  Unit style    : metal
+  Current step  : 0
+  Time step     : 0.001
+Per MPI rank memory allocation (min/avg/max) = 2.936 | 2.978 | 3.061 Mbytes
+   Step         PotEng         KinEng         TotEng    
+         0   0              0              0            
+         1   0              0              0            
+Loop time of 4.22537e-05 on 3 procs for 1 steps with 1 atoms
+
+Performance: 2044.793 ns/day, 0.012 hours/ns, 23666.585 timesteps/s, 23.667 katom-step/s
+30.8% CPU use with 3 MPI tasks x 1 OpenMP threads
+
+MPI task timing breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 2e-07      | 2.71e-07   | 3.09e-07   |   0.0 |  0.64
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 8.47e-07   | 8.2477e-06 | 1.2056e-05 |   0.0 | 19.52
+Output  | 2.0428e-05 | 2.4025e-05 | 3.0945e-05 |   0.0 | 56.86
+Modify  | 4.16e-07   | 4.77e-07   | 5.08e-07   |   0.0 |  1.13
+Other   |            | 9.233e-06  |            |       | 21.85
+
+Nlocal:       0.333333 ave           1 max           0 min
+Histogram: 2 0 0 0 0 0 0 0 0 1
+Nghost:        2.33333 ave           4 max           0 min
+Histogram: 1 0 0 0 0 0 0 1 0 1
+Neighs:              0 ave           0 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+FullNghs:            0 ave           0 max           0 min
+Histogram: 3 0 0 0 0 0 0 0 0 0
+
+Total # of neighbors = 0
+Ave neighs/atom = 0
+Neighbor list builds = 0
+Dangerous builds = 0
+0
+Total wall time: 0:00:00

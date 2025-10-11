@@ -788,17 +788,20 @@ class CohesiveEnergy(LMPStaticCalculator):
         self.log_file = os.path.join(log_dir, f'cohesive_{pot_name}.log')
         self.logger = AppLogger(__name__, self.log_file, overwrite=True).get_logger()
         static_bulk = bulk(self.element, self.lattice, a=self.alat, cubic=cubic)
-        write(os.path.join(self.calculation_dir, 'data.static'), static_bulk, format='lammps-data')
+        self.bulk_num_atoms = len(static_bulk)
+        write(os.path.join(self.calculation_dir, 'data.bulk'), static_bulk, format='lammps-data')
 
 
-    def _setup(self):
-        with open(os.path.join(self.template_dir, 'in.latt'), 'r') as f:
+    def _setup(self, type: str='atom'):
+        shutil.copy(os.path.join(self.template_dir, 'data.atom'), 
+                    os.path.join(self.calculation_dir, 'data.atom'))
+        with open(os.path.join(self.template_dir, 'in.coh'), 'r') as f:
             input_template = f.read()
-        input_file = os.path.join(self.calculation_dir, 'in.latt')
+        input_file = os.path.join(self.calculation_dir, 'in.coh')
         with open(input_file, 'w') as f:
-            f.write(input_template.format(ff_settings='\n'.join(self.ff_settings), mass=self.mass))
-        shutil.copy(os.path.join(self.template_dir, 'submit-latt.sh'), 
-                    os.path.join(self.calculation_dir, 'submit-latt.sh'))
+            f.write(input_template.format(type=type, ff_settings='\n'.join(self.ff_settings), mass=self.mass))
+        shutil.copy(os.path.join(self.template_dir, 'submit-coh.sh'), 
+                    os.path.join(self.calculation_dir, 'submit-coh.sh'))
 
 
     def calculate(self):
@@ -806,11 +809,18 @@ class CohesiveEnergy(LMPStaticCalculator):
         Calculate the lattice constant by running a LAMMPS simulation.
         """
         self._setup()
-        subprocess.run('sbatch submit-latt.sh', shell=True, check=True, cwd=self.calculation_dir)
+        subprocess.run('sbatch submit-coh.sh', shell=True, check=True, cwd=self.calculation_dir)
         time.sleep(10)
-        a, b, c = np.loadtxt(os.path.join(self.calculation_dir, 'lattice.txt'))
-        self.logger.info(f"Lattice constant: {a}, {b}, {c}")
-        return a, b, c
+        energy_atom = np.loadtxt(os.path.join(self.calculation_dir, 'atom.txt'))
+        self.logger.info(f"atom energy: {energy_atom} eV")
+        self._setup(type='bulk')
+        subprocess.run('sbatch submit-coh.sh', shell=True, check=True, cwd=self.calculation_dir)
+        time.sleep(10)
+        energy_bulk = np.loadtxt(os.path.join(self.calculation_dir, 'bulk.txt'))
+        cohesive_energy = -(energy_bulk - energy_atom * self.bulk_num_atoms)/self.bulk_num_atoms
+        self.logger.info(f"bulk energy: {energy_bulk} eV")
+        self.logger.info(f"cohesive energy: {energy_bulk} - {energy_atom} * {self.bulk_num_atoms} = {cohesive_energy} eV")
+        return cohesive_energy
 
 class ElasticConstant(LMPStaticCalculator):
     """ 

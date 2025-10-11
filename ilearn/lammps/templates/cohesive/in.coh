@@ -2,13 +2,15 @@ units           metal
 boundary        p p p
 atom_style      atomic
 
-read_data       atom.data
+read_data       data.{type}
 
 {ff_settings}
-mass              1 {mass}
+mass            1 {mass}
 
 thermo          10
-thermo_style custom step pe ke etotal
+thermo_style    custom step pe ke etotal
 
 run             1
 
+variable        energy equal etotal
+print           "${{energy}}" file {type}.txt 
