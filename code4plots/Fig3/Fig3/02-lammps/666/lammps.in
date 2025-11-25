@@ -1,0 +1,11 @@
+units           metal
+
+read_data       supercell-001
+mass            1 72.64
+
+pair_style      quip
+pair_coeff      * * ../../../../00-check/01-pot/Ge-v10.xml "Potential xml_label=GAP_2025_3_8_120_22_43_25_989" 32
+
+dump            phonopy all custom 1 force.* id type x y z fx fy fz
+dump_modify     phonopy format line "%d %d %15.8f %15.8f %15.8f %15.8f %15.8f %15.8f"
+run             0
