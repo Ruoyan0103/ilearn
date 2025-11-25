@@ -53,13 +53,13 @@ if __name__ == "__main__":
     # lc = LatticeConstant(pot_name, ff_settings, mass, element, lattice, alat=5.3, cubic=True)
     # lc.calculate()
 
-    # elastic = ElasticConstant(pot_name, ff_settings, mass, lattice, alat=5.653) # alat from lc calculate
+    # elastic = ElasticConstant(pot_name, ff_settings, mass, lattice, alat=5.654) # alat from lc calculate
     # elastic.calculate()
 
-    # vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.653, size=3, del_id=1)
+    # vf = VacancyDefectFormation(pot_name, ff_settings, mass, lattice, alat=5.654, size=3, del_id=1)
     # vf.calculate()
 
-    coh = CohesiveEnergy(pot_name, ff_settings, mass, element, lattice, alat=5.653, cubic=False)
+    coh = CohesiveEnergy(pot_name, ff_settings, mass, element, lattice, alat=5.654, cubic=False)
     coh.calculate()
 
 
